@@ -1,6 +1,6 @@
-logoText = "Zzo"
-logoType = "short" # long, short
-description = "The Zzo theme for Hugo example site."
+logoText = "FF"
+logoType = "long" # long, short
+description = "致力于用代码创造艺术"
 custom_css = []
 custom_js = []
 useFaviconGenerator = true # https://www.favicon-generator.org/
@@ -40,14 +40,14 @@ talksGroupByDate = "2006"
 pubPaginate = 20
 
 # whoami
-myname = "zzossig"
-email = "zzossig@gmail.com"
-whoami = "Web Developer"
+myname = "梁瑞尧"
+email = "liangneo#qq.com"
+whoami = "游戏开发者"
 bioImageUrl = ""
 useGravatar = false
-location = "Seoul, Korea"
-organization = "Hugo"
-link = "https://zzossig.io/ko"
+location = "中国，深圳"
+organization = "腾讯"
+link = "https://github.com/neoliang"
 
 # sidebar
 enableBio = true
@@ -141,11 +141,12 @@ commento = false
   dataAttrs = "" # "data-isso='https://isso.example.com' data-isso-require-author='true'"
 
 [socialOptions]
-  email = "mailto:your@email.com"
+  email = "mailto:liangneo@qq.com"
   phone = ""
-  facebook = "http://example.org/"
-  twitter = "http://example.org/"
-  github = "https://github.com/zzossig/hugo-theme-zzo"
+  facebook = ""
+  twitter = ""
+  github = "https://github.com/neoliang"
+  zhihu = "https://www.zhihu.com/people/liang-rui-yao"
   stack-overflow = ""
   instagram = ""
   google-plus = ""
@@ -163,7 +164,6 @@ commento = false
   gitlab = ""
   mastodon = ""
   jianshu = ""
-  zhihu = ""
   signal = ""
   whatsapp = ""
   matrix = ""

@@ -1,18 +1,18 @@
-baseURL = "http://example.org"
-title = "Hugo Zzo Theme"
+baseURL = "/"
+title = "飞飞的博客"
 theme = "zzo"
 
-defaultContentLanguage = "en"
+defaultContentLanguage = "zh"
 defaultContentLanguageInSubdir = true
 hasCJKLanguage = true
 
-summaryLength = 70
+summaryLength = 200
 buildFuture = true
 
-copyright = "&copy;{year}, All Rights Reserved"
+copyright = "&copy;{2020}, All Rights Reserved"
 timeout = 10000
 enableEmoji = true
-paginate = 13
+paginate = 7
 rssLimit = 100
 
 enableGitInfo = false
