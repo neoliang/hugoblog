@@ -6,9 +6,9 @@ header:
     paddingY: 0
     align: center
     title:
-      - HUGO
+      - 代码与艺术
     subtitle:
-      - The world’s fastest framework for building websites
+      - 数学、天文、艺术及编程
     titleColor: 
     titleShadow: true
     titleFontSize: 44
