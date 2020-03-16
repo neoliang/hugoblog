@@ -1,5 +1,5 @@
 
-<script class="p5js"  type="text/p5">
+<script class="p5js"  {{ with .Get "data-height" }}data-height="{{.}}"{{end}} {{ if .Get "autoplay" }}data-autoplay{{end}} {{ with .Get "canvas-width" }}data-preview-width="{{.}}"{{end}} type="text/p5">
 {{ .Inner }}
 </script>
 
