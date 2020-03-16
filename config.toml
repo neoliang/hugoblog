@@ -1,0 +1,29 @@
+# Site settings
+baseurl = "/"
+title = "Code and Art"
+paginate = 5
+buildFuture = true
+
+[[menu.social]]
+  name = "GitHub"
+  title = "fab fa-github-square"
+  url = "https://github.com/neoliang"
+
+
+
+[[menu.main]]
+  name = "存档"
+  title = "Archives"
+  url = "/archives/"
+
+[params]
+  author = "feef"
+  twitter = ""
+  classes = []
+
+[outputs]
+  home = ["HTML", "JSON", "RSS"]
+  page = ["HTML"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  taxonomyTerm = ["HTML", "RSS"]
