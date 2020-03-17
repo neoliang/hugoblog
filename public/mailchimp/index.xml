@@ -18,25 +18,5 @@
 			<description>本文测试几个ShortCode功能&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;测试shadertoy,p5js、video及shader编辑&lt;!-- raw HTML omitted --&gt;</description>
 		</item>
 		
-		<item>
-			<title>代码与艺术-开篇</title>
-			<link>/about-artofcode/</link>
-			<pubDate>Sat, 14 Mar 2020 00:00:00 UTC</pubDate>
-			<author>feef</author>
-			<guid>/about-artofcode/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
-			<description>本文介绍创建该博客的动机与过程&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;正如博客标题，我将会在这里记录下代码创建艺术的过程。这篇文章介绍该博客的创建动机与过程，以及将来打算写作的内容…&lt;!-- raw HTML omitted --&gt;</description>
-		</item>
-		
-		<item>
-			<title>代码与艺术-开篇</title>
-			<link>/posts/about-artofcode/</link>
-			<pubDate>Sat, 14 Mar 2020 00:00:00 UTC</pubDate>
-			<author>feef</author>
-			<guid>/posts/about-artofcode/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
-			<description>本文介绍创建该博客的动机与过程&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;正如博客标题，我将会在这里记录下代码创建艺术的过程。这篇文章介绍该博客的创建动机与过程，以及将来打算写作的内容…&lt;!-- raw HTML omitted --&gt;</description>
-		</item>
-		
 	</channel>
 </rss>
