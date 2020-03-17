@@ -1,7 +1,7 @@
 ---
 title: Demo测试
 date: "2020-03-16"
-url: "//test"
+url: "/posts/test"
 description: "本文测试几个ShortCode功能"
 classes:
 - feature-figcaption

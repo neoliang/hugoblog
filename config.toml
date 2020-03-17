@@ -10,11 +10,23 @@ buildFuture = true
   url = "https://github.com/neoliang"
 
 
-
 [[menu.main]]
   name = "存档"
   title = "Archives"
   url = "/archives/"
+
+[[menu.main]]
+  name = "作品"
+  title = "art"
+  url = "/"
+
+[[menu.main]]
+  name = "文章"
+  title = "posts"
+  url = "/posts/"
+
+
+
 
 [params]
   author = "feef"

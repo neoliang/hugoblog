@@ -1,18 +1,20 @@
-{{ define "main" }}
-	<div class="pa3 pa4-ns w-100 w-70-ns center">
-		<section class="w-100 mw8">
-		{{ $pages := where .Paginator.Pages ".Params.skip" "ne" "true" }}
-		{{ range where (where $pages ".Date.Unix" "<" now.Unix) "Section" "ne" "slides" }}
-			{{ partial "li.html" . }}
-		{{ end }}
-		</section>
-	</div>
-{{ end }}
 
-{{ define "pagination" }}
-<footer class="w-100 sans-serif" role="contentinfo">
-	<nav class="w-third-l pb3 f6 center db" role="navigation">
-		{{- template "_internal/pagination.html" . -}}
-	</nav>
-</footer>
+{{ define "main" }}
+<div class="container">	
+	<div class="main">
+		<ul id="og-grid" class="og-grid">
+			{{ range $.Site.Data.items.items }}
+			<li>
+				<a href="{{.url}}" data-largesrc="{{.image}}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
+					<img src="{{.thumb}}" alt="{{.alt}}"/>
+				</a>
+			</li>
+			{{ end }}
+		</ul>
+	</div>
+</div>
+
+
+{{ partial "scripts.html" . }}
+
 {{ end }}
