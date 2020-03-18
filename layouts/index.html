@@ -5,9 +5,7 @@
 		<ul id="og-grid" class="og-grid">
 			{{ range $.Site.Data.items.items }}
 			<li>
-				<div href="{{.url}}" data-largesrc="{{.image}}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
-					<img src="{{.thumb}}" alt="{{.alt}}"/>
-				</div>
+				<img src="{{.thumb}}" alt="{{.alt}}" data-jump="{{.url}}" data-largesrc="{{.image}}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}" />
 			</li>
 			{{ end }}
 		</ul>

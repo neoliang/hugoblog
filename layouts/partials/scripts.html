@@ -213,7 +213,7 @@ console.log("addItems"+i);
 					$items.on( 'click', 'span.og-close', function() {
 						hidePreview();
 						return false;
-					} ).children( 'div' ).on( 'click', function(e) {
+					} ).children( 'img' ).on( 'click', function(e) {
 
 						var $item = $( this ).parent();
 						current === Array.from($items).findIndex(d => d == $item[0]) ? hidePreview() : showPreview( $item );
@@ -300,9 +300,9 @@ console.log("addItems"+i);
 
 						current = this.$item.index();
 
-						var $itemEl = this.$item.children( 'div' ),
+						var $itemEl = this.$item.children( 'img' ),
 							eldata = {
-								href : $itemEl.attr( 'href' ),
+								href : $itemEl.data( 'jump' ),
 								largesrc : $itemEl.data( 'largesrc' ).split(';'),
 								title : $itemEl.data( 'title' ),
 								description : $itemEl.data( 'description' ),
