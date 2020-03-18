@@ -214,7 +214,7 @@ console.log("addItems"+i);
 						hidePreview();
 						return false;
 					} ).children( 'a' ).on( 'click', function(e) {
-						return false;
+
 						var $item = $( this ).parent();
 						current === Array.from($items).findIndex(d => d == $item[0]) ? hidePreview() : showPreview( $item );
 						return false;
@@ -227,7 +227,7 @@ console.log("addItems"+i);
 				}
 
 				function showPreview( $item ) {
-					return true;
+
 					var preview = $.data( this, 'preview' ),
 						position = $item.data( 'offsetTop' );
 
