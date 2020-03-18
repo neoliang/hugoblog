@@ -277,6 +277,7 @@
 						this.$previewInner = $( '<div class="og-expander-inner"></div>' ).append( this.$closePreview, this.$fullimage, this.$details );
 						this.$previewEl = $( '<div class="og-expander"></div>' ).append( this.$previewInner );
 						this.$item.append( this.getEl() );
+						this.$largeImgs = []
 						if( support ) {
 							this.setTransition();
 						}
@@ -299,7 +300,7 @@
 						var $itemEl = this.$item.children( 'a' ),
 							eldata = {
 								href : $itemEl.attr( 'href' ),
-								largesrc : $itemEl.data( 'largesrc' ),
+								largesrc : $itemEl.data( 'largesrc' ).split(';'),
 								title : $itemEl.data( 'title' ),
 								description : $itemEl.data( 'description' ),
 								buttontext : $itemEl.data( 'buttontext' )
@@ -320,30 +321,40 @@
 
 						var self = this;
 						
-						if( typeof self.$largeImg != 'undefined' ) {
-							self.$largeImg.remove();
+						for (var i = 0; i < self.$largeImgs.length; i++) {												
+							if( typeof self.$largeImgs[i] != 'undefined' ) {
+								self.$largeImgs[i].remove();
+							}
 						}
+						
+						self.$largeImgs = []
 
 						if( self.$fullimage.is( ':visible' ) ) {
 							this.$loading.show();
-							$( '<img/>' ).load( function() {
-								var $img = $( this );
-								if( $img.attr( 'src' ) === self.$item.children('a').data( 'largesrc' ) ) {
-									self.$loading.hide();
-									self.$fullimage.find( 'img' ).remove();
-									self.$largeImg = $img.fadeIn( 350 );
-									self.$fullimage.append( self.$largeImg );
-								}
-							} ).attr( 'src', eldata.largesrc );	
+							self.$fullimage.find( 'img' ).remove();
+							for (var i = 0; i < eldata.largesrc.length ; ++i) {
+								$( '<img index="' + i +  '" />' ).load( function() {
+									var $img = $( this );
+										self.$loading.hide();
+										var tImg = $img.fadeIn( 350 )
+										self.$largeImgs.push(tImg);
+										self.$fullimage.append( tImg );
+										if($img.attr('index') == eldata.largesrc.length-1)
+										{
+											setTimeout( $.proxy( function() {	
+												this.setHeights();
+												this.positionPreview();
+											}, self ), 25 );
+
+										}
+								} ).attr( 'src', eldata.largesrc[i] );									
+							}
+
 						}
 
 					},
 					open : function() {
 
-						setTimeout( $.proxy( function() {	
-							this.setHeights();
-							this.positionPreview();
-						}, this ), 25 );
 
 					},
 					close : function() {
@@ -359,9 +370,12 @@
 
 						setTimeout( $.proxy( function() {
 
-							if( typeof this.$largeImg !== 'undefined' ) {
-								this.$largeImg.fadeOut( 'fast' );
+							for (var i = 0; i < this.$largeImgs.length; i++) {												
+								if( typeof this.$largeImgs[i] != 'undefined' ) {
+									this.$largeImgs[i].fadeOut( 'fast' );
+								}
 							}
+							this.$largeImgs = []
 							this.$previewEl.css( 'height', 0 );
 							var $expandedItem = $items.eq( this.expandedIdx );
 							$expandedItem.css( 'height', $expandedItem.data( 'height' ) ).on( transEndEventName, onEndFn );
@@ -377,16 +391,25 @@
 					},
 					calcHeight : function() {
 
-						var heightPreview = winsize.height - this.$item.data( 'height' ) - marginExpanded,
-							itemHeight = winsize.height;
-
+						var maxHeight = 0;
+						$('.og-fullimg').find( 'img' ).each(function(){
+							maxHeight += this.naturalHeight
+						})
+						
+						console.log("maxHeight",maxHeight);
+						maxHeight +=  this.$item.data( 'height' ) + marginExpanded;
+						maxHeight = Math.max(maxHeight,winsize.height)
+						var heightPreview =  maxHeight - this.$item.data( 'height' ) - marginExpanded,
+							itemHeight = maxHeight;
+						console.log("maxHeight",maxHeight);
 						if( heightPreview < settings.minHeight ) {
 							heightPreview = settings.minHeight;
 							itemHeight = settings.minHeight + this.$item.data( 'height' ) + marginExpanded;
 						}
 
-						this.height = heightPreview;
+						this.height = heightPreview ;
 						this.itemHeight = itemHeight;
+						console.log("maxHeight",maxHeight);
 
 					},
 					setHeights : function() {
@@ -401,6 +424,7 @@
 
 						this.calcHeight();
 						this.$previewEl.css( 'height', this.height );
+						console.log("this.$previewEl.css( 'height'",this.height)
 						this.$item.css( 'height', this.itemHeight ).on( transEndEventName, onEndFn );
 
 						if( !support ) {
