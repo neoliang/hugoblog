@@ -130,6 +130,8 @@
 					previewPos = -1,
 					scrollExtra = 0,
 					marginExpanded = 10,
+					ogExpanderInnerWidth = 50,
+					previewImgPadding = 5,
 					$window = $( window ), winsize,
 					$body = $( 'html, body' ),
 					transEndEventNames = {
@@ -333,7 +335,7 @@
 							this.$loading.show();
 							self.$fullimage.find( 'img' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
-								$( '<img index="' + i +  '" />' ).load( function() {
+								$( '<img index="' + i +  '"' + 'style="padding: '+previewImgPadding+'px 0;" />' ).load( function() {
 									var $img = $( this );
 										self.$loading.hide();
 										var tImg = $img.fadeIn( 350 )
@@ -392,12 +394,19 @@
 					calcHeight : function() {
 
 						var maxHeight = 0;
+						var imgMaxWdith = 0;
 						$('.og-fullimg').find( 'img' ).each(function(){
-							maxHeight += this.naturalHeight
+							maxHeight += this.naturalHeight + previewImgPadding
+							imgMaxWdith = Math.max(imgMaxWdith,this.naturalWidth)
 						})
-						
+						var layoutWidth = $('.og-fullimg').width()
+						if(imgMaxWdith > 0 && layoutWidth > 0)
+						{	
+							console.log("imgMaxWdith->layoutWidth->maxHeight",imgMaxWdith,layoutWidth,maxHeight)
+							maxHeight = maxHeight * layoutWidth / imgMaxWdith
+						}
 						console.log("maxHeight",maxHeight);
-						maxHeight +=  this.$item.data( 'height' ) + marginExpanded;
+						maxHeight +=  this.$item.data( 'height' ) + marginExpanded + ogExpanderInnerWidth;
 						maxHeight = Math.max(maxHeight,winsize.height)
 						var heightPreview =  maxHeight - this.$item.data( 'height' ) - marginExpanded,
 							itemHeight = maxHeight;
@@ -409,7 +418,6 @@
 
 						this.height = heightPreview ;
 						this.itemHeight = itemHeight;
-						console.log("maxHeight",maxHeight);
 
 					},
 					setHeights : function() {
@@ -424,7 +432,6 @@
 
 						this.calcHeight();
 						this.$previewEl.css( 'height', this.height );
-						console.log("this.$previewEl.css( 'height'",this.height)
 						this.$item.css( 'height', this.itemHeight ).on( transEndEventName, onEndFn );
 
 						if( !support ) {
