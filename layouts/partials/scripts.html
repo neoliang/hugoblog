@@ -251,7 +251,7 @@ console.log("addItems"+i);
 					previewPos = position;
 					preview = $.data( this, 'preview', new Preview( $item ) );
 					preview.open();
-
+					return false;
 				}
 
 				function hidePreview() {
@@ -331,8 +331,8 @@ console.log("addItems"+i);
 						}
 						
 						self.$largeImgs = []
-						console.log("self.$fullimage.is( ':visible' )",self.$fullimage.is( ':visible' ));
-						if( self.$fullimage.is( ':visible' ) || true) {
+						//if( self.$fullimage.is( ':visible' ) || true) 
+						{
 							this.$loading.show();
 							self.$fullimage.find( 'img' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
