@@ -199,14 +199,14 @@ console.log("addItems"+i);
 					
 					$window.on( 'debouncedresize', function() {
 						
-						scrollExtra = 0;
-						previewPos = -1;
+						//scrollExtra = 0;
+						//previewPos = -1;
 						saveItemInfo();
 						getWinSize();
-						var preview = $.data( this, 'preview' );
-						if( typeof preview != 'undefined' ) {
+						//var preview = $.data( this, 'preview' );
+						//if( typeof preview != 'undefined' ) {
 							//hidePreview();
-						}
+						//}
 
 					} );
 
@@ -221,8 +221,7 @@ console.log("addItems"+i);
 						var $item = $( this ).parent();
 						if(current === Array.from($items).findIndex(d => d == $item[0]))
 						{
-							if(!is_touch_device())
-							{hidePreview();}
+							hidePreview();
 						}
 						else
 						{
