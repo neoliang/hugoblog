@@ -221,7 +221,7 @@ console.log("addItems"+i);
 						var $item = $( this ).parent();
 						if(current === Array.from($items).findIndex(d => d == $item[0]))
 						{
-							#if(!is_touch_device())
+							if(!is_touch_device())
 							{hidePreview();}
 						}
 						else
