@@ -32,11 +32,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
 		{{ end }}
-
-		<script src="//toolness.github.io/p5.js-widget/p5-widget.js"></script>
-<link type="text/css" rel="stylesheet" href="/css/glslEditor.css">
-<script type="application/javascript" src="/js/glslEditor.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
 		{{ if or (in .Site.Params.classes "feature-highlight") (in .Params.classes "feature-highlight") -}}
 			{{- if not (or (in .Site.Params.classes "feature-nohighlight") (in .Params.classes "feature-nohighlight") ) -}}
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
