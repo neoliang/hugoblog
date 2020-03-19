@@ -1,5 +1,8 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script>
+			function is_touch_device() {
+ 				 return 'ontouchstart' in window;
+			}
 			var $event = $.event,
 			$special,
 			resizeTimeout;
@@ -216,7 +219,15 @@ console.log("addItems"+i);
 					} ).children( 'a' ).on( 'click', function(e) {
 						e.preventDefault();
 						var $item = $( this ).parent();
-						current === Array.from($items).findIndex(d => d == $item[0]) ? hidePreview() : showPreview( $item );
+						if(current === Array.from($items).findIndex(d => d == $item[0]))
+						{
+							if(!is_touch_device())
+							{hidePreview();}
+						}
+						else
+						{
+							showPreview( $item );
+						}
 						return false;
 
 					} );
@@ -302,7 +313,7 @@ console.log("addItems"+i);
 
 						var $itemEl = this.$item.children( 'a' ),
 							eldata = {
-								href : $itemEl.attr( 'href' ),
+								href : $itemEl.data( 'href' ),
 								largesrc : $itemEl.data( 'largesrc' ).split(';'),
 								title : $itemEl.data( 'title' ),
 								description : $itemEl.data( 'description' ),
