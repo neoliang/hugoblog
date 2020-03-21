@@ -1,4 +1,4 @@
-		<script src="js/jquery.min.js"></script>
+		
 		<script>
 			function is_touch_device() {
  				 return 'ontouchstart' in window;
@@ -405,17 +405,10 @@ console.log("addItems"+i);
 					calcHeight : function() {
 
 						var maxHeight = 0;
-						var imgMaxWdith = 0;
-						$('.og-fullimg').find( 'img' ).each(function(){
-							maxHeight += this.naturalHeight + previewImgPadding
-							imgMaxWdith = Math.max(imgMaxWdith,this.naturalWidth)
-						})
 						var layoutWidth = $('.og-fullimg').width()
-						if(imgMaxWdith > 0 && layoutWidth > 0)
-						{	
-							console.log("imgMaxWdith->layoutWidth->maxHeight",imgMaxWdith,layoutWidth,maxHeight)
-							maxHeight = maxHeight * layoutWidth / imgMaxWdith
-						}
+						$('.og-fullimg').find( 'img' ).each(function(){
+							maxHeight += this.naturalHeight * layoutWidth/this.naturalWidth + previewImgPadding
+						})
 						console.log("maxHeight",maxHeight);
 						maxHeight +=  this.$item.data( 'height' ) + marginExpanded + ogExpanderInnerWidth;
 						maxHeight = Math.max(maxHeight,winsize.height)
