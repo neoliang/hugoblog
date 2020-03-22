@@ -4,7 +4,7 @@ title = "blackhole"
 image = "images/full/raymarching.jpg;images/full/raymarching-bh.jpg;images/full/bh-v1.jpg;images/full/blackhole.jpg"
 thumb = "images/thumbs/blackhole.jpg"
 alt = "Logo"
-description = "在开设本博客的时，我决定设计一个Logo以体现本博客所要表达的审美与乐趣。用比较简洁的元素，颜色这样才不至于让logo看起来比较花哨，喧宾夺主。所以状态只有直线、圆和三角形。颜色只有灰、白、红。体现宇宙也要有人文智慧，这样用简单的同心圆来传达出因地球自转而产生的星空漩涡，在星空中再随机画一些圆表示恒星，这就是自然与宇宙。但在人文与智慧表达确有一些困难，首先，用直线连接恒星，让其看起来有星座的感觉，在自然形成的三角形并不多见，三角形人很明显人造感，这样代表了人文。三角形能让人想到的勾股定理，而勾股定理不但可以计算三维空间中的距离，也可以计算四维时空的距离，这样代表了智慧。"
+description = "卡尔·爱德华·萨根（英语：Carl Edward Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。"
 url = "/posts/"
 
 [[items]]
@@ -12,7 +12,7 @@ title = "木星云"
 image = "images/full/jupiter-clouds.jpg"
 thumb = "images/thumbs/jupiter-clouds.jpg"
 alt = "Logo"
-description = "在开设本博客的时，我决定设计一个Logo以体现本博客所要表达的审美与乐趣。用比较简洁的元素，颜色这样才不至于让logo看起来比较花哨，喧宾夺主。所以状态只有直线、圆和三角形。颜色只有灰、白、红。体现宇宙也要有人文智慧，这样用简单的同心圆来传达出因地球自转而产生的星空漩涡，在星空中再随机画一些圆表示恒星，这就是自然与宇宙。但在人文与智慧表达确有一些困难，首先，用直线连接恒星，让其看起来有星座的感觉，在自然形成的三角形并不多见，三角形人很明显人造感，这样代表了人文。三角形能让人想到的勾股定理，而勾股定理不但可以计算三维空间中的距离，也可以计算四维时空的距离，这样代表了智慧。"
+description = "卡尔·爱德华·萨根（英语：Carl Edward Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。"
 url = "/posts/"
 
 
@@ -21,7 +21,7 @@ title = "About Logo"
 image = "img/default-header-img.jpg;img/galaxyv1.jpg"
 thumb = "images/thumbs/logo.jpg"
 alt = "Logo"
-description = "在开设本博客的时，我决定设计一个Logo以体现本博客所要表达的审美与乐趣。用比较简洁的元素，颜色这样才不至于让logo看起来比较花哨，喧宾夺主。所以状态只有直线、圆和三角形。颜色只有灰、白、红。体现宇宙也要有人文智慧，这样用简单的同心圆来传达出因地球自转而产生的星空漩涡，在星空中再随机画一些圆表示恒星，这就是自然与宇宙。但在人文与智慧表达确有一些困难，首先，用直线连接恒星，让其看起来有星座的感觉，在自然形成的三角形并不多见，三角形人很明显人造感，这样代表了人文。三角形能让人想到的勾股定理，而勾股定理不但可以计算三维空间中的距离，也可以计算四维时空的距离，这样代表了智慧。"
+description = "卡尔·爱德华·萨根（英语：Carl Edward Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。"
 url = "/posts/"
 
 
@@ -30,7 +30,7 @@ title = "Joy Division"
 image = "images/full/joydivision.jpg"
 thumb = "images/thumbs/joydivision.jpg"
 alt = "Logo"
-description = "在开设本博客的时，我决定设计一个Logo以体现本博客所要表达的审美与乐趣。用比较简洁的元素，颜色这样才不至于让logo看起来比较花哨，喧宾夺主。所以状态只有直线、圆和三角形。颜色只有灰、白、红。体现宇宙也要有人文智慧，这样用简单的同心圆来传达出因地球自转而产生的星空漩涡，在星空中再随机画一些圆表示恒星，这就是自然与宇宙。但在人文与智慧表达确有一些困难，首先，用直线连接恒星，让其看起来有星座的感觉，在自然形成的三角形并不多见，三角形人很明显人造感，这样代表了人文。三角形能让人想到的勾股定理，而勾股定理不但可以计算三维空间中的距离，也可以计算四维时空的距离，这样代表了智慧。"
+description = "Make an expressive transition between colors. Think of a particular emotion. What color seems most representative of it? How does it appear? How does it fade away? Think of another emotion and the matching color for it. Change the beginning and ending color of the above code to match those emotions. Then animate the transition using shaping functions. Robert Penner developed a series of popular shaping functions for computer animation known as easing functions, you can use this example as research and inspiration but the best result will come from making your own transitions."
 url = "/posts/"
 
 [[items]]
@@ -38,7 +38,7 @@ title = "气球"
 image = "images/full/ballon.jpg"
 thumb = "images/thumbs/ballon.jpg"
 alt = "Logo"
-description = "在开设本博客的时，我决定设计一个Logo以体现本博客所要表达的审美与乐趣。用比较简洁的元素，颜色这样才不至于让logo看起来比较花哨，喧宾夺主。所以状态只有直线、圆和三角形。颜色只有灰、白、红。体现宇宙也要有人文智慧，这样用简单的同心圆来传达出因地球自转而产生的星空漩涡，在星空中再随机画一些圆表示恒星，这就是自然与宇宙。但在人文与智慧表达确有一些困难，首先，用直线连接恒星，让其看起来有星座的感觉，在自然形成的三角形并不多见，三角形人很明显人造感，这样代表了人文。三角形能让人想到的勾股定理，而勾股定理不但可以计算三维空间中的距离，也可以计算四维时空的距离，这样代表了智慧。"
+description = "Make an expressive transition between colors. Think of a particular emotion. What color seems most representative of it? How does it appear? How does it fade away? Think of another emotion and the matching color for it. Change the beginning and ending color of the above code to match those emotions. Then animate the transition using shaping functions. Robert Penner developed a series of popular shaping functions for computer animation known as easing functions, you can use this example as research and inspiration but the best result will come from making your own transitions."
 url = "/posts/"
 
 
