@@ -134,7 +134,7 @@
 					scrollExtra = 0,
 					marginExpanded = 10,
 					ogExpanderInnerWidth = 50,
-					previewImgPadding = 5,
+					imgPreviewMargin = 5,
 					$window = $( window ), winsize,
 					$body = $( 'html, body' ),
 					transEndEventNames = {
@@ -209,6 +209,16 @@ console.log("addItems"+i);
 						//}
 
 					} );
+					$window.on( 'deviceorientation',function () {
+						scrollExtra = 0;
+						previewPos = -1;
+						saveItemInfo();
+						getWinSize();
+						var preview = $.data( this, 'preview' );
+						if( typeof preview != 'undefined' ) {
+							hidePreview();
+						}						
+					});
 
 				}
 
@@ -346,7 +356,7 @@ console.log("addItems"+i);
 							this.$loading.show();
 							self.$fullimage.find( 'img' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
-								$( '<img index="' + i +  '"' + 'style="padding: '+previewImgPadding+'px 0;" />' ).load( function() {
+								$( '<img index="' + i +  '"' + 'style="margin: '+imgPreviewMargin+'px 0;" />' ).load( function() {
 									var $img = $( this );
 										self.$loading.hide();
 										var tImg = $img.fadeIn( 350 )
@@ -406,18 +416,16 @@ console.log("addItems"+i);
 
 						var heightPreview = 0;
 						var layoutWidth = $('.og-fullimg').width()
+						var parent = $('.og-expander-inner')
+						var parentPadding =  parseInt(parent.css('padding-top')) + parseInt(parent.css('padding-bottom'));
+						console.log('og-expander padding',parentPadding);
 						$('.og-fullimg').find( 'img' ).each(function(){
-							var itemH = this.naturalHeight * layoutWidth/this.naturalWidth + previewImgPadding
-							console.log('itemH',itemH)
+							var itemH = this.naturalHeight * layoutWidth/this.naturalWidth + imgPreviewMargin*2+8;
 							heightPreview += itemH;
-							console.log("heightPreview",heightPreview);
 						})
-						console.log("heightPreview",heightPreview);
-						heightPreview -= previewImgPadding;
-						console.log("heightPreview",heightPreview);
-						heightPreview += 80;//padding in css
+						heightPreview -= imgPreviewMargin*2;
+						heightPreview += parentPadding;//padding in css
 						heightPreview = Math.max(heightPreview,winsize.height)
-						console.log("heightPreview",heightPreview);
 						itemHeight = heightPreview + this.$item.data( 'height' ) + marginExpanded;
 						if( heightPreview < settings.minHeight ) {
 							heightPreview = settings.minHeight;
