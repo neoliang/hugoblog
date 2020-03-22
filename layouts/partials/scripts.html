@@ -209,6 +209,16 @@ console.log("addItems"+i);
 						//}
 
 					} );
+					$window.on( 'deviceorientation',function () {
+						scrollExtra = 0;
+						previewPos = -1;
+						saveItemInfo();
+						getWinSize();
+						var preview = $.data( this, 'preview' );
+						if( typeof preview != 'undefined' ) {
+							hidePreview();
+						}						
+					});
 
 				}
 
