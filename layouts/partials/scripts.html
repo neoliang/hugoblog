@@ -404,17 +404,21 @@ console.log("addItems"+i);
 					},
 					calcHeight : function() {
 
-						var maxHeight = 0;
+						var heightPreview = 0;
 						var layoutWidth = $('.og-fullimg').width()
 						$('.og-fullimg').find( 'img' ).each(function(){
-							maxHeight += this.naturalHeight * layoutWidth/this.naturalWidth + previewImgPadding
+							var itemH = this.naturalHeight * layoutWidth/this.naturalWidth + previewImgPadding
+							console.log('itemH',itemH)
+							heightPreview += itemH;
+							console.log("heightPreview",heightPreview);
 						})
-						console.log("maxHeight",maxHeight);
-						maxHeight +=  this.$item.data( 'height' ) + marginExpanded + ogExpanderInnerWidth;
-						maxHeight = Math.max(maxHeight,winsize.height)
-						var heightPreview =  maxHeight - this.$item.data( 'height' ) - marginExpanded,
-							itemHeight = maxHeight;
-						console.log("maxHeight",maxHeight);
+						console.log("heightPreview",heightPreview);
+						heightPreview -= previewImgPadding;
+						console.log("heightPreview",heightPreview);
+						heightPreview += 80;//padding in css
+						heightPreview = Math.max(heightPreview,winsize.height)
+						console.log("heightPreview",heightPreview);
+						itemHeight = heightPreview + this.$item.data( 'height' ) + marginExpanded;
 						if( heightPreview < settings.minHeight ) {
 							heightPreview = settings.minHeight;
 							itemHeight = settings.minHeight + this.$item.data( 'height' ) + marginExpanded;
