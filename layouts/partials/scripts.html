@@ -354,14 +354,19 @@ console.log("addItems"+i);
 						//if( self.$fullimage.is( ':visible' ) || true) 
 						{
 							this.$loading.show();
-							self.$fullimage.find( 'img' ).remove();
+							self.$fullimage.find( '.og-img-preview-container' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
-								$( '<img index="' + i +  '"' + 'style="margin: '+imgPreviewMargin+'px 0;" />' ).load( function() {
+								var fig = $('<div class="og-img-preview-container"> </div>')
+								fig.append('<div class="og-img-preview-overlay">' + eldata.largesrc[i] + '</div>' )
+								self.$fullimage.append(fig);
+								var img = $( '<img index="' + i +  '"' + 'style="margin: '+imgPreviewMargin+'px 0;" />' );
+								fig.append( img );
+								img.load( function() {
 									var $img = $( this );
 										self.$loading.hide();
 										var tImg = $img.fadeIn( 350 )
 										self.$largeImgs.push(tImg);
-										self.$fullimage.append( tImg );
+										
 										if($img.attr('index') == eldata.largesrc.length-1)
 										{
 											setTimeout( $.proxy( function() {	

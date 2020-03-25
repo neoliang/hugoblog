@@ -108,6 +108,34 @@
 	max-width: 100%;
 }
 
+.og-img-preview-container {
+  position: relative;
+  max-width: 100%;
+}
+
+
+.og-img-preview-overlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  max-width: 640px;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size:10px;
+  padding: 5px;
+  margin-bottom: 8px;
+  text-align: center;
+  display: inline-block;
+}
+
+.og-img-preview-container:hover .og-img-preview-overlay {
+  opacity: 1;
+}
+
 .og-details h3 {
 	font-weight: 300;
 	font-size: 52px;
