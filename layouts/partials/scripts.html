@@ -425,7 +425,9 @@ console.log("addItems"+i);
 						var parentPadding =  parseInt(parent.css('padding-top')) + parseInt(parent.css('padding-bottom'));
 						console.log('og-expander padding',parentPadding);
 						$('.og-fullimg').find( 'img' ).each(function(){
-							var itemH = this.naturalHeight * layoutWidth/this.naturalWidth + imgPreviewMargin*2+8;
+							var hScale = layoutWidth/this.naturalWidth;
+							if (hScale > 1) { hScale = 1;}
+							var itemH = this.naturalHeight * hScale + imgPreviewMargin*2+8;
 							heightPreview += itemH;
 						})
 						heightPreview -= imgPreviewMargin*2;
