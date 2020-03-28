@@ -6,7 +6,7 @@
 			{{ range $.Site.Data.items.items }}
 			<li>
 				<a class="button" href="javascript:void(0)" data-jump="{{.url}}" data-largesrc="{{.image}}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
-					<img src="{{.thumb}}" alt="{{.alt}}"/>
+					<img src="preview_images/thumbs/{{.thumb}}" alt="{{.alt}}"/>
 				</a>
 			</li>
 			{{ end }}

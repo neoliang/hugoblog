@@ -323,7 +323,7 @@ console.log("addItems"+i);
 						var $itemEl = this.$item.children( 'a' ),
 							eldata = {
 								href : $itemEl.data( 'jump' ),
-								largesrc : $itemEl.data( 'largesrc' ).split(';'),
+								largesrc : $itemEl.data( 'largesrc' ).split(';').map(v=>"preview_images/full/"+v),
 								title : $itemEl.data( 'title' ),
 								description : $itemEl.data( 'description' ),
 								buttontext : $itemEl.data( 'buttontext' )
