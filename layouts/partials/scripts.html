@@ -353,6 +353,8 @@ console.log("addItems"+i);
 						self.$largeImgs = []
 						//if( self.$fullimage.is( ':visible' ) || true) 
 						{
+							this.setHeights();
+							this.positionPreview();
 							this.$loading.show();
 							self.$fullimage.find( '.og-img-preview-container' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
@@ -366,15 +368,6 @@ console.log("addItems"+i);
 										self.$loading.hide();
 										var tImg = $img.fadeIn( 350 )
 										self.$largeImgs.push(tImg);
-										
-										if($img.attr('index') == eldata.largesrc.length-1)
-										{
-											setTimeout( $.proxy( function() {	
-												this.setHeights();
-												this.positionPreview();
-											}, self ), 25 );
-
-										}
 								} ).attr( 'src', eldata.largesrc[i] );									
 							}
 
@@ -423,13 +416,20 @@ console.log("addItems"+i);
 						var layoutWidth = $('.og-fullimg').width()
 						var parent = $('.og-expander-inner')
 						var parentPadding =  parseInt(parent.css('padding-top')) + parseInt(parent.css('padding-bottom'));
-						console.log('og-expander padding',parentPadding);
-						$('.og-fullimg').find( 'img' ).each(function(){
-							var hScale = layoutWidth/this.naturalWidth;
+						//console.log('og-expander padding',parentPadding);
+
+						var $itemEl = this.$item.children( 'a' )
+						//console.log(this.$item,$itemEl,$itemEl.data('widths'))
+						widths = $itemEl.data('widths').toString().split(';');
+						heights = $itemEl.data('heights').toString().split(';');
+						//console.log(widths);
+						for (var i = 0; i < heights.length; i++) {
+							var hScale = layoutWidth/widths[i];
 							if (hScale > 1) { hScale = 1;}
-							var itemH = this.naturalHeight * hScale + imgPreviewMargin*2+8;
-							heightPreview += itemH;
-						})
+							var itemH = heights[i] * hScale + imgPreviewMargin*2+8;
+							heightPreview += itemH;				
+						}
+						//console.log(heightPreview);
 						heightPreview -= imgPreviewMargin*2;
 						heightPreview += parentPadding;//padding in css
 						heightPreview = Math.max(heightPreview,winsize.height)

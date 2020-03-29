@@ -4,8 +4,18 @@
 	<div class="main">
 		<ul id="og-grid" class="og-grid">
 			{{ range $.Site.Data.items.items }}
+			{{$widths := slice}}
+			{{$heights := slice}}
+			{{ range split .image ";" }}
+			{{ $original := printf "content/preview_images/full/%s" .  }}
+			{{ $cfg := imageConfig ($original) }}
+			{{ $widths = $widths | append $cfg.Width }}
+			{{ $heights = $heights | append $cfg.Height }}
+			{{ end }}
+			{{ $ws := delimit $widths ";" }}
+			{{ $hs := delimit $heights ";" }}
 			<li>
-				<a class="button" href="javascript:void(0)" data-jump="{{.url}}" data-largesrc="{{.image}}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
+				<a class="button" href="javascript:void(0)" data-jump="{{.url}}" data-largesrc="{{.image}}" data-widths="{{ $ws }}" data-heights="{{ $hs }}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
 					<img src="preview_images/thumbs/{{.thumb}}" alt="{{.alt}}"/>
 				</a>
 			</li>
