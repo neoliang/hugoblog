@@ -323,7 +323,8 @@ console.log("addItems"+i);
 						var $itemEl = this.$item.children( 'a' ),
 							eldata = {
 								href : $itemEl.data( 'jump' ),
-								largesrc : $itemEl.data( 'largesrc' ).split(';').map(v=>"preview_images/full/"+v),
+								largesrc : $itemEl.data( 'largesrc' ).split(';'),
+								descs : $itemEl.data('descs').split(';'),
 								title : $itemEl.data( 'title' ),
 								description : $itemEl.data( 'description' ),
 								buttontext : $itemEl.data( 'buttontext' )
@@ -359,7 +360,7 @@ console.log("addItems"+i);
 							self.$fullimage.find( '.og-img-preview-container' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
 								var fig = $('<div class="og-img-preview-container"> </div>')
-								fig.append('<div class="og-img-preview-overlay">' + eldata.largesrc[i] + '</div>' )
+								fig.append('<div class="og-img-preview-overlay">' + eldata.descs[i] + '</div>' )
 								self.$fullimage.append(fig);
 								var img = $( '<img index="' + i +  '"' + 'style="margin: '+imgPreviewMargin+'px 0;" />' );
 								fig.append( img );

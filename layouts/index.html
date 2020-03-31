@@ -6,16 +6,23 @@
 			{{ range $.Site.Data.items.items }}
 			{{$widths := slice}}
 			{{$heights := slice}}
-			{{ range split .image ";" }}
-			{{ $original := printf "content/preview_images/full/%s" .  }}
+			{{$imgpaths := slice}}
+			{{$imgdescs := slice}}
+			{{ range .images }}
+			{{ $path := printf "%s%s" $.Site.Data.items.img_full_dir .img }}
+			{{ $original := printf "content/%s" $path  }}
 			{{ $cfg := imageConfig ($original) }}
 			{{ $widths = $widths | append $cfg.Width }}
 			{{ $heights = $heights | append $cfg.Height }}
+			{{ $imgpaths = $imgpaths | append $path }}
+			{{ $imgdescs = $imgdescs | append .desc }}
 			{{ end }}
 			{{ $ws := delimit $widths ";" }}
 			{{ $hs := delimit $heights ";" }}
+			{{ $imgs := delimit $imgpaths ";"}}
+			{{ $descs := delimit $imgdescs ";"}}
 			<li>
-				<a class="button" href="javascript:void(0)" data-jump="{{.url}}" data-largesrc="{{.image}}" data-widths="{{ $ws }}" data-heights="{{ $hs }}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
+				<a class="button" href="javascript:void(0)" data-jump="{{.url}}" data-largesrc="{{ $imgs }}" data-descs="{{$descs}}" data-widths="{{ $ws }}" data-heights="{{ $hs }}" data-title="{{.title}}" data-description="{{.description }}" data-buttontext="{{.buttontext}}">
 					<img src="preview_images/thumbs/{{.thumb}}" alt="{{.alt}}"/>
 				</a>
 			</li>

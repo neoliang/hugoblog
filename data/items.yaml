@@ -1,0 +1,78 @@
+img_full_dir: preview_images/full/
+items:
+  - title: 黑洞
+    thumb: blackhole.jpg
+    alt: Logo
+    description: >-
+      卡尔·爱德华·萨根（英语：Carl Edward
+      Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
+    url: /posts/
+    images:
+      - img: raymarching.jpg
+        desc: 引力透镜下的光线追踪
+      - img: raymarching-bh.jpg
+        desc: 引力透镜下黑洞后的星球
+      - img: bh-v1.jpg
+        desc: 简单背景下的黑洞
+      - img: blackhole.jpg
+        desc: 黑洞最终版
+  - title: 木星云
+    thumb: jupiter-clouds.jpg
+    alt: Logo
+    description: >-
+      卡尔·爱德华·萨根（英语：Carl Edward
+      Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
+    url: /posts/
+    images:
+      - img: jupiter-clouds.jpg
+        desc: 分形多层噪声渲染的木星云
+  - title: About Logo
+    thumb: logo.jpg
+    alt: Logo
+    description: >-
+      卡尔·爱德华·萨根（英语：Carl Edward
+      Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
+    url: /posts/
+    images:
+      - img: logo-v0.3.jpg
+        desc: Logo第一版
+      - img: logo-v0.1.jpg
+        desc: Logo第二版
+      - img: logo-v0.1.jpg
+        desc: Logo第三版
+      - img: logo-v1.jpg
+        desc: Logo最终版
+  - title: Joy Division
+    thumb: joydivision.jpg
+    alt: Logo
+    description: >-
+      Make an expressive transition between colors. Think of a particular
+      emotion. What color seems most representative of it? How does it appear?
+      How does it fade away? Think of another emotion and the matching color for
+      it. Change the beginning and ending color of the above code to match those
+      emotions. Then animate the transition using shaping functions. Robert
+      Penner developed a series of popular shaping functions for computer
+      animation known as easing functions, you can use this example as research
+      and inspiration but the best result will come from making your own
+      transitions.
+    url: /posts/
+    images:
+      - img: joydivision.jpg
+        desc: Joy Division
+  - title: 气球
+    thumb: ballon.jpg
+    alt: Logo
+    description: >-
+      Make an expressive transition between colors. Think of a particular
+      emotion. What color seems most representative of it? How does it appear?
+      How does it fade away? Think of another emotion and the matching color for
+      it. Change the beginning and ending color of the above code to match those
+      emotions. Then animate the transition using shaping functions. Robert
+      Penner developed a series of popular shaping functions for computer
+      animation known as easing functions, you can use this example as research
+      and inspiration but the best result will come from making your own
+      transitions.
+    url: /posts/
+    images:
+      - img: ballon.jpg
+        desc: 气球
