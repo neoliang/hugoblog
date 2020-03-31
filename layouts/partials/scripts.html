@@ -131,6 +131,7 @@
 					$items = $grid.children( 'li' ),
 					current = -1,
 					previewPos = -1,
+					previewIndex = -1,
 					scrollExtra = 0,
 					marginExpanded = 10,
 					ogExpanderInnerWidth = 50,
@@ -187,6 +188,7 @@ console.log("addItems"+i);
 					$items.each( function() {
 						var $item = $( this );
 						$item.data( 'offsetTop', $item.offset().top );
+						$item.data('index',$item.index());
 						if( saveheight ) {
 							$item.data( 'height', $item.height() );
 						}
@@ -212,6 +214,7 @@ console.log("addItems"+i);
 					$window.on( 'deviceorientation',function () {
 						scrollExtra = 0;
 						previewPos = -1;
+						previewIndex = -1;
 						saveItemInfo();
 						getWinSize();
 						var preview = $.data( this, 'preview' );
@@ -249,13 +252,14 @@ console.log("addItems"+i);
 				function showPreview( $item ) {
 
 					var preview = $.data( this, 'preview' ),
-						position = $item.data( 'offsetTop' );
+						position = $item.data( 'offsetTop' ),
+						idx = $item.data('index');
 
 					scrollExtra = 0;
 
 					if( typeof preview != 'undefined' ) {
-
-						if( previewPos !== position ) {
+						console.log("preview != 'undefined'",previewPos,position)
+						if( previewIndex !== idx ) {
 							if( position > previewPos ) {
 								scrollExtra = preview.height;
 							}
@@ -269,6 +273,7 @@ console.log("addItems"+i);
 					}
 
 					previewPos = position;
+					previewIndex = idx;
 					preview = $.data( this, 'preview', new Preview( $item ) );
 					preview.open();
 					return false;
@@ -354,8 +359,7 @@ console.log("addItems"+i);
 						self.$largeImgs = []
 						//if( self.$fullimage.is( ':visible' ) || true) 
 						{
-							this.setHeights();
-							this.positionPreview();
+
 							this.$loading.show();
 							self.$fullimage.find( '.og-img-preview-container' ).remove();
 							for (var i = 0; i < eldata.largesrc.length ; ++i) {
@@ -371,7 +375,8 @@ console.log("addItems"+i);
 										self.$largeImgs.push(tImg);
 								} ).attr( 'src', eldata.largesrc[i] );									
 							}
-
+							this.setHeights();
+							this.positionPreview();
 						}
 
 					},
@@ -433,13 +438,13 @@ console.log("addItems"+i);
 						//console.log(heightPreview);
 						heightPreview -= imgPreviewMargin*2;
 						heightPreview += parentPadding;//padding in css
+						//console.log(heightPreview);
 						heightPreview = Math.max(heightPreview,winsize.height)
 						itemHeight = heightPreview + this.$item.data( 'height' ) + marginExpanded;
 						if( heightPreview < settings.minHeight ) {
 							heightPreview = settings.minHeight;
 							itemHeight = settings.minHeight + this.$item.data( 'height' ) + marginExpanded;
 						}
-
 						this.height = heightPreview ;
 						this.itemHeight = itemHeight;
 
