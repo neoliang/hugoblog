@@ -34,12 +34,14 @@ items:
       Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
     url: /posts/
     images:
-      - img: logo-v0.3.jpg
+      - img: logo-v0.1.jpg
         desc: Logo第一版
-      - img: logo-v0.1.jpg
+      - img: logo-v0.2.jpg
         desc: Logo第二版
-      - img: logo-v0.1.jpg
+      - img: logo-v0.0.jpg
         desc: Logo第三版
+      - img: logo-v0.3.jpg
+        desc: Logo第四版
       - img: logo-v1.jpg
         desc: Logo最终版
   - title: Joy Division
