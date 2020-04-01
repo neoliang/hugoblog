@@ -1,9 +1,8 @@
 ---
 layout: search
 url: /search/
-title: Search
+title: 搜索
 classes:
 - feature-nosubtitle
-- feature-nohdr
 - feature-depth
 ---

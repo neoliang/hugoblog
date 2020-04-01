@@ -1,6 +1,6 @@
 # Site settings
 baseurl = "/"
-title = "Code and Art"
+title = "代码与艺术"
 paginate = 5
 buildFuture = true
 
@@ -31,7 +31,7 @@ buildFuture = true
 [params]
   author = "feef"
   twitter = ""
-  classes = []
+  classes = ["feature-nomusic"]
 
 [outputs]
   home = ["HTML", "JSON", "RSS"]
