@@ -4,18 +4,22 @@ items:
     thumb: blackhole.jpg
     alt: Logo
     description: >-
-      卡尔·爱德华·萨根（英语：Carl Edward
-      Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
+      黑洞是恒星的一种，它的质量和引力巨大以致于连光都不能从内部逃脱。在黑洞周围，由于强引力的作用会引发时空非常大扭曲。
+      这样，即使是被黑洞挡着的恒星发出的光，虽然有一部分会落入黑洞中消失，可另一部分也会通过弯曲的空间中绕过黑洞往前传播，从而产生引力透镜效应。
+      引力透镜效应可以用光线追踪和万有引力定律来模拟，（图一）显示的就是在黑洞后的红色星球发出来的光经过引力弯曲后传播的路径，虽然红色星球在直线路径上被遮挡信，
+      但通过引力透镜，我们可以看到一个红色光环（图二）。要实现这样的效果比较容易，在shadertoy下只用了不40行代码就可以实现类似于（图三）这样的效果，虽然只有简单的背景，
+      但给黑洞加上动画后，简单的方格背景在引力透镜下也能产生很酷的效果。当然这并不是真实的黑洞，真实的黑洞还有吸积盘、相对论喷流等（图四），要实现这些效果并不是很困难，更多细节请参考...
+
     url: /posts/
     images:
       - img: raymarching.jpg
-        desc: 引力透镜下的光线追踪
+        desc: (图一)引力透镜下的光线追踪
       - img: raymarching-bh.jpg
-        desc: 引力透镜下黑洞后的星球
+        desc: (图一)黑洞引力透镜下的星球
       - img: bh-v1.jpg
-        desc: 简单背景下的黑洞
+        desc: （图三）简单背景下的黑洞
       - img: blackhole.jpg
-        desc: 黑洞最终版
+        desc: （图四）黑洞最终版
   - title: 木星云
     thumb: jupiter-clouds.jpg
     alt: Logo
@@ -78,3 +82,12 @@ items:
     images:
       - img: ballon.jpg
         desc: 气球
+  - title: 日落
+    thumb: palmtree.jpg
+    alt: palmtree
+    description: >-
+      模仿IQ的作品
+    url: /posts/
+    images:
+        - img: palmtree.jpg
+          desc: 日落
