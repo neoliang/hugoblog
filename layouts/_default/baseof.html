@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+		
 		<link rel="alternate" type="application/rss+xml" title="RSS" href="{{ "index.xml" | absURL }}">
 		<link rel="canonical" href="{{ .Permalink }}">
 		<!-- the Story logo is a square with rounded corners interlocked with a section symbol in Bodoni 72 Book font -->
@@ -46,9 +47,10 @@
 		<script src="{{ "js/auto-render.min.js" | absURL }}"></script> <!-- for KaTeX -->
 			{{- end -}}
 		{{- end -}}
-		{{ if or (in .Site.Params.classes "feature-music") (in .Params.classes "feature-music") -}}
-			{{- if not (or (in .Site.Params.classes "feature-nomusic") (in .Params.classes "feature-nomusic") ) -}}
-		<script src="{{ "js/abcjs_basic_5.6.3-min.js" | absURL }}"></script>
+		{{ if or (in .Site.Params.classes "feature-chart") (in .Params.classes "feature-chart") -}}
+			{{- if not (or (in .Site.Params.classes "feature-nochart") (in .Params.classes "feature-nochart") ) -}}
+		<script src="{{ "js/chart.min.js" | absURL }}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/chart.min.css" />
 			{{- end -}}
 		{{- end -}}
 		{{ with .Site.Params.head }}{{ range . }}

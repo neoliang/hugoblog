@@ -1,0 +1,15 @@
+
+{{ $id := delimit (shuffle (seq 1 9)) "" }}
+{{ $code_height := or (.Get "code-height") 360 }}
+{{ .Scratch.Set "id" $id }}
+{{ .Scratch.Set "height" $code_height }}
+
+<canvas class="{{$id}}"  {{ with .Get "height" }}height="{{.}}"{{end}} {{ with .Get "width" }}width="{{.}}"{{end}}> </canvas>
+<br>
+{{ partialCached "ace.html" . }}
+<script >
+	var editor = ace.edit("{{$id}}");
+	editor.setValue({{ .Inner }})
+</script>
+
+

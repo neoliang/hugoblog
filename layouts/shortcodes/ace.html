@@ -1,0 +1,6 @@
+{{ $id := or (.Get "id")  (delimit (shuffle (seq 1 9)) "") }}
+{{ $height := or (.Get "height") 360 }}
+
+{{ .Scratch.Set "id" $id }}
+{{ .Scratch.Set "height" $height }}
+{{ partialCached "ace.html" . }}
