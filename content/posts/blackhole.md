@@ -57,7 +57,7 @@ categories:
 对屏幕上的所有象素点执行该过程，如下[^4]
 [^4]:(https://www.shadertoy.com/view/wlSGWy)
 
-{{< shadertoy wlSGWy >}}
+{{< video poster="/img/blackhole/raymarching.jpg" src="/video/blackhole/raymarching.mp4" >}}
 
 
 利用上述的算法，在Shadertoy中的实现画一个黑球，用来模拟无引力透镜的黑洞,核心代码如下：
@@ -122,13 +122,13 @@ for(int i = 0;i<maxStep;++i)
 
 ![黑洞引力透镜下的恒星形成一个环](/img/blackhole/blackv0.2.jpg)
 
-动态图如下[^9]： (加载速度慢，请耐心等待)
+动态图如下[^9]： 
 [^9]:(https://www.shadertoy.com/view/wltSD7)
 
-{{< shadertoy wltSD7 >}}
+{{< video src="/video/blackhole/raymarchingbh.mp4" >}}
 
 这样我们就实现了一个简单的黑洞，不过这看起来好像只是一个黑色的圆再加上了一个红色的环，效果并不酷。如果我们加上一个简单的背景，并让黑洞随机运动，并让背景产生引力透镜效果看起来就很不错了，如下所示[^8] 
-{{< shadertoy WltSDM >}}
+{{< video src="/video/blackhole/blackhole-v0.mp4" >}}
 [^8]:(https://www.shadertoy.com/view/WltSDM)
 
 ## 四、小结
