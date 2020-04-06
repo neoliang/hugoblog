@@ -126,10 +126,10 @@ for(int i = 0;i<maxStep;++i)
 动态图如下[^9]： 
 [^9]:(https://www.shadertoy.com/view/wltSD7)
 
-{{< video src="/video/blackhole/raymarchingbh.mp4" >}}
+{{< video src="/video/blackhole/raymarchingbh.mp4" poster="/img/blackhole/blackv0.2.jpg" >}}
 
 这样我们就实现了一个简单的黑洞，不过这看起来好像只是一个黑色的圆再加上了一个红色的环，效果并不酷。如果我们加上一个简单的背景，并让黑洞随机运动，并让背景产生引力透镜效果看起来就很不错了，如下所示[^8] 
-{{< video src="/video/blackhole/blackhole-v0.mp4" >}}
+{{< video src="/video/blackhole/blackhole-v0.mp4" poster="/img/blackhole/blackv1.jpg" >}}
 [^8]:(https://www.shadertoy.com/view/WltSDM)
 
 ## 四、小结
