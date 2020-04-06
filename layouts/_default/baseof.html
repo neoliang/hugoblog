@@ -97,12 +97,11 @@
 								</time>
 								at <a class="no-underline category {{ cond $hdr "near-white dim" "black hover-gray" }}" href="{{ .Params.site }}">{{ .Params.event }}</a>
 							{{ else }}
-								Published
-								<time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
-									{{- .Date.Format "Jan 2, 2006" -}}
+								<time datetime="{{ .Date.Format "2006-01-02" }}">
+									{{- .Date.Format "2006年01月02日" -}}
 								</time>
 								<span class="display-print">by {{ .Params.author | default .Site.Params.author }}</span>
-								{{ range $idx, $cat := .Params.categories }}{{ if gt $idx 0 }}, {{ end }}{{ if eq $idx 0 }} in {{ end }}<a href="{{ "categories" | absURL }}/{{ . | urlize }}" class="no-underline category {{ cond $hdr "near-white dim" "black hover-gray" }}">{{ . | title }}</a>{{ end }}
+								{{ range $idx, $cat := .Params.categories }}{{ if gt $idx 0 }}, {{ end }}{{ if eq $idx 0 }} tags: {{ end }}<a href="{{ "categories" | absURL }}/{{ . | urlize }}" class="no-underline category {{ cond $hdr "near-white dim" "black hover-gray" }}">{{ . | title }}</a>{{ end }}
 								<span class="display-print">at {{ .Permalink }}</span>
 							{{ end }}
 						{{ else }}

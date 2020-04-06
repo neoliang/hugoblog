@@ -129,6 +129,7 @@ figure img {
     background-color: rgba(0, 0, 0, 0.75);
     padding: 1rem;
     visibility: hidden;
+    text-align: center;
   }
   body.feature-figcaption-hidden figure:hover figcaption {
     visibility: visible;
