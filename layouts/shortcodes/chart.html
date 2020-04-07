@@ -10,13 +10,38 @@
 <br>
 
 {{ partialCached "ace.html" . }}
-<script >
+<script type="text/javascript">
 {{ .Inner | safeJS }}
-	var editor = ace.edit("{{$editor_id}}");
-	editor.setValue({{ .Inner }},-1)
-	ContentFit("#{{$id}}",{{$height}});
-	var ctx = document.getElementById('{{$id}}').getContext('2d');
-	var myChart = new Chart(ctx,chart_data)
+  var editor = ace.edit("{{$editor_id}}");
+  editor.setValue({{ .Inner }},-1)
+  ContentFit("#{{$id}}",{{$height}});
+  var ctx = document.getElementById('{{$id}}').getContext('2d');
+  var myChart = new Chart(ctx,chart_data)
+  editor.commands.addCommand({
+    name:'run',
+    bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'},
+      exec: function(editor) {
+        
+        var code = editor.getValue();
+        var script = document.createElement('script');
+        try {
+          script.appendChild(document.createTextNode(code));
+          document.body.appendChild(script);
+          var ctx = document.getElementById('{{$id}}').getContext('2d');
+          myChart.destroy();
+          myChart = new Chart(ctx,chart_data)
+
+          var editorElement = $('#{{$editor_id}}')
+          editorElement.css('transform','scale(1.02)')
+          setInterval(()=>{editorElement.css('transform','scale(1)')},200);
+        } catch (e) {
+          script.text = code;
+          document.body.appendChild(script);
+        }
+      },
+      readOnly: false 
+  });
+
 </script>
 
 
