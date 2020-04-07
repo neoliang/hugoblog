@@ -144,3 +144,13 @@ $( function() {
       });
    }
 });
+
+function ContentFit(element,height) {
+   var onResize = function(e) {    
+    var mapElement = $(element);
+    var scale = height/720
+    mapElement.css("height", mapElement.width() * scale);
+  };
+  onResize();
+  window.addEventListener("resize",onResize);
+}

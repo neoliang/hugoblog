@@ -2,7 +2,7 @@
 {{ $height := .Scratch.Get "height" }}
 
 <style type="text/css">
-    
+  
 .caret {
   text-align: left;
   cursor: pointer;
@@ -30,35 +30,28 @@
 
 <span class="caret" id="caret_{{$id}}" >隐藏代码</span>
 
-<div id="{{$id}}" style="max-width: 100%; height: 360px;"></div>
+<div id="{{$id}}" style="max-width: 100%; height: 360px;border: 1px solid lightgray;"></div>
 
 <script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-    var editor = ace.edit("{{$id}}");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/javascript");
-    var onResize = function(e) {
-		
-    	var mapElement = $("#{{$id}}");
-    	var scale = {{$height}}/720
-    	mapElement.css("height", mapElement.width() * scale);
-    	console.log("resize",mapElement,mapElement.height());
-	};
-	onResize();
-	window.addEventListener("resize",onResize);
-    $("#caret_{{$id}}").on('click',(e)=>{
-        var v = $("#{{$id}}").css('display')
-        if(v === 'none')
-        {
-            $("#{{$id}}").css('display','block')
-            $("#caret_{{$id}}").removeClass('caret-down')
-            $("#caret_{{$id}}").text("隐藏代码")
-        }
-        else
-        {
-            $("#{{$id}}").css('display','none')
-            $("#caret_{{$id}}").addClass('caret-down')
-            $("#caret_{{$id}}").text("显示代码")
-        }
-    });
+  var editor = ace.edit("{{$id}}");
+  editor.setTheme("ace/theme/github");
+  editor.session.setMode("ace/mode/javascript");
+  editor.setShowPrintMargin(false);
+  ContentFit("#{{$id}}",{{$height}});
+  $("#caret_{{$id}}").on('click',(e)=>{
+    var v = $("#{{$id}}").css('display')
+    if(v === 'none')
+    {
+      $("#{{$id}}").css('display','block')
+      $("#caret_{{$id}}").removeClass('caret-down')
+      $("#caret_{{$id}}").text("隐藏代码")
+    }
+    else
+    {
+      $("#{{$id}}").css('display','none')
+      $("#caret_{{$id}}").addClass('caret-down')
+      $("#caret_{{$id}}").text("显示代码")
+    }
+  });
 </script>
