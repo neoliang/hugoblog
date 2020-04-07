@@ -11,13 +11,12 @@
 
 {{ partialCached "ace.html" . }}
 <script >
+{{ .Inner | safeJS }}
 	var editor = ace.edit("{{$editor_id}}");
-	var codes = {{ .Inner }};
-	editor.setValue(codes,-1)
+	editor.setValue({{ .Inner }},-1)
 	ContentFit("#{{$id}}",{{$height}});
-	//var data = eval(codes);
-	//var ctx = document.getElementById('{{$id}}').getContext('2d');
-	//var myChart = new Chart(ctx,data)
+	var ctx = document.getElementById('{{$id}}').getContext('2d');
+	var myChart = new Chart(ctx,chart_data)
 </script>
 
 

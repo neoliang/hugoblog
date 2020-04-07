@@ -33,7 +33,7 @@ categories:
 ##作品展示
 
 {{<chart code-height=360 height=300 >}}
-data = {
+chart_data = {
     type: 'bar',
     data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
