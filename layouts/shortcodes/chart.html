@@ -15,9 +15,9 @@
 	var codes = {{ .Inner }};
 	editor.setValue(codes,-1)
 	ContentFit("#{{$id}}",{{$height}});
-	var data = eval(codes);
-	var ctx = document.getElementById('{{$id}}').getContext('2d');
-	var myChart = new Chart(ctx,data)
+	//var data = eval(codes);
+	//var ctx = document.getElementById('{{$id}}').getContext('2d');
+	//var myChart = new Chart(ctx,data)
 </script>
 
 
