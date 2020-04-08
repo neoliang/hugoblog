@@ -1,6 +1,17 @@
-{{ $id := or (.Get "id")  (delimit (shuffle (seq 1 9)) "") }}
+{{ $editor_id := or (.Get "id")  (delimit (shuffle (seq 1 9)) "") }}
 {{ $height := or (.Get "height") 360 }}
 
-{{ .Scratch.Set "id" $id }}
-{{ .Scratch.Set "height" $height }}
-{{ partialCached "ace.html" . }}
+<div id="parent_{{$editor_id}}" />
+<script type="text/javascript">
+  var editor = createAceEditor({
+    parent :$("#parent_{{$editor_id}}"),
+    id:"{{$editor_id}}",
+    height:{{$height}},
+    code:{{ .Inner }},
+    onCodeRunEnd : ()=>{
+    	console.log('editor run end');
+    }
+  })
+  //editor.
+</script>
+

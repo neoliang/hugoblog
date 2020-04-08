@@ -53,6 +53,12 @@
 		<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/chart.min.css" />
 			{{- end -}}
 		{{- end -}}
+		{{ if or (in .Site.Params.classes "feature-ace") (in .Params.classes "feature-ace") -}}
+			{{- if not (or (in .Site.Params.classes "feature-nocace") (in .Params.classes "feature-noace") ) -}}
+		<script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/acehelper.js" type="text/javascript" charset="utf-8"></script>
+			{{- end -}}
+		{{- end -}}		
 		{{ with .Site.Params.head }}{{ range . }}
 		{{ . | safeHTML }}{{ end }}{{ end }}
 		<script src="{{ "js/story.js" | absURL }}"></script>

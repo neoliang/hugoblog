@@ -7,21 +7,12 @@ classes:
 - feature-figcaption
 - feature-figcaption-hidden
 - feature-chart
+- feature-ace
 categories:
 - Demo
 ---
 测试shadertoy,p5js、video及shader编辑
 <!--more-->
-
-
-##shader嵌入测试[^1]
-[^1]:(https://www.shadertoy.com/view/tslyRH)
-
-{{< shadertoy tslyRH >}}
-
-
-##shader在线编辑测试
-
 
 
 ##视频测试
@@ -87,3 +78,9 @@ chart_data = {
     }
 }
 {{</chart>}}
+
+{{<ace height=100 >}}
+
+console.log("hello world");
+
+{{</ace>}}

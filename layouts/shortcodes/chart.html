@@ -6,94 +6,24 @@
 
 <canvas id="{{$id}}"  style="max-width: 100%; height: 360px;"> </canvas>
 <br>
+<div id="parent_{{$editor_id}}" />
 
-<style type="text/css">
-  
-.caret {
-  text-align: left;
-  cursor: pointer;
-  -webkit-user-select: none; /* Safari 3.1+ */
-  -moz-user-select: none; /* Firefox 2+ */
-  -ms-user-select: none; /* IE 10+ */
-  user-select: none;
-
-}
-
-.caret::before {
-  content: "\f104";
-  color: black;
-  display: inline-block;
-  margin-right: 6px;
-  transform: rotate(90deg);
-}
-
-.caret-down::before {
-  -ms-transform: rotate(0deg); /* IE 9 */
-  -webkit-transform: rotate(0deg); /* Safari */'
-  transform: rotate(0deg);  
-}
-
-</style>
-
-<i class="fas fa-angle-right"></i><span class="caret" id="caret_{{$editor_id}}" style="color: #357edd;" >隐藏代码</span>
-
-<div id="{{$editor_id}}" style="max-width: 100%; height: 360px;border: 1px solid lightgray;"></div>
-
-<script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-  var editor = ace.edit("{{$editor_id}}",{
-    theme: "ace/theme/github"});
-  editor.session.setMode("ace/mode/javascript");
-  editor.setShowPrintMargin(false);
-  editor.setAutoScrollEditorIntoView(true);
-  $("#caret_{{$editor_id}}").on('click',(e)=>{
-    var v = $("#{{$editor_id}}").css('display')
-    if(v === 'none')
-    {
-      $("#{{$editor_id}}").css('display','block')
-      $("#caret_{{$editor_id}}").removeClass('caret-down')
-      $("#caret_{{$editor_id}}").text("隐藏代码")
-    }
-    else
-    {
-      $("#{{$editor_id}}").css('display','none')
-      $("#caret_{{$editor_id}}").addClass('caret-down')
-      $("#caret_{{$editor_id}}").text("显示代码")
-    }
-  });
-</script>
 <script type="text/javascript">
 {{ .Inner | safeJS }}
-  var editor = ace.edit("{{$editor_id}}");
-  editor.setValue({{ .Inner }},1)
   ContentFit($("#{{$id}}"),{{$height}});
-  var ctx = document.getElementById('{{$id}}').getContext('2d');
-  var myChart = new Chart(ctx,chart_data)
-  editor.commands.addCommand({
-    name:'run',
-    bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'},
-      exec: function(editor) {
-        
-        var code = editor.getValue();
-        var script = document.createElement('script');
-        try {
-          script.appendChild(document.createTextNode(code));
-          document.body.appendChild(script);
-          var ctx = document.getElementById('{{$id}}').getContext('2d');
-          myChart.destroy();
-          myChart = new Chart(ctx,chart_data)
-
-          var editorElement = $('#{{$editor_id}}')
-          editorElement.css('transform','scale(1.02)')
-          setInterval(()=>{editorElement.css('transform','scale(1)')},200);
-        } catch (e) {
-          script.text = code;
-          document.body.appendChild(script);
-        }
-      },
-      readOnly: false 
-  });
-
+  var myChart = null;
+  createAceEditor({
+    parent :$("#parent_{{$editor_id}}"),
+    id:"{{$editor_id}}",
+    height:{{$code_height}},
+    code:{{ .Inner }},
+    onCodeRunEnd : ()=>{
+      var ctx = document.getElementById('{{$id}}').getContext('2d');
+      if(myChart != null)
+        myChart.destroy();
+      myChart = new Chart(ctx,chart_data);
+    }
+  })
 </script>
 
 
