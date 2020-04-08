@@ -1,5 +1,5 @@
-{{ $id := .Scratch.Get "id" }}
-{{ $height := .Scratch.Get "height" }}
+{{ $id := .id }}
+{{ $height := .height }}
 
 <style type="text/css">
   
@@ -36,12 +36,7 @@
 <script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
   var editor = ace.edit("{{$id}}",{
-    theme: "ace/theme/github",
-    maxLines: 30,
-    minLines: 10,
-    wrap: true,
-    autoScrollEditorIntoView: true
-  });
+    theme: "ace/theme/github"});
   editor.session.setMode("ace/mode/javascript");
   editor.setShowPrintMargin(false);
   ContentFit("#{{$id}}",{{$height}});
