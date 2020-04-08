@@ -144,9 +144,8 @@ $( function() {
       });
    }
 });
-function ContentFit(element,height) {
+function ContentFit(mapElement,height) {
    var onResize = function(e) {    
-    var mapElement = $(element);
     var scale = height/720
     mapElement.css("height", mapElement.width() * scale);
   };

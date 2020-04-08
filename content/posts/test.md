@@ -25,45 +25,62 @@ categories:
 
 
 ##视频测试
-
-
+{{<p5js>}}
+background(0, 0, 100);
+{{</p5js>}}
 
 
 
 ##作品展示
 
 {{<chart code-height=360 height=300 >}}
+function mandblot(x,y,cx,cy){
+  let x1 = x*x-y*y + cx;
+  let y1 = 2*x*y + cy;
+  return {x:x1,y:y1}
+}
+function divcount(esp){
+  let x = 0;
+  let y = 0;
+  let N = 500;
+  for(let i = 0;i<N;++i)
+  {
+    let z1 = mandblot(x,y,-0.75,esp)
+    x = z1.x;
+    y = z1.y;
+    let r = x*x+y*y;
+    //print(r)
+    if( r> 2.0)
+    {
+      return i;
+    }
+  }
+  return N
+}
+
+
+let testCount = 100;
+let esps = Array.from({length:testCount},(v,i)=> -0.1+(i/testCount) * 0.2);
+//esps = esps.filter(v => Math.abs(v) >= 0.008)
+let dc = esps.map(divcount);
+let pis = esps.map((v,i)=> Math.abs(v * dc[i]))
+
 chart_data = {
-    type: 'bar',
+    type: 'line',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    	labels:esps.map(v => v.toPrecision(2)),       
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+            label: '#epsilon',
+            data: dc,
         }]
     },
     options: {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    min:2.9,
+                    //max:3.2
                 }
             }]
         }
