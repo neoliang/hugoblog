@@ -56,12 +56,12 @@ ContentFit($("#iframe_{{$id}}"),{{add $height $code_height}});
 
 iframe.onload = function(){
   lastheight = iframe.contentWindow.document.body.scrollHeight
-  iframe.style.height = lastheight + 'px';
+  iframe.style.height = lastheight + 4 + 'px';
 
   setInterval(function(){
     if (iframe.contentWindow.document.body.scrollHeight != lastheight) {
       lastheight = iframe.contentWindow.document.body.scrollHeight
-    iframe.style.height = lastheight + 'px';
+    iframe.style.height = lastheight + 4 + 'px';
     }
   }, 200);
 }
