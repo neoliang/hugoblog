@@ -7,7 +7,7 @@ function ContentFit(mapElement,height) {
   onResize();
   window.addEventListener("resize",onResize);
 }
-
+var toolbarHeight = 24;
 function createAceEditor(cfg){
   var parent = cfg.parent;
   var id = cfg.id;
@@ -17,27 +17,29 @@ function createAceEditor(cfg){
   var onCodeRunEnd = cfg.onCodeRunEnd;
   parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
   parent.append('<div id="' + id + '" style="max-width: 100%; height: 360px;border: 1px solid lightgray;"></div>');
+  parent.append('<div id="toolbar_' + id + '" style="max-width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;border: 1px solid lightgray;padding-top: -1px;padding-right: 1px;"></div>');
   var editor = ace.edit(id,{theme: "ace/theme/xcode"});
   editor.session.setMode("ace/mode/javascript");
   editor.setShowPrintMargin(false);
   editor.setAutoScrollEditorIntoView(true);
   ContentFit($("#"+id),height);
+  ContentFit($("#toolbar_"+id),toolbarHeight);
   $("#caret_"+id).on('click',(e)=>{
-    var editorElement = $("#"+id);
+    var editorElement = [$("#"+id),$('#toolbar_'+id)];
     var caretElement = $("#caret_"+id);
-    var v = editorElement.css('display')
+    var v = editorElement[0].css('display')
 
     if(v === 'none')
     {
-      editorElement.css('display','block')
-      caretElement.removeClass('caret-down')
-      caretElement.text("隐藏代码")
+      editorElement.forEach(e => e.css('display','block'));
+      caretElement.removeClass('caret-down');
+      caretElement.text("隐藏代码");
     }
     else
     {
-      editorElement.css('display','none')
-      caretElement.addClass('caret-down')
-      caretElement.text("显示代码")
+      editorElement.forEach(e => e.css('display','none'));
+      caretElement.addClass('caret-down');
+      caretElement.text("显示代码");
     }
   });
   function runeditor()
