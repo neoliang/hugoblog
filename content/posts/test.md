@@ -2,6 +2,7 @@
 title: Demo测试
 date: "2020-03-16"
 url: "/posts/test"
+thumbnail: "img/story-logo-black.svg"
 description: "本文测试几个ShortCode功能"
 classes:
 - feature-figcaption
