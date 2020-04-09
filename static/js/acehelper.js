@@ -17,7 +17,7 @@ function createAceEditor(cfg){
   var onCodeRunEnd = cfg.onCodeRunEnd;
   parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
   parent.append('<div id="' + id + '" style="max-width: 100%; height: 360px;border: 1px solid lightgray;"></div>');
-  var editor = ace.edit(id,{theme: "ace/theme/github"});
+  var editor = ace.edit(id,{theme: "ace/theme/xcode"});
   editor.session.setMode("ace/mode/javascript");
   editor.setShowPrintMargin(false);
   editor.setAutoScrollEditorIntoView(true);
