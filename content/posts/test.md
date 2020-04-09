@@ -16,12 +16,22 @@ categories:
 
 
 ##视频测试
-{{<p5js>}}
+
+{{<p5js id="2315" >}}
 background(0, 0, 100);
-{{</p5js>}}
+{{</p5js >}}
 
+{{<p5js id="2315" >}}
+background(0, 0, 10);
+ellipse(25,25,30,30);
+{{</p5js >}}
 
-
+{{<shader id="3321" >}}
+	ddd
+{{</shader >}}
+{{<shader id="3321" >}}
+	ddd
+{{</shader >}}
 ##作品展示
 
 {{<chart code-height=360 height=300 >}}

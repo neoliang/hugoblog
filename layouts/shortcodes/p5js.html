@@ -4,11 +4,22 @@
 {{ $code_height := or (.Get "code-height") 360 }}
 {{ $height := or (.Get "height") 360}}
 
+<iframe id="iframe_{{$id}}" width="100%" height="100%" style="border: 0px;" scrolling="no" frameborder="0" onload="resizeIframe(this)" srcdoc='
+<head>
+<script src="/js/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/p5.js"></script>
+<script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/acehelper.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  
 
 <div id="{{$id}}"  style="max-width: 100%; height: 360px;"> </div>
 <br>
 <div id="parent_{{$editor_id}}" />
-<script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/p5.js"></script>
+
+{{$fcodes := split .Inner "\n"}}
+{{$scode := delimit $fcodes "\\n" }}
 
 
 <script type="text/javascript">
@@ -16,20 +27,25 @@
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
     height:{{$code_height}},
-    code:{{ .Inner }},
+    code:"{{ $scode }}",
     onCodeWillRun:(code)=> 
     {
       $("#{{$id}}").children().remove();
       var scale = {{$height}}/720;
-      var mapElement = $('#{{$id}}')
+      var mapElement = $("#{{$id}}")
       var height = mapElement.width() * scale;
       
       mapElement.css("height",height);
-      return "function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent('{{$id}}');" + code + "}";
+      return "function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}";
     },
     onCodeRunEnd : ()=>{new p5();}
   })
-  window.addEventListener("resize",()=>{
-    runeditor(ace.edit("{{$editor_id}}"));
-  });
+</script>
+</body>' >
+</iframe>
+<script type="text/javascript">
+  ContentFit($("#iframe_{{$id}}"),{{add $height $code_height}});
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+  }
 </script>

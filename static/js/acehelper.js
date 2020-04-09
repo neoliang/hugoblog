@@ -1,4 +1,13 @@
 
+function ContentFit(mapElement,height) {
+   var onResize = function(e) {    
+    var scale = height/720
+    mapElement.css("height", mapElement.width() * scale);
+  };
+  onResize();
+  window.addEventListener("resize",onResize);
+}
+
 function createAceEditor(cfg){
   var parent = cfg.parent;
   var id = cfg.id;
