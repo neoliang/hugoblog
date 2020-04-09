@@ -54,11 +54,17 @@ var iframe = document.getElementById('iframe_{{$id}}'),
     lastheight;
 ContentFit($("#iframe_{{$id}}"),{{add $height $code_height}});
 
-setInterval(function(){
+iframe.onload = function(){
+  lastheight = iframe.contentWindow.document.body.scrollHeight
+  iframe.style.height = lastheight + 'px';
+
+  setInterval(function(){
     if (iframe.contentWindow.document.body.scrollHeight != lastheight) {
-        // adjust the iframe's size
-        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
-        lastheight = iframe.contentWindow.document.body.scrollHeight;
+      lastheight = iframe.contentWindow.document.body.scrollHeight
+    iframe.style.height = lastheight + 'px';
     }
-}, 200);
+  }, 200);
+}
+
+
 </script>
