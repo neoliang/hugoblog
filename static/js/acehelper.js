@@ -40,7 +40,7 @@ function createAceEditor(cfg){
       caretElement.text("显示代码")
     }
   });
-  function runeditor(editor)
+  function runeditor()
   {
     var code = editor.getValue();  
     if(onCodeWillRun != null)
@@ -67,6 +67,6 @@ function createAceEditor(cfg){
       exec: runeditor,
       readOnly: false 
   }); 
-  runeditor(editor);
-  return editor;
+  runeditor();
+  return runeditor;
 }
