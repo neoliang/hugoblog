@@ -46,15 +46,19 @@ function createAceEditor(cfg){
   {
     var code = editor.getValue();  
     if(onCodeWillRun != null)
+    {  
       code = onCodeWillRun(code);
+    }
 
-    var script = $('#script_'+id)
-    if(script !== undefined)
-      script.remove();
+    if(code !== null){
+      var script = $('#script_'+id)
+      if(script !== undefined)
+        script.remove();
+      script = $('<script id="script_'+id + '">');
+      script.text(code);
+      script.appendTo('head');      
+    }
 
-    script = $('<script id="script_'+id + '">');
-    script.text(code);
-    script.appendTo('head');
     var editorElement = $("#"+id);
     editorElement.css('transform','scale(1.02)')
     setInterval(()=>{editorElement.css('transform','scale(1)')},200);

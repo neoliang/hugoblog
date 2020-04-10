@@ -6,65 +6,63 @@
 
 <iframe id="iframe_{{$id}}" width="100%" height="100%" style="border: 0px;margin: 0;padding: 0;" scrolling="no" frameborder="0" srcdoc='
 <head>
-<script src="/js/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
-<script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/acehelper.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/jquery.min.js"></script>
+<script>
+  function setCode(code){
+    $("#{{$id}}").children().remove();
+    var scale = {{$height}}/720;
+    var mapElement = $("#{{$id}}")
+    var height = mapElement.width() * scale;
+    
+    mapElement.css("height",height);
+
+    code = "function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}\n new p5();";
+    var script = $("#script_{{$id}}");
+    if(script !== undefined)
+      script.remove();
+    script = $("<script id=\"script_"+{{$id}} + "\">");
+    script.text(code);
+    script.appendTo("head");  
+  }
+</script>
 </head>
 <body>
-  
+<div id="{{$id}}"  style="width: 100%; height: 100%;"> </div>
+</body> '>
+</iframe>
 
-<div id="{{$id}}"  style="max-width: 100%; height: 360px;"> </div>
-<br>
 <div id="parent_{{$editor_id}}" />
 
 {{$fcodes := split .Inner "\n"}}
 {{$scode := delimit $fcodes "\\n" }}
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
 <script type="text/javascript">
-  var runeditor = createAceEditor({
+  var runeditor_{{$id | safeJS  }} = createAceEditor({
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
-    height:{{$code_height}},
-    code:"{{ $scode }}",
+    height:{{ trim $code_height "\n" }},
+    code:{{ .Inner }},
     onCodeWillRun:(code)=> 
     {
-      $("#{{$id}}").children().remove();
-      var scale = {{$height}}/720;
-      var mapElement = $("#{{$id}}")
-      var height = mapElement.width() * scale;
-      
-      mapElement.css("height",height);
-      return "function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}";
-    },
-    onCodeRunEnd : ()=>{new p5();}
-  });
-  window.addEventListener("resize",()=>{
-    runeditor();
-  });
-</script>
-</body>' >
-</iframe>
-<script type="text/javascript">
-
-
-
-
-ContentFit($("#iframe_{{$id}}"),{{add $height $code_height}});
-
-document.getElementById('iframe_{{$id}}').onload = function(){
-  var iframe = document.getElementById('iframe_{{$id}}');
-  var lastheight = iframe.contentWindow.document.body.scrollHeight;
-  iframe.style.height = lastheight + 4 + 'px';
-
-  setInterval(function(){
-    if (iframe.contentWindow.document.body.scrollHeight != lastheight) {
-      lastheight = iframe.contentWindow.document.body.scrollHeight
-      iframe.style.height = lastheight + 4 + 'px';
+      var setCode = document.getElementById("iframe_{{$id}}").contentWindow.setCode;
+      if(setCode !== undefined)
+        setCode(code);
+      return null;
     }
-  }, 200);
-}
+  });
 
+  var adjustSize = ()=>{
+    
+    var iframe =$("#iframe_{{$id}}");
+    var scale = {{$height}}/720
+    iframe.css("height", iframe.width() * scale);
+    runeditor_{{$id | safeJS }}();
+    iframe.height(iframe.contents().find("html").height()+4);
 
+    //iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 4 + 'px';
+  };
+  window.addEventListener("resize",adjustSize);
+  document.getElementById('iframe_{{$id}}').onload = adjustSize;
 </script>
