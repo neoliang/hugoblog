@@ -36,6 +36,7 @@ categories:
 
 ## 待完善功能
 1. iFrame排版对齐修复，P5.js使用iFrame实现，iFrame嵌入时排版的宽度和原生元素上有差异
+	- 将AceEditor从iFrame中分享出来（已完成）
 1. 代码编辑器运行按钮嵌入（参考Shadertoy）
 1. 代码编辑器折叠按钮和文字美化 （参考Shadertoy）
 1. 支持P5.js,Chart.js和shader的嵌入时不显示代码
