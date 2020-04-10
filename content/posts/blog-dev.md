@@ -41,3 +41,4 @@ categories:
 1. 代码编辑器折叠按钮和文字美化 （参考Shadertoy）
 1. 支持P5.js,Chart.js和shader的嵌入时不显示代码
 1. P5.js代码支持Setup函数及非Setup函数
+1. 字体大小调整,适配手机横坚屏（参考cnblog)
