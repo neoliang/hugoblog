@@ -45,4 +45,4 @@ categories:
 1. shader嵌入支持（屏幕适配及多实例）
 1. P5js改进
 	- 支持setup函数及非setup函数
-	- canvas由hook创建，内置屏幕宽高变量
+	- canvas由hook创建，内置屏幕宽高变量 （已完成）

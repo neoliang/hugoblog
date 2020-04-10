@@ -32,8 +32,9 @@ categories:
 1. 相对论喷流，吸积盘上的气体、星尘有部分会跨越事件视界落入黑洞，从而产生粒子，能量等从黑洞的两极接近光速喷射而出，形成相对论喷流。  
 [^2]:(https://zhuanlan.zhihu.com/p/30445343)
 
-## P5
-{{<p5js height=900 code-height=400 >}}
+### P5
+
+{{<p5js height=900 code-height=400 hideCode=true >}}
 function mix(a,b,v){
 return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
 }
