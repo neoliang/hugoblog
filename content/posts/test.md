@@ -23,8 +23,7 @@ categories:
 ![Anatomy of a black hole. Credit: Illustration: ESO, ESA/Hubble, M.Kornmesser/N.Bartmann](/img/blackhole/intro.jpg)
 
 
-一个黑洞由四个部分组成（如上图所示 ）[^1]
-[^1]:(https://www.technology.org/2019/09/25/leta%C2%80%C2%99s-talk-about-black-holes/)
+一个黑洞由四个部分组成（如上图所示 ）
   
 
 1. 奇点，位于黑洞的最中心，体积无限小，质量无限大的点，这两种特性使得奇点的密度无限大，具有很强大的引力，以至于所有掉入黑洞的物质和能量最终都会坍缩和终结于这里。
