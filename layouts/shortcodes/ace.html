@@ -1,6 +1,7 @@
 {{ $editor_id := or (.Get "id")  (delimit (shuffle (seq 1 9)) "") }}
 {{ $height := or (.Get "height") 360 }}
-
+{{ $readOnly := or (.Get "readOnly") false }}
+{{ $language := or (.Get "language") "javascript" }}
 <div id="parent_{{$editor_id}}" />
 <script type="text/javascript">
   createAceEditor({
@@ -8,6 +9,9 @@
     id:"{{$editor_id}}",
     height:{{$height}},
     code:{{ .Inner }},
+    readOnly:{{$readOnly}},
+    language:{{$language}},
+    onCodeWillRun: ()=> null,
     onCodeRunEnd : ()=>{
     	console.log('editor run end');
     }

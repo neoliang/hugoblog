@@ -33,7 +33,7 @@ categories:
 [^2]:(https://zhuanlan.zhihu.com/p/30445343)
 
 ## P5
-{{<p5js id="2315" code-height=100 >}}
+{{<p5js height=900 code-height=400 >}}
 function mix(a,b,v){
 return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
 }
@@ -44,7 +44,7 @@ bezier(x,y,
        x+random(0,t/5),y+0.66*t,
        x,y+t)
 }
-let w = 400,h = 700
+let w = width,h = height
 background(41,118,206);
 colorMode(RGB,1,1,1,1)
 let cols = [
@@ -120,7 +120,7 @@ for(let i = 0;i<80;++i){
 {{</p5js >}}
 
 ## ace
-{{<ace height=100 >}}
+{{<ace height=100 readOnly=true >}}
 console.log("hello world");
 {{</ace>}}
 
@@ -183,11 +183,12 @@ chart_data = {
 {{</chart>}}
 
 ## Another P5
-{{<p5js id="2315" >}}
-let w = 720
-let h = 720
+{{<p5js  >}}
+let w = width;
+let h = height;
 colorMode(HSB,1,1,1,1)
 background(1);
+
 noStroke()
 let cols =[
   color(0.0,0.7,0.8),
@@ -198,6 +199,9 @@ frameRate(30)
 let frame = 0
 draw = ()=>{
   background(1);
+  stroke(0,0.,0.75);
+  noFill();
+  rect(0,0,w,h);
   let i = 0
   ++frame
   for(let x = 40;x<w;x+=50+(i%3)*20)

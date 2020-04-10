@@ -9,6 +9,7 @@ classes:
 - feature-figcaption
 - feature-figcaption-hidden
 - feature-math
+- feature-ace
 categories:
 - portfolio
 - physics
@@ -62,7 +63,7 @@ categories:
 
 利用上述的算法，在Shadertoy中的实现画一个黑球，用来模拟无引力透镜的黑洞,核心代码如下：
 
-```c
+{{<ace height=200 readOnly=true language="glsl" >}}
 for(int i = 0;i<maxStep;++i)
 {
     vec3 p = eye + ray_dir * step;
@@ -73,7 +74,7 @@ for(int i = 0;i<maxStep;++i)
         break;
     }       
 }
-```
+{{</ace>}}
 
 更详细的代码请参考[^5]，实现效果如下：
 [^5]:(https://www.shadertoy.com/view/WldXWM)
@@ -95,7 +96,7 @@ for(int i = 0;i<maxStep;++i)
 核心代码如下，更详细的代码请参考[^6] 
 [^6]:(https://www.shadertoy.com/view/WltSDM)
 
-```c
+{{<ace height=350 readOnly=true language="glsl" >}}
 vec3 p = eye;
 vec3 v = ray_dir;
 float dt = 0.02;
@@ -117,7 +118,8 @@ for(int i = 0;i<maxStep;++i)
         break;
     }       
 }
-```
+{{</ace>}}
+
 黑洞的背后的红色发光恒星发出的光线在引力透镜的弯曲下，最终会形成一个环，如下图
 
 ![黑洞引力透镜下的恒星形成一个环](/img/blackhole/blackv0.2.jpg)

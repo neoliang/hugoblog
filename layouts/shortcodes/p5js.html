@@ -17,7 +17,7 @@
     
     mapElement.css("height",height);
 
-    code = "function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}\n new p5();";
+    code = "let width =" + mapElement.width() + ";let height = " +height+";function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}\n new p5();";
     var script = $("#script_{{$id}}");
     if(script !== undefined)
       script.remove();
