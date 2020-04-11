@@ -17,7 +17,7 @@
     
     mapElement.css("height",height);
 
-    code = "let width =" + mapElement.width() + ";let height = " +height+";function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}\n new p5();";
+    code = "if( typeof remove !== \"undefined\"){remove();};let width =" + mapElement.width() + ";let height = " +height+";function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code + "}\n new p5();";
     var script = $("#script_{{$id}}");
     if(script !== undefined)
       script.remove();
@@ -58,16 +58,23 @@
     }
   });
 
-  var adjustSize = ()=>{
+  var adjustSize_{{$id | safeJS }} = ()=>{
     
     var iframe =$("#iframe_{{$id}}");
     var scale = {{$height}}/720
-    iframe.css("height", iframe.width() * scale);
+    //iframe.css("height", iframe.width() * scale);
     runeditor_{{$id | safeJS }}();
-    iframe.height(iframe.contents().find("html").height()+4);
+    iframe.height(iframe.contents().find("html").height()+2);
 
     //iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 4 + 'px';
   };
-  window.addEventListener("resize",adjustSize);
-  document.getElementById('iframe_{{$id}}').onload = adjustSize;
+  window.addEventListener("resize",adjustSize_{{$id | safeJS }});
+  document.getElementById('iframe_{{$id}}').onload = ()=>{ 
+    var x = document.getElementById('iframe_{{$id}}');
+    var body = (x.contentWindow || x.contentDocument);
+    if (body.document) body = body.document.body;
+    body.style.padding = 0;
+    body.style.margin = 0;
+    adjustSize_{{$id | safeJS }}();
+  };
 </script>

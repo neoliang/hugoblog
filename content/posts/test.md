@@ -32,9 +32,42 @@ categories:
 1. 相对论喷流，吸积盘上的气体、星尘有部分会跨越事件视界落入黑洞，从而产生粒子，能量等从黑洞的两极接近光速喷射而出，形成相对论喷流。  
 [^2]:(https://zhuanlan.zhihu.com/p/30445343)
 
+### P5 Instance
+{{<p5js_ins >}}
+let w = width,h = height;
+sketch.colorMode(sketch.HSB,1,1,1,1)
+sketch.background(1);
+sketch.noStroke()
+
+let cols =[
+  sketch.color(0.0,0.7,0.8),
+  sketch.color(0.7,0.1,0.2),
+  sketch.color(0.75,0.0,0.8)
+  ]
+sketch.frameRate(30)
+let frame = 0
+sketch.draw = ()=>{
+  sketch.background(1);
+  sketch.stroke(0,0,0.75);
+  sketch.noFill();
+  sketch.rect(0,0,w,h);
+  let i = 0
+  ++frame
+  for(let x = 40;x<w;x+=50+(i%3)*20)
+  {
+    sketch.fill(cols[i++%3])
+    for(let y = 40;y<h;y+=45)
+    {
+      let t = sketch.noise(x/500,(y)/500)*40
+      let s = (Math.sin((frame/15+t))*-0.5+0.5)*30 
+      sketch.ellipse(x+sketch.noise(x/100,y/100,frame/10),y,s,s)
+    }
+  }
+}
+{{</p5js_ins >}}
 ### P5
 
-{{<p5js hideCode=true height=900 code-height=400 >}}
+{{<p5js hideCode=false height=900 code-height=400 >}}
 function mix(a,b,v){
 return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
 }
