@@ -34,7 +34,7 @@ categories:
 
 ### P5
 
-{{<p5js height=900 code-height=400 hideCode=true >}}
+{{<p5js hideCode=true height=900 code-height=400 >}}
 function mix(a,b,v){
 return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
 }
@@ -128,7 +128,7 @@ console.log("hello world");
 
 
 ##作品展示
-{{<chart code-height=360 height=300 >}}
+{{<chart code-height=360 height=300 hideCode=true >}}
 function mandblot(x,y,cx,cy){
   let x1 = x*x-y*y + cx;
   let y1 = 2*x*y + cy;
@@ -184,7 +184,7 @@ chart_data = {
 {{</chart>}}
 
 ## Another P5
-{{<p5js  >}}
+{{<p5js  hideCode=true >}}
 let w = width;
 let h = height;
 colorMode(HSB,1,1,1,1)
@@ -220,6 +220,5 @@ draw = ()=>{
 
 {{<shader id="3321" >}}
 {{</shader >}}
-{{<shader id="33121" >}}
-{{</shader >}}
+
 

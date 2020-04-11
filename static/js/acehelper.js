@@ -64,7 +64,7 @@ function createAceEditor(cfg){
       var script = $('#script_'+id)
       if(script !== undefined)
         script.remove();
-      script = $('<script id="script_'+id + '">');
+      script = $('<script id="script_'+id + '"> </script>');
       script.text(code);
       script.appendTo('head');      
     }

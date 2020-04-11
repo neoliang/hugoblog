@@ -2,7 +2,7 @@
 {{ $height := or (.Get "height") 360 }}
 {{ $readOnly := or (.Get "readOnly") false }}
 {{ $language := or (.Get "language") "javascript" }}
-<div id="parent_{{$editor_id}}" />
+<div id="parent_{{$editor_id}}" > </div>
 <script type="text/javascript">
   createAceEditor({
     parent :$("#parent_{{$editor_id}}"),

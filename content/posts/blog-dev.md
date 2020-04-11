@@ -26,8 +26,8 @@ categories:
 
 博客的文章写作使用的是Story模板[^2],Story的排版美观，对于作品展示和写作是比较理想的选择，支持数学公式，代码高亮、自动存档及搜索等功能。我在这个模板的基础上增加了以下功能：
 - 整合了图片预览模板Hugrid
-- 代码编辑器Ace[^3]嵌入,使用（使用```- feature-ace```开启)
-- Chart.Js图表绘制（使用```- feature-chart```开启)
+- 代码编辑器Ace[^3]嵌入,使用（使用`- feature-ace`开启)
+- Chart.Js图表绘制（使用`- feature-chart`开启)
 - P5.js绘图嵌入
 - Shader嵌入
 
@@ -39,7 +39,8 @@ categories:
 	- 将AceEditor从iFrame中分享出来（已完成）
 1. 代码编辑器运行按钮嵌入（参考Shadertoy）
 1. 代码编辑器折叠按钮和文字美化 （参考Shadertoy）
-1. 支持P5.js,Chart.js和shader的嵌入时不显示代码
+1. 支持P5.js,Chart.js和shader的嵌入时不显示代码 (已完成)
+	> 备注:`<div/>`的写法是错误的，正常的写法 `<div> </div> `
 1. 字体大小调整,适配手机横坚屏（参考cnblog)
 1. 代码嵌入使用AceEditor的只读模式,支持多种语言语法高亮（已完成)
 1. shader嵌入支持（屏幕适配及多实例）
