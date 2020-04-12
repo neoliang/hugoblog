@@ -34,40 +34,80 @@ categories:
 
 ### P5 Instance
 {{<p5js_ins >}}
-let w = width,h = height;
-sketch.colorMode(sketch.HSB,1,1,1,1)
-sketch.background(1);
-sketch.noStroke()
+let w = width;
+let h = height;
+colorMode(HSB,1,1,1,1)
+background(1);
 
+noStroke()
 let cols =[
-  sketch.color(0.0,0.7,0.8),
-  sketch.color(0.7,0.1,0.2),
-  sketch.color(0.75,0.0,0.8)
+  color(0.0,0.7,0.8),
+  color(0.7,0.1,0.2),
+  color(0.75,0.0,0.8)
   ]
-sketch.frameRate(30)
+frameRate(30)
 let frame = 0
-sketch.draw = ()=>{
-  sketch.background(1);
-  sketch.stroke(0,0,0.75);
-  sketch.noFill();
-  sketch.rect(0,0,w,h);
+draw = ()=>{
+  background(1);
+  stroke(0,0.,0.75);
+  noFill();
+  rect(0,0,w,h);
   let i = 0
   ++frame
   for(let x = 40;x<w;x+=50+(i%3)*20)
   {
-    sketch.fill(cols[i++%3])
+    fill(cols[i++%3])
     for(let y = 40;y<h;y+=45)
     {
-      let t = sketch.noise(x/500,(y)/500)*40
-      let s = (Math.sin((frame/15+t))*-0.5+0.5)*30 
-      sketch.ellipse(x+sketch.noise(x/100,y/100,frame/10),y,s,s)
+      let t = noise(x/500,(y)/500)*40
+      let s = (sin((frame/15+t))*-0.5+0.5)*30 
+      ellipse(x+noise(x/100,y/100,frame/10),y,s,s)
     }
   }
 }
 {{</p5js_ins >}}
-### P5
 
-{{<p5js hideCode=false height=900 code-height=400 >}}
+### P5
+{{<p5js >}}
+function MakeParticle(col,lifetime)
+{
+    let pos  = [random(0,width), random(0,height)]; let pre_pos = pos;
+    return function(){ //update particle  return true if dead
+      stroke(col); line(pre_pos[0],pre_pos[1],pos[0],pos[1]);     
+      if (lifetime-- <= 0) return true;
+      let a = noise(pos[0]/2000,pos[1]/2000)*2000;
+      pre_pos = pos;
+      pos = [pos[0]+cos(a)*5,pos[1] +sin(a)*5];
+      return false;
+    }
+}
+function MakeParticleSystem(num,col,lifetime)
+{
+    let parts = Array.from({length:num},_=>MakeParticle(col,lifetime)); //create num of particles   
+    return  _=> parts.map(p=>p()).every(dead=>dead); //update layer until all particles die
+}
+function MakeParticleLayer(configs)
+{
+  let layers = configs.map(cfg =>MakeParticleSystem(cfg.num,cfg.col,cfg.lifetime));
+  let iter = 0;
+  return _=> {//run particle layer , if dead then next 
+    if( iter < layers.length && layers[iter]()) ++iter;
+  }
+}
+function setup () {
+  //createCanvas (800, 400);
+  colorMode(RGB,1.0);background (.976, .949, .878);
+  draw = MakeParticleLayer([{col:color(.667,.133, .141,0.35),num : 4000,lifetime:100},
+      {col:color(1., .812, .337,.25),num : 800,lifetime:55},
+      {col:color(0.,.369, .608,0.25),num : 600,lifetime:35},
+      {col:color(.667,.133, .141,0.35),num : 200,lifetime:100},
+    ]);
+}
+{{</p5js>}}
+
+---
+
+{{<p5js hideCode=false noSetup=true height=900 code-height=400 >}}
 function mix(a,b,v){
 return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
 }
@@ -217,7 +257,7 @@ chart_data = {
 {{</chart>}}
 
 ## Another P5
-{{<p5js  hideCode=true >}}
+{{<p5js  noSetup=true hideCode=true >}}
 let w = width;
 let h = height;
 colorMode(HSB,1,1,1,1)

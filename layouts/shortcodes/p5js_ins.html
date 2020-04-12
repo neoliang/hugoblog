@@ -2,15 +2,48 @@
 {{ $editor_id := printf "editor_%s" $id }}
 {{ $code_height := or (.Get "code-height") 360 }}
 {{ $height := or (.Get "height") 360}}
-
+<!--使用With后出现一堆奇怪的问题，先暂停使用-->
 
 <div id="{{$id}}"  style="max-width: 100%; height: 360px;"> </div>
 <br>
 <div id="parent_{{$editor_id}}" /> </div>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
 
+<script id = "p5template" type="text/p5template" >
+let last_sketch_{{$id}} = null;
+let width ="+width+";
+let height = "+height+";
+let sketch_{{$id}} = (sketch)=>{
+  last_sketch_{{$id}} = sketch;
+  sketch.setup =() =>{
+    var canvas = sketch.createCanvas(width,height); 
+    with(sketch){
+      let colorMode = sketch.colorMode.bind(sketch);
+      let HSB = sketch.HSB;
+      let background = sketch.background.bind(sketch);
+      let noStroke = sketch.noStroke.bind(sketch);
+      let color = sketch.color.bind(sketch);
+      let frameRate = sketch.frameRate.bind(sketch);
+      let stroke = sketch.stroke.bind(sketch);
+      let noFill = sketch.noFill.bind(sketch);
+      let fill = sketch.fill.bind(sketch);
+      let rect = sketch.rect.bind(sketch);
+      let noise = sketch.noise.bind(sketch);
+      let ellipse = sketch.ellipse.bind(sketch);
+      //let random = sketch.random.bind(sketch);
+      //let randomGaussian = sketch.randomGaussian.bind(this);
+      let draw
+      "+code+"
+      if(sketch.draw !== null) sketch.draw = draw;
+    }
+  }
+}; 
+if(last_sketch_{{$id}} !== null){last_sketch_{{$id}}.remove();}
+p5_{{$id}} = new p5(sketch_{{$id}},'{{$id}}');
+</script>
 
 <script type="text/javascript">
+
   let run_{{$id | safeJS}} = createAceEditor({
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
@@ -22,9 +55,13 @@
       var scale = {{$height}}/720;
       var mapElement = $('#{{$id}}')
       var height = mapElement.width() * scale;
-      
+       
       mapElement.css("height",height);
-      return "let last_sketch_{{$id}} = null;let width =" + mapElement.width() + ";let height = " +height+";let sketch_{{$id}} = (sketch)=>{last_sketch_{{$id}} = sketch;sketch.setup =()=>{var canvas = sketch.createCanvas(" + mapElement.width() +"," + height + ");" + code + "}}; if(last_sketch_{{$id}} !== null){last_sketch_{{$id}}.remove();}p5_{{$id}} = new p5(sketch_{{$id}},'{{$id}}');";
+      code = document.getElementById('p5template').textContent.replace('"+width+"',mapElement.width()).replace('"+height+"',height).replace('"+code+"',code);
+      return code;
+      /*
+      return "let last_sketch_{{$id}} = null;let width =" + mapElement.width() + ";let height = " +height+";let sketch_{{$id}} = (sketch)=>{last_sketch_{{$id}} = sketch;sketch.setup =()=>{var canvas = sketch.createCanvas(" + mapElement.width() +"," + height + "); with(sketch){" + code + "}}}; if(last_sketch_{{$id}} !== null){last_sketch_{{$id}}.remove();}p5_{{$id}} = new p5(sketch_{{$id}},'{{$id}}');";
+      */
     }
     //onCodeRunEnd : ()=>{new p5();}
   })

@@ -49,3 +49,4 @@ categories:
 	- 支持setup函数及非setup函数
 	- canvas由hook创建，内置屏幕宽高变量 （已完成）
 	- 尝试instance模式
+1. 在线编辑Shader,p5js及表格后存档生成id,可以通过id心iframe或Shortcode的方式嵌入网页
