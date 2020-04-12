@@ -18,6 +18,7 @@ let sketch_{{$id}} = (sketch)=>{
   sketch.setup =() =>{
     var canvas = sketch.createCanvas(width,height); 
     with(sketch){
+      /*
       let colorMode = sketch.colorMode.bind(sketch);
       let HSB = sketch.HSB;
       let background = sketch.background.bind(sketch);
@@ -33,8 +34,9 @@ let sketch_{{$id}} = (sketch)=>{
       //let random = sketch.random.bind(sketch);
       //let randomGaussian = sketch.randomGaussian.bind(this);
       let draw
+      */
       "+code+"
-      if(sketch.draw !== null) sketch.draw = draw;
+      //if(sketch.draw !== null) sketch.draw = draw;
     }
   }
 }; 

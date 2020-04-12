@@ -54,8 +54,7 @@
     id:"{{$editor_id}}",
     height:{{ trim $code_height "\n" }},
     code:{{ .Inner }},
-    onCodeWillRun:(code)=> 
-    {
+    onCodeWillRun:(code)=> {
       var setCode = document.getElementById("iframe_{{$id}}").contentWindow.setCode;
       if(setCode !== undefined)
         setCode(code);

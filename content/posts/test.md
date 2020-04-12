@@ -34,40 +34,40 @@ categories:
 
 ### P5 Instance
 {{<p5js_ins >}}
-let w = width;
-let h = height;
-colorMode(HSB,1,1,1,1)
-background(1);
+let w = width,h = height;
+sketch.colorMode(sketch.HSB,1,1,1,1)
+sketch.background(1);
+sketch.noStroke()
 
-noStroke()
 let cols =[
-  color(0.0,0.7,0.8),
-  color(0.7,0.1,0.2),
-  color(0.75,0.0,0.8)
+  sketch.color(0.0,0.7,0.8),
+  sketch.color(0.7,0.1,0.2),
+  sketch.color(0.75,0.0,0.8)
   ]
-frameRate(30)
+sketch.frameRate(30)
 let frame = 0
-draw = ()=>{
-  background(1);
-  stroke(0,0.,0.75);
-  noFill();
-  rect(0,0,w,h);
+sketch.draw = ()=>{
+  sketch.background(1);
+  sketch.stroke(0,0,0.75);
+  sketch.noFill();
+  sketch.rect(0,0,w,h);
   let i = 0
   ++frame
   for(let x = 40;x<w;x+=50+(i%3)*20)
   {
-    fill(cols[i++%3])
+    sketch.fill(cols[i++%3])
     for(let y = 40;y<h;y+=45)
     {
-      let t = noise(x/500,(y)/500)*40
-      let s = (sin((frame/15+t))*-0.5+0.5)*30 
-      ellipse(x+noise(x/100,y/100,frame/10),y,s,s)
+      let t = sketch.noise(x/500,(y)/500)*40
+      let s = (Math.sin((frame/15+t))*-0.5+0.5)*30 
+      sketch.ellipse(x+sketch.noise(x/100,y/100,frame/10),y,s,s)
     }
   }
 }
 {{</p5js_ins >}}
 
 ### P5
+#### 蒙得里安梯田
 {{<p5js >}}
 function MakeParticle(col,lifetime)
 {
@@ -106,7 +106,7 @@ function setup () {
 {{</p5js>}}
 
 ---
-
+#### 气球
 {{<p5js hideCode=false noSetup=true height=900 code-height=400 >}}
 function mix(a,b,v){
 return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
@@ -193,15 +193,16 @@ for(let i = 0;i<80;++i){
 } 
 {{</p5js >}}
 
-## ace
+## ace 只读代码嵌入测试
 {{<ace height=100 readOnly=true >}}
 console.log("hello world");
 {{</ace>}}
 
 
 
-##作品展示
-{{<chart code-height=360 height=300 hideCode=true >}}
+## 表格展示
+### mandelbrot neck divergent count
+{{<chart code-height=360 height=300 hideCode=false >}}
 function mandblot(x,y,cx,cy){
   let x1 = x*x-y*y + cx;
   let y1 = 2*x*y + cy;
@@ -255,7 +256,45 @@ chart_data = {
     }
 }
 {{</chart>}}
-
+### 表格多实例测试
+{{<chart code-height=360 height=300 hideCode=true >}}
+chart_data =  {
+  type: 'bar',
+  data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+      }]
+  },
+  options: {
+      scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
+  }
+}
+{{</chart>}}
 ## Another P5
 {{<p5js  noSetup=true hideCode=true >}}
 let w = width;
@@ -291,7 +330,8 @@ draw = ()=>{
 }
 {{</p5js >}}
 
-{{<shader id="3321" >}}
+## shader 嵌入测试
+{{<shader >}}
 {{</shader >}}
 
 

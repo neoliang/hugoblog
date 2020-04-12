@@ -12,7 +12,7 @@
 <div id="parent_{{$editor_id}}" > </div>
 {{end}}
 <script type="text/javascript">
-{{ .Inner | safeJS }}
+//{{ .Inner | safeJS }}
   ContentFit($("#{{$id}}"),{{$height}});
   var myChart = null;
   createAceEditor({
@@ -20,11 +20,14 @@
     id:"{{$editor_id}}",
     height:{{$code_height}},
     code:{{ .Inner }},
+    onCodeWillRun:(code)=>{
+      return "let chart_data ;\n" +  code + "\n chart_data_{{$id}} = chart_data;"
+    },
     onCodeRunEnd : ()=>{
       var ctx = document.getElementById('{{$id}}').getContext('2d');
       if(myChart != null)
         myChart.destroy();
-      myChart = new Chart(ctx,chart_data);
+      myChart = new Chart(ctx,chart_data_{{$id | safeJS}});
     }
   })
 </script>
