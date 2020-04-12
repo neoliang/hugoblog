@@ -52,7 +52,7 @@
   var runeditor_{{$id | safeJS  }} = createAceEditor({
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
-    height:{{ trim $code_height "\n" }},
+    height:{{ $code_height }},
     code:{{ .Inner }},
     onCodeWillRun:(code)=> {
       var setCode = document.getElementById("iframe_{{$id}}").contentWindow.setCode;

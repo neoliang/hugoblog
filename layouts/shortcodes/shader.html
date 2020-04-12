@@ -1,36 +1,20 @@
 
 {{ $id := delimit (shuffle (seq 1 9)) "" }}
+{{ $editor_id := printf "editor_%s" $id }}
+{{ $code_height := or (.Get "code-height") 360 }}
 {{ $height := or (.Get "height") 360}}
+{{ $hideCode := or (.Get "hideCode") false  }}
 
 <canvas id="{{$id}}"  style="width: 100%; height: 360px;"> </canvas>
 
-<script id="vs" type="x-shader/vertex"> 
-  attribute vec3 position;
-  void main() {
-    gl_Position = vec4( position, 1.0 );
-  }
-</script> 
-
-<script id="fs" type="x-shader/fragment"> 
-
-  uniform float time;
-  uniform vec2 resolution;
-
-  void main( void ) {
-
-    vec2 position = - 1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
-    float red = abs( sin( position.x * position.y + time / 5.0 ) );
-    float green = abs( sin( position.x * position.y + time / 4.0 ) );
-    float blue = abs( sin( position.x * position.y + time / 3.0 ) );
-    gl_FragColor = vec4( red, green, blue, 1.0 );
-
-  }
-
-</script> 
+{{if $hideCode }}
+<div id="parent_{{$editor_id}}" style="display: none;" > </div>
+{{else}}
+<div id="parent_{{$editor_id}}" > </div>
+{{end}}
 
 <script> 
   /*
-  {{.Inner}}
   */
   /**
    * Provides requestAnimationFrame in a cross browser way.
@@ -48,11 +32,9 @@
 
   })();
 
-
-  var canvas, 
-      gl, 
+__createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : function (canvas,fragment_shader) {
+  let gl, 
       buffer, 
-      vertex_shader, fragment_shader, 
       currentProgram,
       vertex_position,
       timeLocation,
@@ -62,48 +44,26 @@
                       screenWidth : 0, 
                       screenHeight: 0 };
 
-  init();
-  animate();
 
-  function init() {
+  let createShader = function ( src, type ) {
 
-    vertex_shader = document.getElementById('vs').textContent;
-    fragment_shader = document.getElementById('fs').textContent;
+    var shader = gl.createShader( type );
 
+    gl.shaderSource( shader, src );
+    gl.compileShader( shader );
 
+    if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
 
-    canvas = document.getElementById( '{{$id}}' );
-
-
-    // Initialise WebGL
-
-    try {
-
-      gl = canvas.getContext( 'webgl' );
-
-    } catch( error ) { }
-
-    if ( !gl ) {
-      gl = canvas.getContext( 'experimental-webgl' );
+      alert( ( type == gl.VERTEX_SHADER ? "VERTEX" : "FRAGMENT" ) + " SHADER:\n" + gl.getShaderInfoLog( shader ) );
+      return null;
 
     }
 
-    // Create Vertex buffer (2 triangles)
-
-    buffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [ - 1.0, - 1.0, 1.0, - 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0 ] ), gl.STATIC_DRAW );
-
-    // Create Program
-
-    currentProgram = createProgram( vertex_shader, fragment_shader );
-
-    timeLocation = gl.getUniformLocation( currentProgram, 'time' );
-    resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
+    return shader;
 
   }
 
-  function createProgram( vertex, fragment ) {
+  let createProgram = function ( vertex, fragment ) {
 
     var program = gl.createProgram();
 
@@ -136,25 +96,10 @@
 
   }
 
-  function createShader( src, type ) {
 
-    var shader = gl.createShader( type );
 
-    gl.shaderSource( shader, src );
-    gl.compileShader( shader );
 
-    if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
-
-      alert( ( type == gl.VERTEX_SHADER ? "VERTEX" : "FRAGMENT" ) + " SHADER:\n" + gl.getShaderInfoLog( shader ) );
-      return null;
-
-    }
-
-    return shader;
-
-  }
-
-  function resizeCanvas( event ) {
+  let resizeCanvas = function ( event ) {
 
     if ( canvas.width != canvas.clientWidth ||
        canvas.height != canvas.clientHeight ) {
@@ -170,15 +115,8 @@
     }
 
   }
-
-  function animate() {
-
-    resizeCanvas();
-    render();
-    requestAnimationFrame( animate );
-
-  }
-  function render() {
+  
+  let render = function () {
 
     if ( !currentProgram ) return;
 
@@ -204,5 +142,73 @@
     gl.disableVertexAttribArray( vertex_position );
 
   }
-  ContentFit($("#{{$id}}"),{{$height}});
+
+  let vertex_shader = "attribute vec3 position;void main() {gl_Position = vec4( position, 1.0 );}";
+  
+  let init = function () {
+    // Initialise WebGL
+
+    try {
+
+      gl = canvas.getContext( 'webgl' );
+
+    } catch( error ) { }
+
+    if ( !gl ) {
+      gl = canvas.getContext( 'experimental-webgl' );
+
+    }
+
+    // Create Vertex buffer (2 triangles)
+
+    buffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
+    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [ - 1.0, - 1.0, 1.0, - 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0 ] ), gl.STATIC_DRAW );
+
+    // Create Program
+
+    currentProgram = createProgram( vertex_shader, fragment_shader );
+
+    timeLocation = gl.getUniformLocation( currentProgram, 'time' );
+    resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
+
+  }
+
+  let updateShader = function (fragment_shader) {
+    if(currentProgram){
+      gl.createProgram(currentProgram);
+    }
+    currentProgram = createProgram( vertex_shader, fragment_shader );
+
+    timeLocation = gl.getUniformLocation( currentProgram, 'time' );
+    resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
+  }
+  let animate = function () {
+
+    resizeCanvas();
+    render();
+    requestAnimationFrame( animate );
+
+  }
+
+  init();
+  animate();
+  return updateShader;
+}
+let fsCode_{{$id | safeJS }} = {{ .Inner }};
+let updateShader_{{$id | safeJS }} = __createShader__(document.getElementById('{{$id}}'),fsCode_{{$id | safeJS }});
+createAceEditor({
+    parent :$("#parent_{{$editor_id}}"),
+    id:"{{$editor_id}}",
+    height:{{ $code_height }},
+    code: fsCode_{{$id | safeJS }},
+    language:"glsl",
+    onCodeWillRun:(code)=> {
+      updateShader_{{$id | safeJS }}(code);
+      return null;
+    }
+  });
+
+
+ContentFit($("#{{$id}}"),{{$height}});
 </script> 
