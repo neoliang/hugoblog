@@ -145,6 +145,17 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
 
   let vertex_shader = "attribute vec3 position;void main() {gl_Position = vec4( position, 1.0 );}";
   
+  let updateShader = function (fragment_shader) {
+    fragment_shader = "uniform float iTime;\nuniform vec2 iResolution;\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord );\nvoid main( void ) {\nmainImage(gl_FragColor,gl_FragCoord.xy);\n}" + fragment_shader;
+    if(currentProgram){
+      gl.createProgram(currentProgram);
+    }
+    currentProgram = createProgram( vertex_shader, fragment_shader );
+
+    timeLocation = gl.getUniformLocation( currentProgram, 'iTime' );
+    resolutionLocation = gl.getUniformLocation( currentProgram, 'iResolution' );
+  }
+
   let init = function () {
     // Initialise WebGL
 
@@ -166,23 +177,12 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
     gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [ - 1.0, - 1.0, 1.0, - 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0 ] ), gl.STATIC_DRAW );
 
     // Create Program
+    updateShader(fragment_shader);
 
-    currentProgram = createProgram( vertex_shader, fragment_shader );
-
-    timeLocation = gl.getUniformLocation( currentProgram, 'time' );
-    resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
 
   }
 
-  let updateShader = function (fragment_shader) {
-    if(currentProgram){
-      gl.createProgram(currentProgram);
-    }
-    currentProgram = createProgram( vertex_shader, fragment_shader );
 
-    timeLocation = gl.getUniformLocation( currentProgram, 'time' );
-    resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
-  }
   let animate = function () {
 
     resizeCanvas();

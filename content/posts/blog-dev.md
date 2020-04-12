@@ -71,7 +71,8 @@ categories:
   a = ()=> 0;
   ````
 
-
+#### 4.13
+- shader嵌入支持（屏幕适配及多实例）
 [^2]:(https://github.com/xaprb/story)
 [^3]:(https://ace.c9.io/)
 
@@ -82,5 +83,5 @@ categories:
 
 - 字体大小调整,适配手机横坚屏（参考cnblog)
 
-- shader嵌入支持（屏幕适配及多实例）
+
 - 在线编辑Shader,p5js及表格存档生成对应的引用id,可以通过id以iframe或Shortcode的方式嵌入网页

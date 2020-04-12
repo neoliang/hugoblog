@@ -10,7 +10,7 @@ function createAceEditor(cfg){
   var readOnly = cfg.readOnly || false;
   var language = cfg.language || 'javascript';
   parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
-  parent.append('<div id="' + id + '" style="width: 100%; height: 360px;border: 1px solid lightgray;"></div>');
+  parent.append('<div id="' + id + '" style="width: 100%; height: '+height+'px;border: 1px solid lightgray;"></div>');
   if(!readOnly){
     parent.append('<div id="toolbar_' + id + '" style="width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;border: 1px solid lightgray;padding-top: -1px;padding-right: 1px;"></div>');
   }
@@ -18,6 +18,7 @@ function createAceEditor(cfg){
   editor.session.setMode("ace/mode/"+language);
   editor.setShowPrintMargin(false);
   editor.setAutoScrollEditorIntoView(true);
+
   //ContentFit($("#"+id),height);
   // if(!readOnly){
   //   ContentFit($("#toolbar_"+id),toolbarHeight);
