@@ -30,24 +30,20 @@ categories:
 - Chart.Js图表绘制（使用`- feature-chart`开启)
 - P5.js绘图嵌入
 - Shader嵌入
-
-[^2]:(https://github.com/xaprb/story)
-[^3]:(https://ace.c9.io/)
-
-### 待完善功能
-1. iFrame排版对齐修复，P5.js使用iFrame实现，iFrame嵌入时排版的宽度和原生元素上有差异
-  - 将AceEditor从iFrame中分享出来（已完成）
-  - 宽度适配(已完成，set iframe inner html margin and padding to zero)
-1. 代码编辑器运行按钮嵌入（参考Shadertoy）
-1. 代码编辑器折叠按钮和文字美化 （参考Shadertoy）
-1. 支持P5.js,Chart.js和shader的嵌入时不显示代码 (已完成)
+- iFrame排版对齐修复，P5.js使用iFrame实现，iFrame嵌入时排版的宽度和原生元素上有差异
+  - 将AceEditor从iFrame中分离出来
+  - 宽度适配(Set iFrame inner html margin and padding to zero)
+- 支持P5.js,Chart.js和shader的嵌入时不显示代码 (已完成)
   > `<div/>`的写法是错误的，正常的写法 `<div> </div> `
-1. 字体大小调整,适配手机横坚屏（参考cnblog)
-1. 代码嵌入使用AceEditor的只读模式,支持多种语言语法高亮（已完成)
-1. shader嵌入支持（屏幕适配及多实例）
-1. P5js改进
-  - 支持setup函数及非setup函数 (已完成)
-  > js的变量作用域比较奇怪例如以下代码：
+- 代码嵌入使用AceEditor的只读模式,支持多种语言语法高亮
+- P5js改进
+  - 支持setup函数及非setup函数 ([备注](#变量作用域备注))
+  - canvas由hook创建，内置屏幕宽高变量
+  - 尝试instance模式
+  > instance 模式的语法和全局模式有差别，虽然可以用with来解决，但ballonsketch在测试时显示不正常，也未发现报错，暂时弃用  _(4月12日)_
+  
+  > #### 变量作用域备注
+  > js的变量作用域比较奇怪例如以下代码：_(4月12日)_
   ```js
   function a(){return 255;}
   let b = a;
@@ -74,7 +70,16 @@ categories:
   a = ()=> 0;
   ````
 
-  - canvas由hook创建，内置屏幕宽高变量 （已完成）
-  - 尝试instance模式
-  > instance 模式的语法和全局模式有差别，虽然可以用with来解决，但ballonsketch在测试时显示不正常，也未发现报错，暂时弃用  _(4月12日)_
-1. 在线编辑Shader,p5js及表格后存档生成id,可以通过id心iframe或Shortcode的方式嵌入网页
+
+[^2]:(https://github.com/xaprb/story)
+[^3]:(https://ace.c9.io/)
+
+### 待完善功能
+
+- 代码编辑器运行按钮嵌入（参考Shadertoy）
+- 代码编辑器折叠按钮和文字美化 （参考Shadertoy）
+
+- 字体大小调整,适配手机横坚屏（参考cnblog)
+
+- shader嵌入支持（屏幕适配及多实例）
+- 在线编辑Shader,p5js及表格存档生成对应的引用id,可以通过id以iframe或Shortcode的方式嵌入网页
