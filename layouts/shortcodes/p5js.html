@@ -24,7 +24,7 @@
 {{ if $noSetup }}
     "function setup(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\");" + code +  "}\n" +
 {{ else }}
-    code + "; let _setup = window.setup ;window.setup = function(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\"); _setup(this);}\n" + 
+    code + "; let _setup = setup ;setup = function(){var canvas = createCanvas(" + mapElement.width() +"," + height + ");canvas.parent(\"{{$id}}\"); _setup(this);}\n" + 
 {{ end }}
   "new p5();";
     var script = $("#script_{{$id}}");
@@ -62,9 +62,14 @@
       return null;
     }
   });
-
+  let lastSize_{{$id | safeJS }} = 0;
   var adjustSize_{{$id | safeJS }} = ()=>{
     var iframe =$("#iframe_{{$id}}");
+    if( Math.abs(iframe.width() - lastSize_{{$id | safeJS }}) < 2)
+    {
+      return;
+    }
+    lastSize_{{$id | safeJS }} = iframe.width();
     var scale = {{$height}}/720
     runeditor_{{$id | safeJS }}();
     iframe.height(iframe.contents().find("html").height()+4);
