@@ -5,7 +5,7 @@
 {{ $height := or (.Get "height") 360}}
 {{$hideCode := or (.Get "hideCode") false  }}
 
-<canvas id="{{$id}}"  style="max-width: 100%; height: 360px;"> </canvas>
+<canvas id="{{$id}}"  style="width: 100%; height: 360px;"> </canvas>
 {{if $hideCode }}
 <div id="parent_{{$editor_id}}" style="display: none;" > </div>
 {{else}}
@@ -13,7 +13,7 @@
 {{end}}
 <script type="text/javascript">
 //{{ .Inner | safeJS }}
-  ContentFit($("#{{$id}}"),{{$height}});
+  //ContentFit($("#{{$id}}"),{{$height}});
   var myChart = null;
   createAceEditor({
     parent :$("#parent_{{$editor_id}}"),

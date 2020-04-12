@@ -2,7 +2,7 @@
 {{ $id := delimit (shuffle (seq 1 9)) "" }}
 {{ $height := or (.Get "height") 360}}
 
-<canvas id="{{$id}}"  style="max-width: 100%; height: 360px;"> </canvas>
+<canvas id="{{$id}}"  style="width: 100%; height: 360px;"> </canvas>
 
 <script id="vs" type="x-shader/vertex"> 
   attribute vec3 position;
@@ -204,5 +204,5 @@
     gl.disableVertexAttribArray( vertex_position );
 
   }
-  //ContentFit($("#{{$id}}"),{{$height}});
+  ContentFit($("#{{$id}}"),{{$height}});
 </script> 

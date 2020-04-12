@@ -145,8 +145,12 @@ $( function() {
    }
 });
 function ContentFit(mapElement,height) {
+  let lastWidth = mapElement.width();
    var onResize = function(e) {    
     var scale = height/720
+    if(Math.abs(lastWidth - mapElement.width()) < 1)
+      return;
+    lastWidth = mapElement.width();
     mapElement.css("height", mapElement.width() * scale);
   };
   onResize();
