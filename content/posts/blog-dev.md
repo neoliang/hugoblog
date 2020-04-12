@@ -60,7 +60,7 @@ categories:
   console.log(b());
   a = ()=> 0;
   ```
-  >看起来js执行时至少是两个pass,第一遍处理了函数.第二pass时才对变量做赋值操作。 在这个前提下，要hook setup函数就会比较麻烦，不过可以通过以下方式来完成
+  >看起来js执行时至少经历两个pass,第一个pass处理函数编译.第二个pass时对变量赋值。 在这个前提下，hook setup函数就得使用点小技巧，例如：
   ```js
   function a(){return 255;}
   var b = window.a;
