@@ -442,3 +442,17 @@ img[src~="3dbook"] {
   -webkit-transform: rotate(0deg); /* Safari */'
   transform: rotate(0deg);  
 }
+
+.play-code-button {
+  background: url("img/play.png");
+}
+
+.play-code-button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.play-code-button:hover {
+  box-shadow: inset 0px 0px 1px 1px #808080, 0px 0px 1px 1px #808080;
+}

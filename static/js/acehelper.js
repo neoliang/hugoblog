@@ -10,9 +10,10 @@ function createAceEditor(cfg){
   var readOnly = cfg.readOnly || false;
   var language = cfg.language || 'javascript';
   parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
-  parent.append('<div id="' + id + '" style="width: 100%; height: '+height+'px;border: 1px solid lightgray;"></div>');
+  var codeInput = $('<div id="' + id + '" style="width: 100%; height: '+height+'px;border: 1px solid lightgray;">').appendTo(parent);
   if(!readOnly){
-    parent.append('<div id="toolbar_' + id + '" style="width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;border: 1px solid lightgray;padding-top: -1px;padding-right: 1px;"></div>');
+    let toolbar = $('<div id="toolbar_' + id + '" style="width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;margin-top:-1px;border: 1px solid lightgray;">').appendTo(parent);
+    $('<button class="play-code-button" id="img_'+ id + '">').appendTo(toolbar);
   }
   var editor = ace.edit(id,{theme: "ace/theme/xcode",readOnly:readOnly});
   editor.session.setMode("ace/mode/"+language);
@@ -45,8 +46,7 @@ function createAceEditor(cfg){
       caretElement.text("显示代码");
     }
   });
-  function runeditor()
-  {
+  let runeditor = function (){
     var code = editor.getValue();  
     if(onCodeWillRun != null)
     {  
@@ -76,5 +76,6 @@ function createAceEditor(cfg){
       readOnly: false 
   }); 
   runeditor();
+  $('#img_'+id).on('click',runeditor);
   return runeditor;
 }

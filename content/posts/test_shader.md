@@ -32,20 +32,3 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     fragColor = vec4(col,1.0);
 }
 {{</shader >}}
-
-{{<shader code-height=200 >}}
-
-void mainImage( out vec4 fragColor, in vec2 fragCoord ){
-    vec2 uv = (2.*fragCoord.xy-iResolution.xy)/iResolution.y;
-    uv.y -= pow(abs(uv.x),1.3); uv.y *= 1.1;
-    float t = iTime*3.;
-    t = sin(t+sin(t+sin(t+sin(t))))*0.5 + 0.5;
-    t = clamp(t,0.5,1.0);
-    float mainheart = 0.5*t/length(uv);
-    vec3 col = mainheart * vec3(0.2,0.1,0.05);
-    fragColor = vec4(col,1.0);
-}
-
-
-
-{{</shader >}}
