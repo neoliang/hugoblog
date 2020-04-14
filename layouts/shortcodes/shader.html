@@ -39,10 +39,13 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
       vertex_position,
       timeLocation,
       resolutionLocation,
+      mousePosition,
       parameters = {  start_time  : new Date().getTime(), 
                       time        : 0, 
                       screenWidth : 0, 
-                      screenHeight: 0 };
+                      screenHeight: 0,
+                      mouseX:0,
+                      mouseY:0 };
 
 
   let createShader = function ( src, type ) {
@@ -132,7 +135,7 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
 
     gl.uniform1f( timeLocation, parameters.time / 1000 );
     gl.uniform2f( resolutionLocation, parameters.screenWidth, parameters.screenHeight );
-
+    gl.uniform2f( mousePosition,parameters.mouseX,parameters.mouseY);
     // Render geometry
 
     gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
@@ -146,7 +149,7 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
   let vertex_shader = "attribute vec3 position;void main() {gl_Position = vec4( position, 1.0 );}";
   
   let updateShader = function (fragment_shader) {
-    fragment_shader = "uniform float iTime;\nuniform vec2 iResolution;\nvoid mainImage( out vec4 fragColor, in vec2 fragCoord );\nvoid main( void ) {\nmainImage(gl_FragColor,gl_FragCoord.xy);\n}" + fragment_shader;
+    fragment_shader = "uniform float iTime;uniform vec2 iResolution;uniform vec2 iMouse;void mainImage( out vec4 fragColor, in vec2 fragCoord );void main( void ) {mainImage(gl_FragColor,gl_FragCoord.xy);}" + fragment_shader;
     if(currentProgram){
       gl.createProgram(currentProgram);
     }
@@ -154,6 +157,7 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
 
     timeLocation = gl.getUniformLocation( currentProgram, 'iTime' );
     resolutionLocation = gl.getUniformLocation( currentProgram, 'iResolution' );
+    mousePosition = gl.getUniformLocation(currentProgram,'iMouse')
   }
 
   let init = function () {
@@ -171,11 +175,15 @@ __createShader__ = typeof __createShader__ != 'undefined' ? __createShader__ : f
     }
 
     // Create Vertex buffer (2 triangles)
-
+    canvas
     buffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
     gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [ - 1.0, - 1.0, 1.0, - 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0, 1.0, - 1.0, 1.0 ] ), gl.STATIC_DRAW );
-
+    canvas.addEventListener("mousemove", (e)=>{
+      parameters.mouseX = e.offsetX;
+      parameters.mouseY = canvas.height - e.offsetY;
+      //console.log(e.pageX,e.pageY,e.clientX,e.clientY,e.offsetX,e.offsetY);
+    });
     // Create Program
     updateShader(fragment_shader);
 

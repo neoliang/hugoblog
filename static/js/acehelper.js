@@ -1,4 +1,12 @@
 
+function ContentFit(mapElement,height) {
+   var onResize = function(e) {    
+    var scale = height/720
+    mapElement.css("height", mapElement.width() * scale);
+  };
+  onResize();
+  window.addEventListener("resize",onResize);
+}
 var toolbarHeight = 24;
 function createAceEditor(cfg){
   var parent = cfg.parent;
@@ -10,20 +18,18 @@ function createAceEditor(cfg){
   var readOnly = cfg.readOnly || false;
   var language = cfg.language || 'javascript';
   parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
-  var codeInput = $('<div id="' + id + '" style="width: 100%; height: '+height+'px;border: 1px solid lightgray;">').appendTo(parent);
+  parent.append('<div id="' + id + '" style="max-width: 100%; height: 360px;border: 1px solid lightgray;"></div>');
   if(!readOnly){
-    let toolbar = $('<div id="toolbar_' + id + '" style="width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;margin-top:-1px;border: 1px solid lightgray;">').appendTo(parent);
-    $('<button class="play-code-button" id="img_'+ id + '">').appendTo(toolbar);
+    parent.append('<div id="toolbar_' + id + '" style="max-width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;border: 1px solid lightgray;padding-top: -1px;padding-right: 1px;"></div>');
   }
   var editor = ace.edit(id,{theme: "ace/theme/xcode",readOnly:readOnly});
   editor.session.setMode("ace/mode/"+language);
   editor.setShowPrintMargin(false);
   editor.setAutoScrollEditorIntoView(true);
-
-  //ContentFit($("#"+id),height);
-  // if(!readOnly){
-  //   ContentFit($("#toolbar_"+id),toolbarHeight);
-  // }
+  ContentFit($("#"+id),height);
+  if(!readOnly){
+    ContentFit($("#toolbar_"+id),toolbarHeight);
+  }
   
   $("#caret_"+id).on('click',(e)=>{
     var editorElement = [$("#"+id)];
@@ -46,7 +52,8 @@ function createAceEditor(cfg){
       caretElement.text("显示代码");
     }
   });
-  let runeditor = function (){
+  function runeditor()
+  {
     var code = editor.getValue();  
     if(onCodeWillRun != null)
     {  
@@ -76,6 +83,5 @@ function createAceEditor(cfg){
       readOnly: false 
   }); 
   runeditor();
-  $('#img_'+id).on('click',runeditor);
   return runeditor;
 }

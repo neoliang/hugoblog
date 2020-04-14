@@ -194,8 +194,18 @@ for(let i = 0;i<80;++i){
 {{</p5js >}}
 
 ## ace 只读代码嵌入测试
-{{<ace height=100 readOnly=true >}}
+{{<ace height=300 readOnly=true >}}
 console.log("hello world");
+function mix(a,b,v){
+return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
+}
+function ballonTail(x,y,t)
+{
+bezier(x,y,
+       x-random(0,t/5),y+0.33*t,
+       x+random(0,t/5),y+0.66*t,
+       x,y+t)
+}
 {{</ace>}}
 
 
@@ -332,18 +342,15 @@ draw = ()=>{
 
 ## shader 嵌入测试
 {{<shader >}}
-  uniform float time;
-  uniform vec2 resolution;
 
-  void main( void ) {
+void mainImage( out vec4 fragColor, in vec2 fragCoord ){
+  vec2 position = - 1.0 + 2.0 * fragCoord.xy / iResolution.xy;
+  float red = abs( sin( position.x * position.y + iTime / 5.0 ) );
+  float green = abs( sin( position.x * position.y + iTime / 4.0 ) );
+  float blue = abs( sin( position.x * position.y + iTime / 3.0 ) );
+  fragColor = vec4( red, green, blue, 1.0 );
 
-    vec2 position = - 1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
-    float red = abs( sin( position.x * position.y + time / 5.0 ) );
-    float green = abs( sin( position.x * position.y + time / 4.0 ) );
-    float blue = abs( sin( position.x * position.y + time / 3.0 ) );
-    gl_FragColor = vec4( red, green, blue, 1.0 );
-
-  }
+}
 {{</shader >}}
 
 
