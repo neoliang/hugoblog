@@ -444,13 +444,17 @@ img[src~="3dbook"] {
 }
 
 .play-code-button {
-  background: url("img/play.png");
+  background: url("img/play.png") no-repeat top center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
 }
 
 .play-code-button:active {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
-  transform: translateY(4px);
+  transform: scale(0.95);
 }
 
 .play-code-button:hover {
