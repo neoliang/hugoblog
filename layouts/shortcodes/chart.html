@@ -4,6 +4,8 @@
 {{ $code_height := or (.Get "code-height") 360 }}
 {{ $height := or (.Get "height") 360}}
 {{ $hideCode := or (.Get "hideCode") false  }}
+{{ $defaultFold := or (.Get "defaultFold") false }}
+{{ $disableFoldButton := or (.Get "disableFoldButton") false }}
 
 <canvas id="{{$id}}"  style="width: 100%; height: 360px;"> </canvas>
 {{if $hideCode }}
@@ -19,6 +21,8 @@
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
     height:{{$code_height}},
+    defaultFold:{{$defaultFold}},
+    disableFoldButton:{{$disableFoldButton}},
     code:{{ .Inner }},
     onCodeWillRun:(code)=>{
       return "let chart_data ;\n" +  code + "\n chart_data_{{$id}} = chart_data;"

@@ -9,7 +9,11 @@ function createAceEditor(cfg){
   var onCodeRunEnd = cfg.onCodeRunEnd;
   var readOnly = cfg.readOnly || false;
   var language = cfg.language || 'javascript';
-  parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
+  var showFoldButton = !(cfg.disableFoldButton || false);
+  let defaultFold = cfg.defaultFold || false; //默认是否折叠代码
+  if(showFoldButton){
+    parent.append('<span class="caret" id="caret_' + id + '" style="color: #357edd;" >隐藏代码</span>');
+  }
   var codeInput = $('<div id="' + id + '" style="width: 100%; height: '+height+'px;border: 1px solid lightgray;">').appendTo(parent);
   if(!readOnly){
     let toolbar = $('<div id="toolbar_' + id + '" style="width: 100%; height: '+toolbarHeight+'px; background: #F0F0F0;align-items: center;text-align: left;left: 0px;margin-top:-1px;border: 1px solid lightgray;">').appendTo(parent);
@@ -24,28 +28,31 @@ function createAceEditor(cfg){
   // if(!readOnly){
   //   ContentFit($("#toolbar_"+id),toolbarHeight);
   // }
-  
-  $("#caret_"+id).on('click',(e)=>{
-    var editorElement = [$("#"+id)];
-    if (!readOnly) {
-      editorElement.push($('#toolbar_'+id));
-    }
-    var caretElement = $("#caret_"+id);
-    var v = editorElement[0].css('display')
+  if (showFoldButton) { 
+    let toggleFold = ()=>{
+      var editorElement = [$("#"+id)];
+      if (!readOnly) {
+        editorElement.push($('#toolbar_'+id));
+      }
+      var caretElement = $("#caret_"+id);
+      var v = editorElement[0].css('display')
 
-    if(v === 'none')
-    {
-      editorElement.forEach(e => e.css('display','block'));
-      caretElement.removeClass('caret-down');
-      caretElement.text("隐藏代码");
+      if(v === 'none')
+      {
+        editorElement.forEach(e => e.css('display','block'));
+        caretElement.removeClass('caret-down');
+        caretElement.text("隐藏代码");
+      }
+      else
+      {
+        editorElement.forEach(e => e.css('display','none'));
+        caretElement.addClass('caret-down');
+        caretElement.text("显示代码");
+      }
     }
-    else
-    {
-      editorElement.forEach(e => e.css('display','none'));
-      caretElement.addClass('caret-down');
-      caretElement.text("显示代码");
-    }
-  });
+    $("#caret_"+id).on('click',toggleFold);
+    if(defaultFold) toggleFold();
+  }
   let runeditor = function (){
     var code = editor.getValue();  
     if(onCodeWillRun != null)
@@ -68,7 +75,26 @@ function createAceEditor(cfg){
     if(onCodeRunEnd != null)
       onCodeRunEnd();
   }
-  editor.setValue(code,1);
+  
+  if (readOnly) {
+    editor.setValue('\n'+code+'\n',-1);
+    editor.setHighlightActiveLine(false);
+    editor.setHighlightGutterLine(false);
+    editor.container.style.pointerEvents = "none";
+    editor.renderer.$cursorLayer.element.style.opacity = 0;
+    editor.commands.on("exec", function(e) {
+      e.preventDefault();
+    });
+    //no fold widgets
+    editor.session.setFoldStyle('manual');
+    editor.setOptions({
+      maxLines: Infinity
+    });
+  }
+  else
+  {
+    editor.setValue(code,1);
+  }
   editor.commands.addCommand({
     name:'run',
     bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'},

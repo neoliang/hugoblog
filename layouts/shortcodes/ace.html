@@ -2,6 +2,10 @@
 {{ $height := or (.Get "height") 360 }}
 {{ $readOnly := or (.Get "readOnly") false }}
 {{ $language := or (.Get "language") "javascript" }}
+{{ $allowRunning := or (.Get "allowRunning") false }}
+{{ $disableFoldButton := or (.Get "disableFoldButton") false }}
+{{ $defaultFold := or (.Get "defaultFold") false }}
+
 <div id="parent_{{$editor_id}}" > </div>
 <script type="text/javascript">
   createAceEditor({
@@ -11,10 +15,11 @@
     code:{{ .Inner }},
     readOnly:{{$readOnly}},
     language:{{$language}},
+    {{if not $allowRunning }}
     onCodeWillRun: ()=> null,
-    onCodeRunEnd : ()=>{
-    	console.log('editor run end');
-    }
+    {{end}}
+    disableFoldButton:{{$disableFoldButton}},
+    defaultFold:{{$defaultFold}},
   });
 </script>
 
