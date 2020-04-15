@@ -80,11 +80,8 @@ function createAceEditor(cfg){
     editor.setValue('\n'+code+'\n',-1);
     editor.setHighlightActiveLine(false);
     editor.setHighlightGutterLine(false);
-    editor.container.style.pointerEvents = "none";
+    //editor.container.style.pointerEvents = "none";
     editor.renderer.$cursorLayer.element.style.opacity = 0;
-    editor.commands.on("exec", function(e) {
-      e.preventDefault();
-    });
     //no fold widgets
     editor.session.setFoldStyle('manual');
     editor.setOptions({

@@ -38,7 +38,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 Mandelbrot的定义：{{<math>}}f(z)=z^2+c{{</math>}}
 {{<p5js noSetup= true >}}
 //f(z) = z^2+c
-~~~//隐藏显示的代码
+~~~//隐藏的代码
 function mandblot(x,y,cx,cy){
   let x1 = x*x-y*y + cx;
   let y1 = 2*x*y + cy;
@@ -116,10 +116,10 @@ function mandelblotSet(cx,cy){
 }
 
 //计算mandelbrot的脖子
-let testCount = 100;
+var testCount = 150;
 var esps = Array.from({length:testCount},(v,i)=> -0.1+(i/testCount) * 0.2);
 //esps = esps.filter(v => Math.abs(v) >= 0.008)
-let divcount = (esp)=>mandelblotSet(-0.75,esp); 
+var divcount = (esp)=>mandelblotSet(-0.75,esp); 
 var dc = esps.map(divcount);
 {{</ace>}}
 
@@ -149,6 +149,9 @@ chart_data = {
 
 如果将发散数量与距离边界的值相乘，可以发现，离边界越近，结果与{{<math>}}\pi{{</math>}}越相近
 {{<chart code-height=360 height=300 hideCode=false defaultFold=true >}}
+var esps = Array.from({length:testCount},(v,i)=> -0.1+(i/testCount) * 0.2);
+esps = esps.filter(v=> Math.abs(v) > 0.008); 
+var dc = esps.map(divcount);
 var pis = esps.map((v,i)=> Math.abs(v * dc[i]))
 chart_data = {
     type: 'line',
