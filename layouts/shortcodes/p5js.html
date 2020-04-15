@@ -49,15 +49,20 @@
 
 
 <script type="text/javascript">
+  let codes_{{$id | safeJS }} = {{ .Inner}};
+  let hideCode_{{$id | safeJS }} = codes_{{$id | safeJS }}.match(/~~~[\s\S|.]*~~~/g);
+  if(hideCode_{{$id | safeJS }}.length > 0)
+    hideCode_{{$id | safeJS }} = hideCode_{{$id | safeJS }}[0].replace(/~~~/g,"");
+  codes_{{$id | safeJS }} =  codes_{{$id | safeJS }}.replace(/~~~[\s\S|.]*~~~/,"");
   var runeditor_{{$id | safeJS  }} = createAceEditor({
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
     height:{{ $code_height }},
-    code:{{ .Inner }},
+    code:codes_{{$id | safeJS }},
     onCodeWillRun:(code)=> {
       var setCode = document.getElementById("iframe_{{$id}}").contentWindow.setCode;
       if(setCode !== undefined)
-        setCode(code);
+        setCode(hideCode_{{$id | safeJS }}  + code);
       return null;
     }
   });
