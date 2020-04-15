@@ -36,55 +36,58 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 ### Mandelbrot
 Mandelbrot的定义：{{<math>}}f(z)=z^2+c{{</math>}}
-{{<p5js >}}
-let  depth = 100;
-let i;
-let ii, rr;
-
-function setup(){
-  background(0);
-  i = 0;
+{{<p5js noSetup= true >}}
+//f(z) = z^2+c
+~~~//隐藏显示的代码
+function mandblot(x,y,cx,cy){
+  let x1 = x*x-y*y + cx;
+  let y1 = 2*x*y + cy;
+  return {x:x1,y:y1};
 }
-
-function draw(){
-  loadPixels();
-  //println(float(i)/width);
-  for(let p = 0; p < 10; p++){
-    
-    i++;
-    
-    if(i >= width){
-      noLoop(); 
-      break;
+function mandelblotSet(cx,cy){
+  let x = 0;
+  let y = 0;
+  for(let i = 0;i<N;++i)
+  {
+    let z1 = mandblot(x,y,cx,cy)
+    x = z1.x;
+    y = z1.y;
+    let r = x*x+y*y;
+    if( r > 4.0)
+    {
+      return i;
     }
-      for(let j = 0; j < height; j++){
-        let mx, my;
-        mx = map(i, 0, width, -2, 1);
-        my = map(j, 0, height, 1.5, -1.5);
-        let temp = iterate(mx, my, depth);
-        pixels[j*width+i] = color(map(temp, 0, depth, 0, 255));
-      }
-    
   }
-  updatePixels();
+  return N
 }
+~~~
+let _x=0;
+let N = 500;
 
-function iterate( a,  b,  max){
-  let i, r, tri;
-  let count = 0;
-  r = a;
-  i = b;
-  for(let q = 0; q < max; q++){
-    count++;
-    rr = r*r;
-    ii = i*i;
-    tri = 2*r*i;
-    r = rr+ii*-1+a;
-    i = tri+b;
-    if(r*r+i*i > 4){break;}
+background(0);
+
+pixelDensity();
+loadPixels();
+while(true){
+  if(_x >= width){
+    noLoop(); 
+    break;
   }
-  return count;
-}
+  for(let y = 0; y < height; y++){
+    let my = 2*(y/height) - 1;//-1,1
+    let mx = 2*(_x/width) - 1; //-2,2
+    mx *= width/height;//宽高比修正
+    mx -= 0.5;
+    let temp = mandelblotSet(mx, my);
+    let v = temp / N * 255;
+    let si = 4*(y*width+_x);
+    pixels[si] = pixels[si+1] = pixels[si+2] = v ;
+    pixels[si+3] = 255;
+  }
+  ++_x;
+} 
+updatePixels();
+
 {{</p5js>}}
 {{<ace readOnly=true allowRunning=true disableFoldButton=true >}}
 //f(z) = z^2+c
@@ -104,7 +107,7 @@ function mandelblotSet(cx,cy){
     x = z1.x;
     y = z1.y;
     let r = x*x+y*y;
-    if( r> 2.0)
+    if( r > 4.0)
     {
       return i;
     }
@@ -161,7 +164,7 @@ chart_data = {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-                    min:2.9,
+                    min:3.06,
                     max:3.2
                 }
             }]
