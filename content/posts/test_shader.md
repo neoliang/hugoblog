@@ -3,6 +3,7 @@ title: Demo-测试2
 date: "2020-03-16"
 url: "/posts/test_shader"
 thumbnail: "img/story-logo-black.svg"
+image: "img/mandelbrot_banner.jpg"
 description: "测试Shader功能"
 classes:
 - feature-figcaption
