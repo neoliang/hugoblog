@@ -1,10 +1,10 @@
 ---
-title: Demo-测试2
-date: "2020-03-16"
-url: "/posts/test_shader"
+title: Mandelbrot
+date: "2020-04-16"
+url: "/posts/mandelbrot"
 thumbnail: "preview_images/thumbs/mandelbrot1.jpg"
 image: "img/mandelbrot_banner1.jpg"
-description: "测试Shader功能"
+description: "神秘美丽的Mandelbrot介绍"
 classes:
 - feature-figcaption
 - feature-figcaption-hidden
@@ -12,9 +12,9 @@ classes:
 - feature-ace
 - feature-math
 categories:
-- Demo
+- essay,math
 ---
-测试shadher
+记得《2001太空漫游》的作者阿瑟克加克与霍金、卡尔萨根参加过一个节目，主题是关于神、宇宙及一切。在节目中阿瑟展示他亲自编写的Mandelbrot图形程序，并演示可以像操作显微镜一样，放大图形的任意局部细节，看起来这个过程可以无限循环下去。
 <!--more-->
 
 
