@@ -24,6 +24,15 @@ items:
         desc: （图三）简单背景下的黑洞
       - img: blackhole.jpg
         desc: （图四）黑洞最终版
+  - title: Mandelbrot
+    thumb: mandelbrot.jpg
+    alt: Mandelbrot
+    description: >-
+      to do
+    url: /posts/
+    images:
+      - img:  joydivision.jpg
+        desc: test
   - title: 木星云
     thumb: jupiter-clouds.jpg
     alt: Logo
@@ -95,3 +104,4 @@ items:
     images:
         - img: palmtree.jpg
           desc: 日落
+
