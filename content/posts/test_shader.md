@@ -22,16 +22,32 @@ categories:
 
 
 {{<shader code-height=210 height=400 hideCode=false >}}
+vec2 rd(vec2 p)
+{
+    return fract(sin(p*vec2(351.2,123.1))*32.1);
+    
+}
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
-    vec2 m = iMouse/iResolution.xy;
-    // Time varying pixel color
-    vec3 col = vec3(uv*m,0.0);
-
-    // Output to screen
-    fragColor = vec4(col,1.0);
+    vec2 uv = (fragCoord-0.5*iResolution.xy)/iResolution.y;
+    //uv = fract(uv * 2.);
+    vec2 c = 3.*uv;
+  vec2 z = vec2(0.);
+    const float N = 123.;
+    float iter = 0.;
+    for(float i = 0.;i<1.0;i+=1./N)
+    {
+        z = vec2(1.*(z.x*z.x-z.y*z.y),2.0*z.x*z.y)+c;
+        if(dot(z,z)>4.) break;
+        float t = z.x;
+        z.x = z.y;
+        z.y = t;
+        ++iter;
+    }
+    vec3 v = mix(vec3(0.1,0.5,0.9),vec3(1),pow(iter/N,0.2));//1.-pow(iter/N,0.2);
+  vec3 col = vec3(sin(v));
+    fragColor = vec4(v,1.0);
 }
 {{</shader >}}
 
