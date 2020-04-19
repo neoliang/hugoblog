@@ -4,6 +4,7 @@
 {{ $code_height := or (.Get "code-height") 360 }}
 {{ $height := or (.Get "height") 360}}
 {{ $hideCode := or (.Get "hideCode") false  }}
+{{ $defaultFold := or (.Get "defaultFold") false }}
 
 <canvas id="{{$id}}"  style="width: 100%; height: {{$height}}px;"> </canvas>
 
@@ -209,6 +210,7 @@ createAceEditor({
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
     height:{{ $code_height }},
+    defaultFold:{{$defaultFold}},
     code: fsCode_{{$id | safeJS }},
     language:"glsl",
     onCodeWillRun:(code)=> {

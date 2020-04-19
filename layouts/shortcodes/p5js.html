@@ -5,7 +5,7 @@
 {{ $height := or (.Get "height") 360}}
 {{ $hideCode := or (.Get "hideCode") false  }}
 {{ $noSetup := or (.Get "noSetup") false }}
-
+{{ $defaultFold := or (.Get "defaultFold") false }}
 
 
 <iframe id="iframe_{{$id}}" width="100%" height="100%" style="border: 0px;margin: 0;padding: 0;" scrolling="no" frameborder="0" srcdoc='
@@ -58,6 +58,7 @@
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
     height:{{ $code_height }},
+    defaultFold:{{$defaultFold}},
     code:codes_{{$id | safeJS }},
     onCodeWillRun:(code)=> {
       var setCode = document.getElementById("iframe_{{$id}}").contentWindow.setCode;
