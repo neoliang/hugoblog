@@ -3,7 +3,7 @@ title: Mandelbrot
 date: "2020-04-16"
 url: "/posts/mandelbrot"
 thumbnail: "preview_images/thumbs/mandelbrot1.jpg"
-image: "img/mandelbrot_banner1.jpg"
+image: "img/mandelbrot_banner3.jpg"
 description: "神秘美丽的Mandelbrot介绍"
 classes:
 - feature-figcaption
@@ -12,12 +12,14 @@ classes:
 - feature-ace
 - feature-math
 categories:
-- essay,math
+- essay
+- math
 ---
 记得《2001太空漫游》的作者阿瑟克加克与霍金、卡尔萨根参加过一个节目，主题是关于神、宇宙及一切[^1][^2]。在节目中阿瑟展示了他亲自编写的Mandelbrot图形程序。
 <!--more-->
 
-阿瑟向观众介绍可以像操作显微镜一样，放大图形的任意局部细节，而这个放大的过程可以无限循环下去，随着放大的倍数增加，程序展示出了不同的图形细节。该电视节目是在1988年播出的，那时计算机的处理器运算能力还比较弱，差不多处于80386的水准，专业显卡还未问世。阿瑟不得不让他的计算机彻夜的工作20多个小时才能完成某些局部细节的渲染。而现在就算以60PFS实时渲染Mandelbrot对于显卡来说只不过是小菜一碟，例如下图展示的就是Mandelbrot实时放大的效果:
+阿瑟向观众介绍可以像操作显微镜一样，放大图形的任意局部细节，这个放大过程可以无限循环下去，随着放大的倍数增加，程序展示出了不同的图形细节。该电视节目于1988年播出，那时计算机的处理器运算能力还比较弱，差不多处于`Intel 80386`的水准，专业显卡还未问世。阿瑟不得不让他的计算机彻夜工作20多个小时才能完成某些局部细节的渲染。
+从1988年到现在，计算硬件经历了飞速的发展，现在以60PFS实时渲染Mandelbrot对于显卡来说也只不过是小菜一碟，例如下面的动画展示的就是WebGL shader实时渲染的Mandelbrot放大的效果:
 [^1]:(https://www.bilibili.com/video/BV1RW411p7PN)
 [^2]:(https://www.youtube.com/watch?v=HKQQAv5svkk)
 
@@ -48,8 +50,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 }
 {{</shader >}}
 
-## Mandelbrot集合
-上面动画展示的是Mandelbrot集合的图形化效果，Mandelbrot集合是指复平面上使函数{{<math>}}f(z)=z^2+c{{</math>}}不发散的所有点c的集合[^3]。Mandelbrot有一个定理，只有复平面上的点的模（长度）小于2，该点才在集合中。Mandelbrot集合比较适合中代码来表示，js代码如下：
+## Mandelbrot集合介绍
+Mandelbrot集合是指复平面上使函数{{<math>}}f_c(z)=z^2+c{{</math>}}不发散的所有点c的集合[^3]。Mandelbrot有一个比较重要的定理，在集合M中的所有点的模（长度）小于2。基于这个定理Mandelbrot集合可以用代码非常容易的表达出来，js代码如下：
 [^3]:(https://en.wikipedia.org/wiki/Mandelbrot_set)
 
 {{<ace readOnly=true allowRunning=true disableFoldButton=true >}}
@@ -65,13 +67,13 @@ function mandelblotSet(c,inf){
   for(let i = 0;i<inf;++i)
   {   
     z = mandblot(z,c);
-    if( z.x*z.x+z.y*z.y > 4.0) //半径大于2，发散
+    if( z.x*z.x+z.y*z.y > 4.0) //半径大于2，不属于集合
       return i;
   }
   return inf;
 }
 {{</ace>}}
-实际上不在集合中的点发散得比较快，下图统计了256x256大小的Mandelbrot图像上的所有点的经历1～10次迭代后的发散分布情况，从图上可以看出经过1到2次迭代就发散点有40930个，比例高达60%。
+上面代码中的inf表示无穷大，而我们不可能在计算机表示出真正的无穷大，实际上不在集合中的点大多数经历少数几次迭代就已经发散了，在实际应用时，inf的值往往取一个比较小的值也能达到很好的近似。下图统计了256x256大小的Mandelbrot图像上的所有点的经历1～10次迭代后的发散分布情况，从图上可以看出经过1到2次迭代就发散点有40930个，比例高达60%。经历10次迭代后依然还有8321个点未发散，Mandelbrot集合的点就包含于这些点内。
 {{<chart code-height=360 height=300 hideCode=false defaultFold=true >}}
 let width = 256,height = 256;
 let inf = 10;
@@ -99,16 +101,15 @@ chart_data = {
 {{</chart>}}
 
 ## Mandelbrot集合的脖子
-Mandelbrot集合中一个个比较有趣的点在脖子的边界处的点的发散趋势，即下图的红色球和蓝色球的交界处：
+Mandelbrot集合一个比较有趣的点在脖子边界处的点的发散趋势分布，脖子位于下图的红色球和蓝色球的交界处：
 ![Mandelbrot集合的脖子](/img/mandelbrot_neck.jpg)
-David Boll[^4]曾经试图证明红蓝球交界处的厚度为0，他在计算机上计算交界处`0.75+εi`的发散数，发现当ε = 0.0000001时，c点在经历了31415928次迭代后开始发散，用迭代数与ε相乘，这个值恰好与{{<math>}}\pi{{</math>}}相近。
+David Boll[^4]曾经试图证明脖子处的厚度为0，他使用计算机计算了交界处`0.75+εi`代表的点经历发散的迭代数，发现当ε = 0.0000001时，c点在经历了31415928次迭代后开始发散，用迭代数与ε相乘，这个值恰好与{{<math>}}\pi{{</math>}}相近。
 [^4]:(https://en.wikipedia.org/wiki/Special:BookSources/978-0-262-56127-3)
 
-下图是我取交界处150个数计算的发散趋势的分布情况，从图上可以看出，越接近交界，发散所需要的迭代数越大，迭代数相对于ε趋于正态布。
-{{<chart code-height=240 height=300 hideCode=false defaultFold=true >}}
+下图是我取红蓝交界处`0.75+εi`150个点发散趋势的迭代数分布情况，从图上可以看出，越接近脖子处，发散所需要的迭代数越大，迭代数相对于ε趋于正态布。
+{{<chart code-height=240 height=360 hideCode=false defaultFold=true >}}
 var testCount = 150;
 var esps = Array.from({length:testCount},(v,i)=> -0.1+(i/testCount) * 0.2);
-//esps = esps.filter(v => Math.abs(v) >= 0.008)
 var divcount = (esp)=>mandelblotSet({x:-0.75,y:esp},500); 
 var dc = esps.map(divcount);
 chart_data = {
@@ -123,7 +124,7 @@ chart_data = {
 }
 {{</chart>}}
 如果将发散数量与ε相乘，可以发现，离边界越近，结果与{{<math>}}\pi{{</math>}}越相近
-{{<chart code-height=360 height=300 hideCode=false defaultFold=true >}}
+{{<chart code-height=360 height=360 hideCode=false defaultFold=true >}}
 var esps = Array.from({length:testCount},(v,i)=> -0.1+(i/testCount) * 0.2);
 esps = esps.filter(v=> Math.abs(v) > 0.008); 
 var dc = esps.map(divcount);
@@ -153,7 +154,7 @@ chart_data = {
 
 ## Mandelbrot集合的面积
 ### 像素计数法
-目前，Mandelbrot集合面积精度最高的近似值是`1.506484`[^5],人们还未找到求面积的公式，这个值主要通过数值方法计算出来的近似值。一种比较简单计算Mandelbrot集合面积的方法是使用像素点计数方法，例如对于一张`256x256`的图片，将图片上的所有像素点执行迭代，找出那些经历过一定数量迭代而不发散的像素点，将他们的面积相加，对应的代码如下：
+到目前为止，人们还未找到求Mandelbrot的面积解析公式，但我们可以通过数值方法计算出面积近似值，当前，Mandelbrot集合面积精度最高的近似值是`1.506484`[^5]。一种计算Mandelbrot集合面积比较简单的方法是像素点计数方法，例如对于一张`256x256`的图片，将图片上的所有像素点执行迭代，找出那些经历过一定数量迭代而不发散的像素点，将他们的面积相加。对应的代码如下：
 [^5]:(https://www.fractalus.com/kerry/articles/area/mandelbrot-area.html)
 
 {{<ace readOnly=true allowRunning=true disableFoldButton=true >}}
@@ -176,10 +177,10 @@ function MandelbortArea(size,inf){
   return area;
 }
 {{</ace>}}
-随时图形尺寸和最大迭代次数(代码中的inf参数)的增加，计算出来的面积也会越来越接近真实值，下图展示了通过像素计数方法使用不同图片尺寸计算出来面积值
-{{<chart code-height=100 height=300 hideCode=false defaultFold=true >}}
-let sizes = [32,64,128,256,512,1024];
-let areas = sizes.map(v=> MandelbortArea(v,100))
+随时图形尺寸和最大迭代次数(代码中的inf参数)的增加，计算出来的面积也会越来越接近真实值，下图展示了使用不同图片尺寸计算出来面积近似值：
+{{<chart code-height=100 height=360 hideCode=false defaultFold=true >}}
+let sizes = [32,64,128,256,512,1024,2048];
+let areas = sizes.map(v=> MandelbortArea(v,200))
 chart_data = {
     type: 'line',
     data: {
@@ -192,7 +193,7 @@ chart_data = {
 }
 {{</chart>}}
 ### 蒙特卡罗方法
-逐个像素点计算的方法效率比较低，另一种比较常用的方法是蒙特卡罗方法，该方法随机从数素点中抽样计算，再根据概率做相应的调整，代码如下：
+逐个像素点计算的方法效率比较低，另一种比较常用的方法是蒙特卡罗方法，该方法随机从数素点中抽样迭代计算，再根据概率做相应的调整，代码如下：
 {{<ace readOnly=true allowRunning=true disableFoldButton=true >}}
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -221,7 +222,7 @@ function MonteCarloMandelbortArea(sampler){
 }
 {{</ace>}}
 上面的代码采用的图片尺寸为1024*1024,最大迭代次数为100，面积的的近似值与采样有关，采样越高，面积与真实值越接近，下图展示了不同采样计算出来的面积
-{{<chart code-height=100 height=300 hideCode=false defaultFold=true >}}
+{{<chart code-height=100 height=360 hideCode=false defaultFold=true >}}
 let samplers = Array.from({length:100},(v,i)=> 100*(i+1));
 let areas = samplers.map(MonteCarloMandelbortArea)
 chart_data = {
@@ -237,5 +238,7 @@ chart_data = {
 {{</chart>}}
 从上图可以看出，随着采样次数的增加，面积越接近1.5。
 ## 小结
-Mandelbrot集合还有一些其它比较有趣的特性，比如可以从中找到斐波那契数列[^6],有许多艺术家和程序员对它比较入迷，而它最吸引我的地方可能是在于简单规律后蕴藏着那复杂而精美的结构，我想这也许是数学和程序引人入胜的主要原因吧。
+Mandelbrot集合除了自我相似性、拥有无限的细节外，还有一些其它比较有趣的特性，例如边界处的触角数量分布与斐波那契数列有密切的联系[^6],许多艺术家和程序员对它比较入迷，大神iq[^iq]曾在shaderToy上留下了大量关于Mandelbrot的shader。对于我来说，Mandelbrot最令人着迷的地方是其简单规律后蕴藏着的复杂而精美的结构，我想这也许是数学和程序引人入胜的共性吧。
+
 [^6]:(https://www.youtube.com/watch?v=4LQvjSf6SSw)
+[^iq]:(http://www.iquilezles.org/)
