@@ -25,14 +25,20 @@ items:
       - img: blackhole.jpg
         desc: （图四）黑洞最终版
   - title: Mandelbrot
-    thumb: mandelbrot.jpg
+    thumb: mandelbrot4.jpg
     alt: Mandelbrot
     description: >-
-      to do
-    url: /posts/
+      记得《2001太空漫游》的作者阿瑟克加克与霍金、卡尔萨根参加过一个节目，主题是关于神、宇宙及一切12。在节目中阿瑟展示了他亲自编写的Mandelbrot图形程序。阿瑟向观众介绍可以像操作显微镜一样，放大图形的任意局部细节，这个放大过程可以无限循环下去，随着放大的倍数增加，程序展示出了不同的图形细节
+    url: /posts/mandelbrot
     images:
-      - img:  joydivision.jpg
-        desc: test
+      - img:  mandelbrot/1.jpg
+        desc: Mandelbrot局部细节
+      - img:  mandelbrot/2.jpg
+        desc: Mandelbrot局部细节
+      - img:  mandelbrot/3.jpg
+        desc: Mandelbrot局部细节
+      - img:  mandelbrot/4.jpg
+        desc: Mandelbrot局部细节        
   - title: 木星云
     thumb: jupiter-clouds.jpg
     alt: Logo
