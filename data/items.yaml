@@ -52,16 +52,40 @@ items:
         desc: Buddhabrot变种1
       - img:  buddhabrot/3.jpg
         desc: Buddhabrot变种2      
-  - title: 木星云
+  - title: 随机与秩序
     thumb: jupiter-clouds.jpg
     alt: Logo
     description: >-
-      卡尔·爱德华·萨根（英语：Carl Edward
-      Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
+      自然界中充满和随机和秩序，完全的随机产生混乱，完全的秩序重复而枯燥，美也许在随机与秩序之间的某个平衡点，随机中最有秩序的恐怕非柏林噪声莫属了，柏林噪声与向量场结合，产生的美可能会超出你的想象，例如这幅有韵律的梯田，如果叠加多层噪声，在噪声上再嵌套噪声会怎么样，可能是一幅水彩画，也有可能是木星的云。
     url: /posts/
     images:
+      - img:  noise/random_color.jpg
+        desc: 随机颜色
+      - img:  noise/circle_pack.jpg
+        desc: 和谐的随机颜色
+      - img:  noise/mondriaan_terrace.jpg
+        desc: 蒙德里安梯田   
+      - img:  noise/sunset.jpg
+        desc: 日落水墨画 
       - img: jupiter-clouds.jpg
         desc: 分形多层噪声渲染的木星云
+  - title: 气球
+    thumb: ballon.jpg
+    alt: Logo
+    description: >-
+      Make an expressive transition between colors. Think of a particular
+      emotion. What color seems most representative of it? How does it appear?
+      How does it fade away? Think of another emotion and the matching color for
+      it. Change the beginning and ending color of the above code to match those
+      emotions. Then animate the transition using shaping functions. Robert
+      Penner developed a series of popular shaping functions for computer
+      animation known as easing functions, you can use this example as research
+      and inspiration but the best result will come from making your own
+      transitions.
+    url: /posts/
+    images:
+      - img: ballon.jpg
+        desc: 气球
   - title: About Logo
     thumb: logo.jpg
     alt: Logo
@@ -97,23 +121,6 @@ items:
     images:
       - img: joydivision.jpg
         desc: Joy Division
-  - title: 气球
-    thumb: ballon.jpg
-    alt: Logo
-    description: >-
-      Make an expressive transition between colors. Think of a particular
-      emotion. What color seems most representative of it? How does it appear?
-      How does it fade away? Think of another emotion and the matching color for
-      it. Change the beginning and ending color of the above code to match those
-      emotions. Then animate the transition using shaping functions. Robert
-      Penner developed a series of popular shaping functions for computer
-      animation known as easing functions, you can use this example as research
-      and inspiration but the best result will come from making your own
-      transitions.
-    url: /posts/
-    images:
-      - img: ballon.jpg
-        desc: 气球
   - title: 日落
     thumb: palmtree.jpg
     alt: palmtree
