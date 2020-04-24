@@ -2,7 +2,7 @@
 title: Mandelbrot
 date: "2020-04-16"
 url: "/posts/mandelbrot"
-thumbnail: "preview_images/thumbs/mandelbrot1.jpg"
+thumbnail: "preview_images/thumbs/mandelbrot5.jpg"
 image: "img/mandelbrot_banner3.jpg"
 description: "神秘美丽的Mandelbrot介绍"
 classes:
