@@ -38,7 +38,20 @@ items:
       - img:  mandelbrot/3.jpg
         desc: Mandelbrot局部细节
       - img:  mandelbrot/4.jpg
-        desc: Mandelbrot局部细节        
+        desc: Mandelbrot局部细节
+  - title: Buddhabrot
+    thumb: mandelbrot5.jpg
+    alt: Mandelbrot
+    description: >-
+      Buddhabrot是Mandlebrot的另外一种渲染方式，渲染分为两个步骤，第一遍先通过传的Mandelbrot过滤掉那些经历了一定迭代数而不发散的点，将剩下的点再应用Mandelbrot算法,将每个点经历过的轨迹记录下来，最后将每一个象素点被访问的次数以灰度图的方式显示出来
+    url: /posts/mandelbrot
+    images:
+      - img:  buddhabrot/1.jpg
+        desc: Buddhabrot
+      - img:  buddhabrot/2.jpg
+        desc: Buddhabrot变种1
+      - img:  buddhabrot/3.jpg
+        desc: Buddhabrot变种2      
   - title: 木星云
     thumb: jupiter-clouds.jpg
     alt: Logo
