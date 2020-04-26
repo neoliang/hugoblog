@@ -43,7 +43,7 @@ items:
     thumb: mandelbrot5.jpg
     alt: Mandelbrot
     description: >-
-      Buddhabrot是Mandlebrot的另外一种渲染方式，渲染分为两个步骤，第一遍先通过传的Mandelbrot过滤掉那些经历了一定迭代数而不发散的点，将剩下的点再应用Mandelbrot算法,将每个点经历过的轨迹记录下来，最后将每一个象素点被访问的次数以灰度图的方式显示出来
+      Buddhabrot是Mandlebrot的另外一种渲染方式，渲染过程由两个部分组成，第一遍先通过传统的Mandelbrot公式过滤掉那些在集合中的点(经历了一定迭代数而不发散的点)，第二遍将剩下的点再应用Mandelbrot算法,累加每个点迭代轨迹经历过的像素点的灰度值，然后再将这些象素点的灰度值显示出来。
     url: /posts/mandelbrot
     images:
       - img:  buddhabrot/1.jpg
@@ -56,33 +56,29 @@ items:
     thumb: jupiter-clouds.jpg
     alt: Logo
     description: >-
-      自然界中充满和随机和秩序，完全的随机产生混乱，完全的秩序重复而枯燥，美也许在随机与秩序之间的某个平衡点，随机中最有秩序的恐怕非柏林噪声莫属了，柏林噪声与向量场结合，产生的美可能会超出你的想象，例如这幅有韵律的梯田，如果叠加多层噪声，在噪声上再嵌套噪声会怎么样，可能是一幅水彩画，也有可能是木星的云。
-    url: /posts/
+      随机和秩序普遍存在于自然界中，但是自然界中往往没有纯粹的随机与纯粹的秩序。纯粹的随机混乱而无序，纯粹的秩序重复而枯燥，美也许存在于随机与秩序之间的某个平衡点。例如(图一)的随机颜色并没有完全随机RGB三个通道的值，而是限制了明度和饱和度。只随机色调。
+      而(图二)的随机颜色加的些限制就更一些，色调、明度、饱和度都在一个比较小幅度的范围内随机。产生的结果相对于图一会和谐一些，这种随机方式与颜色的相邻色和谐是不谋而各。
+      而随机中最有秩序的恐怕非柏林噪声莫属了，柏林噪声与向量场结合，产生的美可能会超乎于你的想象，例如(图三)有韵律的梯田。如果叠加多层噪声，在噪声中再嵌套另外一层噪声会怎么样，可能是一幅水彩画(图四)，也有可能是木星的云(图五)。
+    url: https://zhuanlan.zhihu.com/p/108584401
     images:
       - img:  noise/random_color.jpg
-        desc: 随机颜色
+        desc: (图一)随机颜色
       - img:  noise/circle_pack.jpg
-        desc: 和谐的随机颜色
+        desc: (图二)和谐的随机颜色
       - img:  noise/mondriaan_terrace.jpg
-        desc: 蒙德里安梯田   
+        desc: (图三)蒙德里安梯田   
       - img:  noise/sunset.jpg
-        desc: 日落水墨画 
+        desc: (图四)日落水墨画 
       - img: jupiter-clouds.jpg
-        desc: 分形多层噪声渲染的木星云
+        desc: (图五)分形噪声木星云
   - title: 气球
     thumb: ballon.jpg
     alt: Logo
     description: >-
-      Make an expressive transition between colors. Think of a particular
-      emotion. What color seems most representative of it? How does it appear?
-      How does it fade away? Think of another emotion and the matching color for
-      it. Change the beginning and ending color of the above code to match those
-      emotions. Then animate the transition using shaping functions. Robert
-      Penner developed a series of popular shaping functions for computer
-      animation known as easing functions, you can use this example as research
-      and inspiration but the best result will come from making your own
-      transitions.
-    url: /posts/
+      气球这幅画的的灵感来源于Georg Nees的Cubic Disarray，Georg Nees是比较早用计算机算法来生成艺术作品的程序员，
+      Cubic Disarray是他比较有名的作品之一，当我第一次看到这幅图时，首先感到比较吃惊，如此简单排列组合方块却充满节奏和韵律，仿佛暗中有股力量在推动着它们运动。
+      其次它给于了我灵感，似乎我已经能脑补出实现这样效果的代码，于是我开始动手实现。在实现这幅图的过程中，气球这幅画就产生了。
+    url: https://zhuanlan.zhihu.com/p/111553201
     images:
       - img: ballon.jpg
         desc: 气球
@@ -104,8 +100,8 @@ items:
         desc: Logo第四版
       - img: logo-v1.jpg
         desc: Logo最终版
-  - title: Joy Division
-    thumb: joydivision.jpg
+  - title: 快乐分裂
+    thumb: joydivision1.jpg
     alt: Logo
     description: >-
       Make an expressive transition between colors. Think of a particular
@@ -119,7 +115,11 @@ items:
       transitions.
     url: /posts/
     images:
+      - img: joydivision0.jpg
+        desc: Joy Division
       - img: joydivision.jpg
+        desc: Joy Division
+      - img: joydivision1.jpg
         desc: Joy Division
   - title: 日落
     thumb: palmtree.jpg
