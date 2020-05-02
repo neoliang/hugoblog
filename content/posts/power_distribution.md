@@ -2,8 +2,8 @@
 title: 随机抽样与幂函数分布
 date: "2020-04-28"
 url: "/posts/power_distribution"
-thumbnail: "preview_images/thumbs/mandelbrot1.jpg"
-image: "img/mandelbrot_banner1.jpg"
+thumbnail: "img/power_distribution.jpg"
+image: "img/power_distribution_banner.jpg"
 description: "随机抽样与幂函数分布"
 classes:
 - feature-figcaption
@@ -58,9 +58,6 @@ chart_data = {
 {{</chart>}}
 如果我们每次抽取多个，取其中的最大值，每个数出现的次数分布会是怎么呢，下图展示了随机抽取2～4个数取最大值的分布情况。
 {{<chart code-height=360 height=400 hideCode=false defaultFold=true >}}
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min; 
-}
 let N = 10000;
 let S = 10;
 let countss = [];
@@ -125,6 +122,81 @@ chart_data = {
 
 ### 这有什么实际的用途呢？
 
-一般来讲，我们可以通过概率密度函数pdf积分求出累积分布函数cdf，再通过求出累积分布函数的反函数来生成样本,通过这样的方法，可以求出幂函数的{{<math >}}f(x)=x^n{{</math>}}的采样函数为:
+一般来讲，我们可以通过概率密度函数pdf积分求出累积分布函数cdf，再通过求出累积分布函数的反函数来生成样本,通过这样的方法，可以求出幂函数的{{<math >}}f(x)=x^n{{</math>}}的幂方根抽采样函数为:
 
-{{<math >}}X=\sqrt[n+1]\xi{{</math>}}
+{{<math >}}X=\sqrt[n+1]\xi{{</math>}}  *（幂方根采样函数）*
+
+我们来对比上式与最大值采样函数的采样耗时
+
+{{<math >}}X= max(\xi_1,\xi_2,...,\xi_{n+1}){{</math>}}  *（最大值采样函数）*
+
+{{<chart code-height=360 height=400 hideCode=false defaultFold=true >}}
+let profileN = 300000;
+function sampleRandom(n){
+  let r = 0;
+  for(let i = 0;i<profileN;++i){
+    r = 0;
+    for(let s = 0;s<n+1;++s) r = Math.max(Math.random(),r);
+  }
+  return r;
+}
+function samplePow(n)
+{
+  let r = 0;
+  for(let i = 0;i<profileN;++i){
+    r = Math.pow(Math.random(),1.0/(n+1));
+  }
+  return r;
+}
+
+let N = 10;
+let randomSamples = [];
+let powerSamples = [];
+for(let i = 0;i<N;++i){
+  let start = Date.now();
+  let r = sampleRandom(i+1);
+  let millis = Date.now() - start;
+  console.log(i+1,millis);
+  randomSamples.push(millis);
+  start = Date.now();
+  r = samplePow(i+1);
+  millis = Date.now() - start;
+  powerSamples.push(millis);
+}
+
+
+chart_data = {
+    type: 'line',
+    data: {
+      labels:randomSamples.map((v,i)=>(i+1)),      
+        datasets: [{
+            label: '最大值采样',
+            data: randomSamples,
+            fill:false,
+            borderColor:'rgba(0, 94, 155, 0.5)',
+        },
+        {
+            label: '幂方根采样',
+            data: powerSamples,
+            fill:false,
+            borderColor:'rgba(170, 34, 36, 0.5)',
+        }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                }
+            }]
+        }
+    }
+}
+{{</chart>}}
+幂方根采样为了生成样本{{<math >}}X{{</math>}},要先从均匀分布中抽取{{<math >}}\xi{{</math>}},再算出n次方根，这样的计算量相对于从均匀分布中抽取多个{{<math >}}\xi_i{{</math>}}取最大值耗时也许会高一些，因此对于某些次幂也许用后者来生成样本是比较好的选择。从在本次测试中可以观察到几个比较有趣的现象：
+- {{<math >}}X=\sqrt[2]\xi{{</math>}}比{{<math >}}X= max(\xi_1,\xi_2){{</math>}}抽样耗时低
+- 在次幂小于4时，最大值采样的的耗时要低于幂方根采样的耗时。
+- 最大值抽样的耗时与n成线性比例
+- 幂方根抽样在n等于1时耗时最低，n等于2时耗时最高，n等于3时开始下降，在n大于4后耗时保持稳定，不再变化
+
