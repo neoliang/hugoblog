@@ -75,7 +75,7 @@ items:
     thumb: ballon.jpg
     alt: Logo
     description: >-
-      气球这幅画的的灵感来源于Georg Nees的Cubic Disarray，Georg Nees是比较早用计算机算法来生成艺术作品的程序员，
+      气球的灵感来源于Georg Nees的Cubic Disarray，Georg Nees是比较早用计算机算法来生成艺术作品的程序员，
       Cubic Disarray是他比较有名的作品之一，当我第一次看到这幅图时，首先感到比较吃惊，如此简单排列组合方块却充满节奏和韵律，仿佛暗中有股力量在推动着它们运动。
       其次它给于了我灵感，似乎我已经能脑补出实现这样效果的代码，于是我开始动手实现。在实现这幅图的过程中，气球这幅画就产生了。
     url: https://zhuanlan.zhihu.com/p/111553201
@@ -104,23 +104,18 @@ items:
     thumb: joydivision1.jpg
     alt: Logo
     description: >-
-      Make an expressive transition between colors. Think of a particular
-      emotion. What color seems most representative of it? How does it appear?
-      How does it fade away? Think of another emotion and the matching color for
-      it. Change the beginning and ending color of the above code to match those
-      emotions. Then animate the transition using shaping functions. Robert
-      Penner developed a series of popular shaping functions for computer
-      animation known as easing functions, you can use this example as research
-      and inspiration but the best result will come from making your own
-      transitions.
+      该图灵感来源于Joy Division 1979年发行专辑Unkown Pleasures的封面,该封面取自于Harold Craft博士的毕业论文《12颗脉冲星的脉冲轮廓和色散的射电观测》中的插图，描述的是CP 1919脉冲星的脉冲轮廓。
+      实际上用代码实现这样的轮廓比较简单，我在这个基础上对算法和参数做了调整，生成了一些看起来还不错的图片，最终给山配上具有层次和光影的颜色，加上天空和太阳，形成了这幅日落图。
     url: /posts/
     images:
+      - img: joydivision3.jpg
+        desc: Joy Division Unkown Pleasures
       - img: joydivision0.jpg
-        desc: Joy Division
+        desc: 中间结果1
       - img: joydivision.jpg
-        desc: Joy Division
+        desc: 中间结果2
       - img: joydivision1.jpg
-        desc: Joy Division
+        desc: 日落
   - title: 日落
     thumb: palmtree.jpg
     alt: palmtree
