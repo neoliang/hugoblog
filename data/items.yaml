@@ -100,22 +100,22 @@ items:
         desc: Logo第四版
       - img: logo-v1.jpg
         desc: Logo最终版
-  - title: 快乐分裂
+  - title: Joy Sunset
     thumb: joydivision1.jpg
     alt: Logo
     description: >-
-      该图灵感来源于Joy Division 1979年发行专辑Unkown Pleasures的封面,该封面取自于Harold Craft博士的毕业论文《12颗脉冲星的脉冲轮廓和色散的射电观测》中的插图，描述的是CP 1919脉冲星的脉冲轮廓。
-      实际上用代码实现这样的轮廓比较简单，我在这个基础上对算法和参数做了调整，生成了一些看起来还不错的图片，最终给山配上具有层次和光影的颜色，加上天空和太阳，形成了这幅日落图。
+      Joy Sunset灵感来源于Joy Division 1979年发行专辑Unkown Pleasures的封面,封面取自于Harold Craft博士的毕业论文《12颗脉冲星的脉冲轮廓和色散的射电观测》中一幅描述CP 1919脉冲星的脉冲轮廓的插图。
+      脉冲星的脉冲轮廓线条充满节奏感，看起来像层叠的小山，它激发了我的灵感，于是我开始着手用代码重现这幅脉冲小山图，最终效果如(图一)，在这个基础上对算法和参数做了调整，生成了一些看起来还不错的图片(图二、图三)，最终给山配上具有层次的光照和颜色，加上天空和太阳，形成了这幅日落图(图四)。
     url: /posts/
     images:
       - img: joydivision3.jpg
-        desc: Joy Division Unkown Pleasures
+        desc: (图一)Joy Division Unkown Pleasures
       - img: joydivision0.jpg
-        desc: 中间结果1
+        desc: (图二)中间结果1
       - img: joydivision.jpg
-        desc: 中间结果2
+        desc: (图三)中间结果2
       - img: joydivision1.jpg
-        desc: 日落
+        desc: (图四)日落
   - title: 日落
     thumb: palmtree.jpg
     alt: palmtree

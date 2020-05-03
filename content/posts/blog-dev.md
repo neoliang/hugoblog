@@ -1,6 +1,6 @@
 ---
 title: 开发日志
-date: "2020-04-8"
+date: "2020-04-08"
 url: "/posts/blog-dev"
 thumbnail: "img/story-logo-black.svg"
 description: "开发日志，记录本博客开发过程中的需求，遇到的问题及解决方法"

@@ -21,7 +21,7 @@ categories:
 ## 随机抽样与幂函数
 
 
-先来做一个简单的实验，我们从0到1之间以0.1的距离均匀的随机抽取1万次，那么每个数出现的次数将会接近1000.如下图所示。
+先来做一个简单的实验，我们从0到1之间以0.1的距离均匀的随机抽取1万次，那么每个数出现的次数将会接近1000，如下图所示：
 {{<chart code-height=360 height=400 hideCode=false defaultFold=true >}}
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min; 
@@ -56,7 +56,7 @@ chart_data = {
     }
 }
 {{</chart>}}
-如果我们每次抽取多个，取其中的最大值，每个数出现的次数分布会是怎么呢，下图展示了随机抽取2～4个数取最大值的分布情况。
+如果我们每次抽取多个，取其中的最大值，每个数出现的次数分布会是怎么呢，下图展示了随机抽取2～4个数取最大值的分布情况：
 {{<chart code-height=360 height=400 hideCode=false defaultFold=true >}}
 let N = 10000;
 let S = 10;

@@ -1,6 +1,6 @@
 ---
 title: Demo-测试2
-date: "2020-03-16"
+date: "2010-03-16"
 url: "/posts/test_shader"
 thumbnail: "preview_images/thumbs/mandelbrot1.jpg"
 image: "img/mandelbrot_banner1.jpg"
