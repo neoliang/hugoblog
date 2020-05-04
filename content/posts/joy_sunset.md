@@ -13,10 +13,10 @@ categories:
 - portfolio
 - physics
 ---
- Joy Sunset灵感来源于Joy Division 1979年发行专辑Unkown Pleasures的封面,封面取自于Harold Craft博士的毕业论文《12颗脉冲星的脉冲轮廓和色散的射电观测》中一幅描述CP 1919脉冲星的脉冲轮廓的插图。脉冲星的脉冲轮廓线条充满节奏感，看起来像层叠的小山，它激发了我的灵感，于是我开始着手用代码重现这幅脉冲小山图。
+ Joy Sunset灵感来源于Joy Division 1979年发行专辑Unkown Pleasures的封面,封面取自于Harold Craft博士的毕业论文《12颗脉冲星的脉冲轮廓和色散的射电观测》中一幅描述CP 1919脉冲星的脉冲轮廓的插图。这颗脉冲星的脉冲轮廓线条充满节奏感，多个脉冲交错在一起看起来像层叠的小山，它激发了我的灵感，于是我开始着手用代码重现这幅脉冲图。
 <!--more-->
 
-实现逻辑比较简单，从上到下画一系列间隔(代码中的vStep)一定距离的平行的线段，距离中心(centerX)为某值(代码中的radius)的范围内y值取一个取大的随机值形成山峰，其它区域为平原。为了表示平原也有一定起伏，加上20%的随机```dy = 0.8*dy + random(0,20)*0.2```，最终结果如下：
+代码实现逻辑并不复杂，从上到下画一系列间隔一定距离(`vStep`)的平行的线段，每一行线段在距离中心(`centerX`)为某值(`radius`)的范围内，让y值随机向扰动形成山峰，而在这radius范围外的y基础不变来表示平原。为了表示平原也有一定起伏，可在y值上增加20%的随机小幅扰动`dy = 0.8*dy + random(0,20)*0.2`，最终结果如下：
 {{<p5js code-height=500 noSetup=true defaultFold=true >}}
 let hStep = height/18,vStep = hStep/2;
 function lineHill(x1,x2,y){
@@ -47,11 +47,12 @@ for(let y = yStart;y<height-margin;y+= vStep){
     dy = dy + randomGaussian(0,dy*0.25)
     curveVertex(x+random(-2,2),y-dy)
   }
+  curveVertex(width-margin,y);
   endShape() 
 }
 {{</p5js >}}
 
-接下来我们让每一行的中心随机偏移一定的量，让山看起来更加错落有致```centerX = (x1+x2)/2 + randomGaussian(0,0.5*radius)```，再按山的远近配上灰度渐变的颜色，这样山看起来有烟雾缭绕的朦胧感。为了让山看起来更有手绘的感觉，我们将颜色设置一个比较低的透明度，每一层山复制绘制多份，每一份高度在原来的基础上随机产生一定的偏移```dy = dy + randomGaussian(0,dy*0.2)```，注意这里用的是高斯分布的随机而不是均匀分布，因为均匀的随机叠加在一起，效果和多层相同的图片叠加在一起差不多，而高斯分布则会让山有主次之分，看起来更自然一些。
+接下来我们让每一行的中心随机在左右偏移一定的值，让山看起来更加错落有致 _(注意这里用的是高斯分布的随机函数)_，`centerX = (x1+x2)/2 + randomGaussian(0,0.5*radius)`，再按山的远近配上灰度渐变的颜色，这样山看起来有烟雾缭绕的朦胧感。为了让山看起来更有手绘的感觉，我们将颜色设置一个比较低的透明度，每一层山复制绘制多份，每一份高度在原来的基础上随机产生一定的偏移```dy = dy + randomGaussian(0,dy*0.2)```，注意这里和上面的每一行中心的左右随机用的是高斯分布的随机而不是均匀分布，因为均匀的随机叠加在一起，效果与多层相同的图片叠加在一起相差不大，而高斯分布则会有明显的主次之分，看起来更自然一些。
 {{<p5js code-height=500 noSetup=true defaultFold=true >}}
 let hStep = height/12,vStep = hStep/3;
 function lineHill(x1,x2,y){
@@ -81,17 +82,18 @@ for(let y = yStart;y<height-margin;y+= vStep){
   let x1 = margin,x2 = width-margin
   let hill = lineHill(margin,width-margin,y)
   for(let i = 0;i<50;++i){
-  beginShape()
-  for(let x=x1;x<=x2;x += hStep){
-    let dy = hill[int((x-x1)/hStep)]
-    dy = dy + randomGaussian(0,dy*0.2)
-    curveVertex(x+random(-2,2),y-dy)
-  }
+    beginShape()
+    for(let x=x1;x<=x2;x += hStep){
+      let dy = hill[int((x-x1)/hStep)]
+      dy = dy + randomGaussian(0,dy*0.2)
+      curveVertex(x+random(-2,2),y-dy)
+    }
+    curveVertex(width-margin,y);
     endShape() 
   }
 }
 {{</p5js >}}
-加上天空，云彩(天空和云的绘制方法可以参考我的另一篇文章[^1])和太阳，效果如下：
+加上天空，云彩(绘制方法可以参考我的另一篇文章[^1])和太阳，效果如下：
 
 {{<p5js noSetup=true defaultFold=true >}}
 let hStep = height/12,vStep = hStep/3;
@@ -159,7 +161,7 @@ for(let y = yStart;y<height-margin;y+= vStep){
 }
 {{</p5js >}}
 
-再调整参数让山回到对称的状态，将太阳置于中心放大，效果如下：
+再调整参数让山左右相对对称，将太阳置于中心并放大，效果如下：
 {{<p5js noSetup=true defaultFold=true >}}
 let hStep = height/12,vStep = hStep/3;
 function lineHill(x1,x2,y){
@@ -186,7 +188,7 @@ let sundir = height*0.75
 for(let i = 0;i<10;++i)
 {
   
-  ellipse(width*0.5+randomGaussian(0,0.01*sundir),height*0.5+randomGaussian(0,0.01*sundir),sundir,sundir)
+  ellipse(margin+width*0.5+randomGaussian(0,0.01*sundir),height*0.5+randomGaussian(0,0.01*sundir),sundir,sundir)
 }
 let clamp = (v,low,high)=>
 {
