@@ -86,7 +86,7 @@ items:
     thumb: logo.jpg
     alt: Logo
     description: >-
-      这是我为本网站从零设计的Logo,完全用程序语言绘制,表达的是宇宙与人的关系，设计上采用了比较简单的方式，几何元素只选择了直线、三角形和圓，颜色只有黑白灰和红色。
+      这是我为本网站设计的Logo,完全用程序语言绘制，虽然只用了简单的直线、三角形和圓，但却表达出了宇宙、星空、人和科技。
     url: /posts/about
     images:
       - img: logo-v0.1.jpg
