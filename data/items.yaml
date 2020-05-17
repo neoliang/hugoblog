@@ -86,9 +86,8 @@ items:
     thumb: logo.jpg
     alt: Logo
     description: >-
-      卡尔·爱德华·萨根（英语：Carl Edward
-      Sagan，1934年11月9日－1996年12月20日），美国天文学家、天体物理学家、宇宙学家、科幻作家，和非常成功的天文学、天体物理学等自然科学方面的科普作家。行星学会的成立者。
-    url: /posts/
+      此Logo的表达宇宙与人的关系。Logo完全用程序语言绘制的，设计我采用了比较简单的方式，几何元素只选择了直线、三角形和圓，颜色只有黑白灰和红色。
+    url: /posts/about
     images:
       - img: logo-v0.1.jpg
         desc: Logo第一版
