@@ -45,7 +45,7 @@ Logo完全用程序语言绘制的，在设计我采用了最简单的方式，�
 
 ## 鸣谢
 
-本博客使用[Hugo](https://gohugo.io/)创建。Hugo是使用Go语言实现的静态网站生成器，Hugo简单易用，大部分情况下只需要Markdown就完成博客书写；当然，如果想扩展博客支持代码、图表和数学公式等也比较容易，只需要写几行简单的代码，通过ShortCode就能实现。如果你也想创建自己的博客，推荐使用。
+本博客使用[Hugo](https://gohugo.io/)创建。Hugo是使用Go语言实现的静态网站生成器，Hugo简单易用，大部分情况下只需要Markdown就完成博客书写；当然，如果想扩展博客支持代码、图表和数学公式等也比较容易，只需要写几行简单的代码，通过[ShortCode](https://gohugo.io/templates/shortcode-templates/)就能实现。如果你也想创建自己的博客，推荐使用。
 
 博客的文章主题和排版使用了[story](https://story.xaprb.com/theme-features/),Story拥有比较简洁和美观的主题，非常适合写博客和展示图片。
 
