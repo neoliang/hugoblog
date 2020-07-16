@@ -44,16 +44,17 @@ Logo完全用程序语言绘制的，在设计我采用了最简单的方式，�
 
 
 ## 鸣谢
-本博客使用[Hugo](https://gohugo.io/)创建。Hugo是使用Go语言实现的静态网站生成器，虽然我并未学习过Go语言，但稍微查阅文档就能很快的入手创建博客了，如果你也想创建博客，推荐使用。
+
+本博客使用[Hugo](https://gohugo.io/)创建。Hugo是使用Go语言实现的静态网站生成器，Hugo简单易用，大部分情况下只需要Markdown就完成博客书写；当然，如果想扩展博客支持代码、图表和数学公式等也比较容易，只需要写几行简单的代码，通过ShortCode就能实现。如果你也想创建自己的博客，推荐使用。
 
 博客的文章主题和排版使用了[story](https://story.xaprb.com/theme-features/),Story拥有比较简洁和美观的主题，非常适合写博客和展示图片。
 
-网站的首页的图片展示主题使用的是Hugo [Grid](https://themes.gohugo.io/tags/grid)，在这个基础上，我修复一些Bug,调整了手机屏幕适配方式，并支持多张图片预览。
+网站的首页的图片展示主题使用的是Hugo [Grid](https://themes.gohugo.io/tags/grid)，Grid以方格格的形式展示图片，简洁美观。
 
-由于和编程相关，在博客中会展示大量的代码，为了支持语法高亮和在线编辑并运行，我使用了[ACE](https://ace.c9.io/)
+博客的代码展示部分使用的是[ACE](https://ace.c9.io/)，ACE不但支持代码语法高亮，而且可以在线编辑并运行。
 
-在博客中的图表展示部分的代码使用的是[Chart.js](https://www.chartjs.org/)
+博客中的图表展示部分使用的是[Chart.js](https://www.chartjs.org/)，Chart.js可以很方便的绘制线性、柱状等各种图表。
 
-在此对以上提及的开源代码表示衷心的感谢～～～
+在此对以上提及的开源代码表示衷心的感谢！
 
 
