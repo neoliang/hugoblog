@@ -163,21 +163,32 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 \end{array} \right){{</math>}}
 
 
-1. 投影变换：相机按下快门，各个三维模型在相机的底片上形成二维图形。即将观察坐标系中的三维图形投影到二维的视图窗口上，视频中的投影矩阵推导讲得比较透彻，从正交到透视，层层递进，正交是透视的基础，而透视只需要处理将Frustum挤压到Cuboid的过程即可以，非常容易理解，具体推导过程可以参考这篇文章[^3]；
-	- 正交投影矩阵为：[to do]
-	- 透视投影矩阵为：{{<math>}}\left( \begin{array}{lcr}
-\frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
-0&tan(\frac {fov}{2})&0&0\\
-0&0&\frac{f+n}{f-n}&\frac {-2*f*n}{f-n}\\
-0&0&1&0
+1. 投影变换：相机按下快门，各个三维模型在相机的底片上形成二维图形。即将观察坐标系中的三维图形投影到二维的视图窗口上，视频中的投影矩阵推导讲得比较透彻，从正交到透视，层层递进，正交是透视的基础，而透视只需要处理将Frustum挤压到Cuboid的过程即可以，非常容易理解；
+	- 正交投影矩阵为：{{<math>}}\left( \begin{array}{lcr}
+\frac{2}{r-l}&0&0&-\frac{r+l}{r-l}\\
+0&\frac{2}{t-b}&0&-\frac{t+b}{t-b}\\
+0&0&\frac{2}{n-f}&-\frac{n+f}{n-f}\\
+0&0&0&1
 \end{array} \right){{</math>}}
 		- 其中n、f分别为近裁剪面和远裁剪面
+		- 视频的推导过程分成两步，先将相机的中心移动到原点，然后再缩放，将两个矩阵相乘就得到最终的投影矩阵
+		- 另外一种比较简单的办法是直接将坐标值映射到 [-1,1] 区间，以{{<math>}} x {{</math>}}为例：
+			- step1：将{{<math>}}x{{</math>}}映射到[0,1]区间 {{<math>}}x^{\prime} = \frac {x-l}{r-l} {{</math>}}
+			- step2：将{{<math>}}x^{\prime}{{</math>}}从 [0,1] 映射到 [-1,1]， {{<math>}}x^{\prime} = x^{\prime} * 2 - 1{{</math>}}
+			- 根据step1和step2可得{{<math>}}x^{\prime} = \frac {2}{r-l} - \frac {x+l}{r-l}{{</math>}}
+		- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，相机往z负方向看，这里的n和f为负值，矩阵的第3行3列的分母为 n-f </font>{{</rawhtml>}}***
+	- 透视投影矩阵为：{{<math>}}\left( \begin{array}{lcr}
+\frac{-1}{tan(\frac {fov}{2})*asp}&0&0&0\\
+0&\frac{-1}{tan(\frac {fov}{2})}&0&0\\
+0&0&\frac{f+n}{n-f}&\frac {-2*f*n}{n-f}\\
+0&0&1&0
+\end{array} \right){{</math>}}
+		- 具体推导过程可以参考这篇文章[^3]，这篇文章的推导思路是正确的，但结果不对
 	{{<rawhtml>}}<a name="projection"></a>{{</rawhtml>}}
-		- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，如果相机往z负方向看，则矩阵的4行3列为-1</font>{{</rawhtml>}}***
-		- 因为在实际使用投影API时我们传入的near和far都是正值，所以和推导过程会和课程视频中有一些差异，公式中的n应该变成-n,即 {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}} 这样对应的矩阵如下：
+		- ***{{<rawhtml>}}<font color=red>注意：在OpenGL中，相机是往z负方向看的，但在实际使用投影API时传入的near和far均为正值，所以计算推导时应该是： {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}}，对应的矩阵如下：</font>{{</rawhtml>}}***
 		- {{<math>}}\left( \begin{array}{lcr}
 \frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
-0&tan(\frac {fov}{2})&0&0\\
+0&\frac {1}{tan(\frac {fov}{2})}&0&0\\
 0&0&\frac{f+n}{f-n}&\frac {-2*f*n}{f-n}\\
 0&0&-1&0
 \end{array} \right){{</math>}}
@@ -235,6 +246,7 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 
 [^5]:(https://en.wikibooks.org/wiki/Cg_Programming/Vector_and_Matrix_Operations)
 
+---
 ### 五、作业一
 
 
@@ -286,6 +298,8 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 1. 三角形显示倒置：前面提到过，如果按闫老师课程中的推导过程来计算投影矩阵，会出现三角形倒置的情况,主要原因是虽然作业中与课程视频使用的都是右手坐标系，相机往z的负方向看，但作业中的near和far使用是正值。正确的做法是将矩阵的4行3列为的1改为-1，具体详情请参考MVP中的右手坐标系下的[投影变换](#projection)
 
 [^6]:(https://www.jianshu.com/p/8b4a1c5cf44b)
+---
+
 ### 六、Roderigus旋转矩阵推导 {{<rawhtml>}}<a name="Roderigus"></a>{{</rawhtml>}}
 
 在不同的引擎或图形API中向量、矩阵是在实际实现或使用过程会有一些细微的差别，如果在编码时不注意，可会出现一些奇怪的Bug。比如作业一的投影矩阵，如果按闫老师课程中推导来实现，就会出现三角形倒置的情况。根据笔者的项目经验，在设计或使用图形API时需要注意以下三点：
