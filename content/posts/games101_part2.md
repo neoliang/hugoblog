@@ -149,8 +149,9 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 x_f&y_f&z_f&-\vec f \cdot o\\
 0&0&0&1
 \end{array} \right){{</math>}}
-	- ***注意，这里是在左手坐标系下推导的观察矩阵，相机是往z的正方向看的，而在右手坐标系下相机是往z负方向看，对应的矩阵如下：***
-	- {{<math>}}View = \left( \begin{array}{lcr}
+	- ***{{<rawhtml>}}<font color=red>注意，这里是在左手坐标系下推导的观察矩阵，相机是往z的正方向看的，而在右手坐标系下相机是往z负方向看。因为只有往z负方向看，最终变换到观察窗口中的坐标x才是向右，y才是向上的；如果往z正方向看，则观察窗口中的坐标x是向左的，这样光栅光的结果最终是左右翻转的</font>{{</rawhtml>}}***
+	{{<rawhtml>}}<a name="view"></a>{{</rawhtml>}}
+	- 固右手坐标系对应的观察矩阵为： {{<math>}}View = \left( \begin{array}{lcr}
 x_r&y_r&z_r&-\vec r \cdot o\\
 x_u&y_u&z_u&-\vec u \cdot o\\
 -x_f&-y_f&-z_f&\vec f \cdot o\\
@@ -165,7 +166,9 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 0&0&1&0
 \end{array} \right){{</math>}}
 	- 其中n、f分别为近裁剪面和远裁剪面
-	- ***注意：在右手坐标系中，如果相机往z负方向看，则矩阵的4行3列为-1,对应的矩阵如下：***
+	{{<rawhtml>}}<a name="projection"></a>{{</rawhtml>}}
+	- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，如果相机往z负方向看，则矩阵的4行3列为-1</font>{{</rawhtml>}}***
+	- 因为在实际使用投影API时我们传入的near和far都是正值，所以和推导过程会和课程视频中有一些差异，公式中的n应该变成-n,即 {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}} 这样对应的矩阵如下：
 	- {{<math>}}\left( \begin{array}{lcr}
 \frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
 0&tan(\frac {fov}{2})&0&0\\
@@ -174,18 +177,57 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 \end{array} \right){{</math>}}
 [^3]:(https://zhuanlan.zhihu.com/p/122411512)
 
+    
 ---
-
->纸上得来终觉浅，绝知此事要躬行。 
- ---陆游《冬夜读书示子聿》
-
+  
 ### 四、线性代数实践与应用
-1. 行矩阵与列矩阵
+
+>水煮蛋该从“小端“剥开还是从“大端“剥开，这是个值得考虑的问题，执着任何一个选择都有可能会让国家引起叛乱，让皇帝丢了王位、甚至送了性命[^4]。
+
+[^4]:(https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F)
+
+
+和水煮蛋该从“小端“剥开还是从“大端“剥开一样，图形学中也面临着一些这样值得考虑的问题，比如矩阵该使用行为主序还是列为主序？比如向量该看作是1xn的矩阵还是nx1的的矩阵？比如坐标系该使用左手还是右手？在编码实践中，我们需要题解这些差异，注意不同的引擎或图形API的这些差别，如果不注意，可能会出现一些奇怪的Bug。比如GAMES101的作业一，如果按闫老师课程中的推导结果来计算投影矩阵，就会出现三角形倒置的情况。下面列举出三个比较典型的实例：
+1. 行矩阵与列矩阵：一般来说，一个以行为主序的矩阵{{<math>}}M_{a,b}{{</math>}}具有a行b列，而以列为主序的矩阵{{<math>}}M_{a,b}{{</math>}}具有a列b行,行矩阵与列矩阵的差别：
+	- 内存布局：对于{{<math>}}M_{a,b}{{</math>}}不管是表示行矩阵还是列矩阵都保存在二维(或一维)数组{{<math>}}A_{a,b}{{</math>}}中，行矩阵的访问下标与与数组访问下标一致，即{{<math>}}M_{i,j}=A_{i,j}{{</math>}} 而列矩阵刚好相反，即 {{<math>}}M_{i,j}=A_{j,i}{{</math>}}
+	- 构造函数，一般来说行矩阵的构造函数使用的是行向量，而列矩阵的构造函数使用的是列向量
+		- 在Cg或HLSL中矩阵构造函数以行向量为主[^5]
+		- 在GLSL中矩阵构造函数是以列向量为主
+		- 具体区别可见如下代码示例：
+		```c++
+		//Cg或HLSL,矩阵构造以行向量为单位
+		float3x3 m = float3x3(
+			1.1, 1.2, 1.3, // first row 
+			2.1, 2.2, 2.3, // second row
+			3.1, 3.2, 3.3  // third row
+			);
+		float3 row0 = float3(0.0, 1.0, 0.0);
+		float3 row1 = float3(1.0, 0.0, 0.0);
+		float3 row2 = float3(0.0, 0.0, 1.0);
+		float3x3 n = float3x3(row0, row1, row2); // sets rows of matrix n
+		
+		//GLSL矩阵构造以列向量为单位
+		mat3 m = mat3(1.1, 2.1, 3.1, //first column
+              		  1.2, 2.2, 3.2, //second column
+              		  1.3, 2.3, 3.3  // third column
+              		  );
+		vec3 col0 = vec3(0.0, 1.0, 0.0);
+		vec3 col1 = vec3(1.0, 0.0, 0.0);
+		vec3 col2 = vec3(0.0, 0.0, 1.0);
+		mat3 n = mat3(col0, col1, col2); // sets columns of matrix n
+	- 与向量相乘
+		- 在HLSL和GLSL中向量即可以看作行向量也可以看作列向量
+		- 在两种语言中，向量与矩阵相乘时，如果向量在矩阵的左边则为行向量，在矩阵右边为列向量
+		- 有时为了计算正交矩阵的逆矩阵(等于转置)与向量的乘积会将向量从矩阵的左边移动到矩阵的右边相乘或者相反，因为{{<math>}}M^T*\vec v= v^T*M{{</math>}}，这种用法常用于法线变换或法线贴图的TBN矩阵变换
 1. 左右手手坐标系
+
 1. 法线向量坐标变换
 
+[^5]:(https://en.wikibooks.org/wiki/Cg_Programming/Vector_and_Matrix_Operations)
 
 ### 五、作业一
+>纸上得来终觉浅，绝知此事要躬行。 
+ ---陆游《冬夜读书示子聿》
 1. 作业描述
 1. 环境搭建
 1. 源代码中的一些bug
@@ -193,6 +235,7 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 	auto ind = (height-point.y())*width + point.x()`会让[frame_buf数组越界引起崩溃](http://games-cn.org/forums/topic/%e4%bd%9c%e4%b8%9a1%e4%bb%a3%e7%a0%81%e6%a1%86%e6%9e%b6%e6%9c%89%e4%b8%80%e5%a4%84crash-bug/)
 	+ `main.cpp`中`get_view_matrix`函数的view矩阵计算有误，应该为`view = view * translate`而不是`view = translate * view`，不过这个bug对作业一无影响，因为源代码中的view为单位矩阵
 1. 三角形倒置问题
+	- 请参考MVP中的右手坐标系下的[观察](#view)和[投影变换](#projection)
 
 ### 六、Roderigus旋转矩阵推导
 
