@@ -3,7 +3,7 @@ title: GAMES101-学习笔记(1)-坐标变换
 date: "2020-10-02"
 url: "/posts/games101_part2"
 description: "计算机图形学概览学习笔记-坐标变换"
-thumbnail: "img/games101/whitted.jpg"
+thumbnail: "img/games101/part1/triangle.jpg"
 image: "img/games101/banner.jpg"
 classes:
 - feature-figcaption
@@ -17,7 +17,11 @@ categories:
 本文是GAMES101课程的光栅化中的坐标变换的总结,这部分主要由三个课时的视频组成，首先是超快猛的关于向量和矩阵的线性代数入门介绍，接下来讲述的是缩放、旋转和平移等仿射变换，最后是模型、观察及投影坐标变换。课程的内容提纲挈领，讲述的内容全是精华，前后衔接紧密，所讲述的知识在后面的章节都会有相应的应用。例如向量的点乘的物理意义之一是判断两向量的接近程度，在后面的着色章节用于计算光照强度；再例如向量的叉乘物理意义之一是判断一个点在向量的左则还是右则，在后面光线追踪的章节用于计算光线与三角形求交。
 <!--more-->
 
+>纸上得来终觉浅，绝知此事要躬行。 
+ ---陆游《冬夜读书示子聿》
+
 ### 一、超快猛线性代数入门
+
 1. 向量：表示方向与长度，在N维笛卡尔坐标系中用N个数来表示，例如三维坐标系中的向量{{<math>}}\vec a^T=(a_x,a_y,a_z){{</math>}} 
 	- 向量点乘：{{<math>}}\vec a \cdot \vec b = x_a*x_b+y_a*y_b+z_a*z_b {{</math>}} 
 	- 向量点乘的应用：
@@ -55,7 +59,7 @@ z_a& 0 &-x_a\\
 s_x& 0&0\\
 0& s_y &0\\
 0&0&s_z\end{array} \right){{</math>}}
-	- 旋转矩阵
+	- 旋转矩阵{{<rawhtml>}}<a name="rotaion_z"></a>{{</rawhtml>}}
 		- {{<math>}}Rz(\theta) = \left( \begin{array}{lcr}
 cos(\theta)& -sin(\theta)&0\\
 sin(\theta)& cos(\theta) &0\\
@@ -82,7 +86,7 @@ A&t\\
 0&1\end{array} \right)\left( \begin{array}{lcr} b\\1\end{array} \right){{</math>}}  这样增加一个维度后,就可以在高维度通过线性变换来完成低维度的平移变换[^2]
 	- 平移变换只适用于点，而向量在平移后保持不变，所以对于向量新增加的维度的坐标恒为0，即向量{{<math>}}\vec v{{</math>}}的齐次坐标为{{<math>}}\left( \begin{array}{lcr} \vec v\\0\end{array} \right){{</math>}} 而点p的齐次坐标为{{<math>}}\left( \begin{array}{lcr} p\\1\end{array} \right){{</math>}}
 	- 这种增加一个维度来表示点或者向量的坐标系称为齐次坐标系
-	- 在齐次坐标系下所有仿射变换都可以用矩阵来表示，
+	- 在齐次坐标系下所有仿射变换都可以用矩阵相乘来表示
 	- 向量、点的加法、减法在齐次坐标系下与笛卡尔坐标系下是相容的，特别地，点与点相加在齐次坐标系表示求两个点的中点
 	- 同样缩放、旋转变换在齐次坐标系下与笛卡尔坐标系下是相容的
 1. 逆变换等于乘于变换矩阵的逆矩阵
@@ -157,24 +161,28 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 -x_f&-y_f&-z_f&\vec f \cdot o\\
 0&0&0&1
 \end{array} \right){{</math>}}
-1. 投影变换：相机按下快门，各个三维模型在相机的底片上形成二维图形。即将观察坐标系中的三维图形投影到二维的视图窗口上；
-	- 视频中的投影矩阵推导讲得比较透彻，从正交到透视，层层递进，正交是透视的基础，而透视只需要处理将Frustum挤压到Cuboid的过程即可以，非常容易理解，具体推导过程可以参考这篇文章[^3]
-	- 最终推导出的投影矩阵为：{{<math>}}\left( \begin{array}{lcr}
+
+
+1. 投影变换：相机按下快门，各个三维模型在相机的底片上形成二维图形。即将观察坐标系中的三维图形投影到二维的视图窗口上，视频中的投影矩阵推导讲得比较透彻，从正交到透视，层层递进，正交是透视的基础，而透视只需要处理将Frustum挤压到Cuboid的过程即可以，非常容易理解，具体推导过程可以参考这篇文章[^3]；
+	- 正交投影矩阵为：[to do]
+	- 透视投影矩阵为：{{<math>}}\left( \begin{array}{lcr}
 \frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
 0&tan(\frac {fov}{2})&0&0\\
 0&0&\frac{f+n}{f-n}&\frac {-2*f*n}{f-n}\\
 0&0&1&0
 \end{array} \right){{</math>}}
-	- 其中n、f分别为近裁剪面和远裁剪面
+		- 其中n、f分别为近裁剪面和远裁剪面
 	{{<rawhtml>}}<a name="projection"></a>{{</rawhtml>}}
-	- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，如果相机往z负方向看，则矩阵的4行3列为-1</font>{{</rawhtml>}}***
-	- 因为在实际使用投影API时我们传入的near和far都是正值，所以和推导过程会和课程视频中有一些差异，公式中的n应该变成-n,即 {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}} 这样对应的矩阵如下：
-	- {{<math>}}\left( \begin{array}{lcr}
+		- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，如果相机往z负方向看，则矩阵的4行3列为-1</font>{{</rawhtml>}}***
+		- 因为在实际使用投影API时我们传入的near和far都是正值，所以和推导过程会和课程视频中有一些差异，公式中的n应该变成-n,即 {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}} 这样对应的矩阵如下：
+		- {{<math>}}\left( \begin{array}{lcr}
 \frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
 0&tan(\frac {fov}{2})&0&0\\
 0&0&\frac{f+n}{f-n}&\frac {-2*f*n}{f-n}\\
 0&0&-1&0
 \end{array} \right){{</math>}}
+
+1. 视口变换 [to do]
 [^3]:(https://zhuanlan.zhihu.com/p/122411512)
 
     
@@ -187,7 +195,9 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 [^4]:(https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F)
 
 
-和水煮蛋该从“小端“剥开还是从“大端“剥开一样，图形学中也面临着一些这样值得考虑的问题，比如矩阵该使用行为主序还是列为主序？比如向量该看作是1xn的矩阵还是nx1的的矩阵？比如坐标系该使用左手还是右手？在编码实践中，我们需要题解这些差异，注意不同的引擎或图形API的这些差别，如果不注意，可能会出现一些奇怪的Bug。比如GAMES101的作业一，如果按闫老师课程中的推导结果来计算投影矩阵，就会出现三角形倒置的情况。下面列举出三个比较典型的实例：
+和水煮蛋该从“小端“剥开还是从“大端“剥开一样，图形学中也面临着一些这样值得考虑的问题，比如矩阵该使用行为主序还是列为主序？比如向量该看作是1xn的矩阵还是nx1的的矩阵？比如坐标系该使用左手还是右手？在编码实践中，我们需要题解这些差异，注意不同的引擎或图形API的这些差别，如果不注意，可能会出现一些奇怪的Bug。比如GAMES101的作业一，如果按闫老师课程中的推导过程来计算投影矩阵，会出现三角形倒置的情况。
+
+下面列举出三个比较典型的实例：
 1. 行矩阵与列矩阵：一般来说，一个以行为主序的矩阵{{<math>}}M_{a,b}{{</math>}}具有a行b列，而以列为主序的矩阵{{<math>}}M_{a,b}{{</math>}}具有a列b行,行矩阵与列矩阵的差别：
 	- 内存布局：对于{{<math>}}M_{a,b}{{</math>}}不管是表示行矩阵还是列矩阵都保存在二维(或一维)数组{{<math>}}A_{a,b}{{</math>}}中，行矩阵的访问下标与与数组访问下标一致，即{{<math>}}M_{i,j}=A_{i,j}{{</math>}} 而列矩阵刚好相反，即 {{<math>}}M_{i,j}=A_{j,i}{{</math>}}
 	- 构造函数，一般来说行矩阵的构造函数使用的是行向量，而列矩阵的构造函数使用的是列向量
@@ -226,18 +236,57 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 [^5]:(https://en.wikibooks.org/wiki/Cg_Programming/Vector_and_Matrix_Operations)
 
 ### 五、作业一
->纸上得来终觉浅，绝知此事要躬行。 
- ---陆游《冬夜读书示子聿》
-1. 作业描述
-1. 环境搭建
-1. 源代码中的一些bug
-	+ `rasterizer`类的`set_pixel`函数的代码段`
-	auto ind = (height-point.y())*width + point.x()`会让[frame_buf数组越界引起崩溃](http://games-cn.org/forums/topic/%e4%bd%9c%e4%b8%9a1%e4%bb%a3%e7%a0%81%e6%a1%86%e6%9e%b6%e6%9c%89%e4%b8%80%e5%a4%84crash-bug/)
-	+ `main.cpp`中`get_view_matrix`函数的view矩阵计算有误，应该为`view = view * translate`而不是`view = translate * view`，不过这个bug对作业一无影响，因为源代码中的view为单位矩阵
-1. 三角形倒置问题
-	- 请参考MVP中的右手坐标系下的[观察](#view)和[投影变换](#projection)
 
-### 六、Roderigus旋转矩阵推导
+
+>本次作业的任务是填写一个旋转矩阵和一个透视投影矩阵，需要在 main.cpp 中修改的函数
+>1. get_model_matrix(float rotation_angle): 逐个元素地构建模型变换矩 阵并返回该矩阵。在此函数中，你只需要实现三维中绕 z 轴旋转的变换矩阵， 而不用处理平移与缩放。
+>1. get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar): 使用给定的参数逐个元素地构建透视投影矩阵并返回 该矩阵。
+>1. 提高项 get_rotation(Vector3f axis, float angle):得到绕任意 过原点的轴的旋转变换矩阵。
+
+1. 环境搭建,本次作业需要使用第三方库OpenCV,如何在Xcode下配置OpenCV请参考这篇文章[^6]
+
+1. 作业框架中源代码的一些bug：
+	- `rasterizer`类的`set_pixel`函数的代码段`
+	auto ind = (height-point.y())*width + point.x()`会让[frame_buf数组越界引起崩溃](http://games-cn.org/forums/topic/%e4%bd%9c%e4%b8%9a1%e4%bb%a3%e7%a0%81%e6%a1%86%e6%9e%b6%e6%9c%89%e4%b8%80%e5%a4%84crash-bug/)
+	- `main.cpp`中`get_view_matrix`函数的view矩阵计算有误，应该为`view = view * translate`而不是`view = translate * view`，不过这个bug对作业一无影响，因为源代码中的view为单位矩阵
+
+1. 作业解析：
+	1. 模型绕 z 轴旋转矩阵，矩阵实现细节请参考仿射变换的[旋转矩阵](#rotaion_z)，对应的代码如下：
+	1. 构建透视投影矩阵,实现细节请参考MVP中的[投影变换](#projection)
+	1. 提高项，实现细节请参考[Roderigus旋转矩阵推导](#Roderigus)
+	1. 作业1、2、3部分最终实现代码如下：
+	```c++
+	//1. 模型绕 z 轴旋转矩阵
+	Eigen::Matrix4f get_model_matrix(float rotation_angle)
+	{
+	    Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
+	    float a = rotation_angle/180.0f*PI;
+	    float c = cosf(a),s = sinf(a);
+	    model << c,-s,0,0,
+	             s, c,0,0,
+	             0, 0,1,0,
+	             0, 0,0,1;
+	    return model;
+	}
+	//2. 构建透视投影矩阵
+	Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
+	                                      float zNear, float zFar)
+	{
+	    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+	    float cota = 0.5f * eye_fov / 180.0f * 3.1415926f ;
+	    cota = 1.f/ tanf(cota);
+	    //右手坐标系
+	    float zD = (zFar-zNear);
+	    projection <<   cota/aspect_ratio,0,0,0,
+	                    0,cota,0,0,
+	                    0,0,(zFar+zNear)/zD,-2.0f*zFar*zNear/zD,
+	                    0,0,-1,0;
+	    return projection;
+	}```
+1. 三角形显示倒置：前面提到过，如果按闫老师课程中的推导过程来计算投影矩阵，会出现三角形倒置的情况,主要原因是虽然作业中与课程视频使用的都是右手坐标系，相机往z的负方向看，但作业中的near和far使用是正值。正确的做法是将矩阵的4行3列为的1改为-1，具体详情请参考MVP中的右手坐标系下的[投影变换](#projection)
+
+[^6]:(https://www.jianshu.com/p/8b4a1c5cf44b)
+### 六、Roderigus旋转矩阵推导 {{<rawhtml>}}<a name="Roderigus"></a>{{</rawhtml>}}
 
 在不同的引擎或图形API中向量、矩阵是在实际实现或使用过程会有一些细微的差别，如果在编码时不注意，可会出现一些奇怪的Bug。比如作业一的投影矩阵，如果按闫老师课程中推导来实现，就会出现三角形倒置的情况。根据笔者的项目经验，在设计或使用图形API时需要注意以下三点：
 1. 行列矩阵的表示与内存布局，左结合与右结合
