@@ -112,7 +112,7 @@ g&h&i&t_z\\
 
 ### 三、MVP
 1. Modle变换：将各个模型在世界空间的摆好Pose,等待拍照。即在模型上应用平移、缩放和旋转等仿射变换，将坐标从模型空间变换到世界空间；
-1. 视图变换：在世界空间中放置相机，即以相机为原点建立观察坐标系；
+1. 观察变换：在世界空间中放置相机，即以相机为原点建立观察坐标系；
 	- 观察矩阵推导：视频课程中的推导讲得比较透彻，容易理解，但推导过程相对较长，另外有一种比较简洁的推导方法，假设观察坐标系的原点为o，三个坐标轴(基底)为{{<math>}}\vec r {{</math>}}，{{<math>}}\vec u {{</math>}}，{{<math>}}\vec f{{</math>}}，对于该坐标系的任意一点{{<math>}}v{{</math>}}在世界坐标系中的坐标p如下：
 	- {{<math>}}p=x_v*\vec r + y_v*\vec u + z_v* \vec f  + o = T(o)\left( \begin{array}{lcr}
 		\vec r&\vec u&\vec f
@@ -176,16 +176,16 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 			- step1：将{{<math>}}x{{</math>}}映射到[0,1]区间 {{<math>}}x^{\prime} = \frac {x-l}{r-l} {{</math>}}
 			- step2：将{{<math>}}x^{\prime}{{</math>}}从 [0,1] 映射到 [-1,1]， {{<math>}}x^{\prime} = x^{\prime} * 2 - 1{{</math>}}
 			- 根据step1和step2可得{{<math>}}x^{\prime} = \frac {2}{r-l} - \frac {x+l}{r-l}{{</math>}}
-		- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，相机往z负方向看，这里的n和f为负值，矩阵的第3行3列的分母为 n-f </font>{{</rawhtml>}}***
+		- ***{{<rawhtml>}}<font color=red>注意：在右手坐标系中，一般情况下相机往z负方向看，这样屏幕向上为y正方向，屏幕向左为x正方向。这里的n和f为负值，固矩阵的第3行3列的分母为 n-f </font>{{</rawhtml>}}***
 	- 透视投影矩阵为：{{<math>}}\left( \begin{array}{lcr}
 \frac{-1}{tan(\frac {fov}{2})*asp}&0&0&0\\
 0&\frac{-1}{tan(\frac {fov}{2})}&0&0\\
 0&0&\frac{f+n}{n-f}&\frac {-2*f*n}{n-f}\\
 0&0&1&0
-\end{array} \right){{</math>}}
-		- 具体推导过程可以参考这篇文章[^3]，这篇文章的推导思路是正确的，但结果不对
+\end{array} \right){{</math>}} （1式）
+		- 具体推导过程可以参考这篇文章[^3]，这篇文章推导思路大体正确，但推导结果不对，正确的结果应该是前面列出（1式）原因正如前面所说near和far取值为负，这样{{<math>}}tan(\frac {fov}{2}) = \frac {t-b}{-2 n}{{</math>}}，导致最终推导出来的矩阵第1行1列和2行2列都有负号。
 	{{<rawhtml>}}<a name="projection"></a>{{</rawhtml>}}
-		- ***{{<rawhtml>}}<font color=red>注意：在OpenGL中，相机是往z负方向看的，但在实际使用投影API时传入的near和far均为正值，所以计算推导时应该是： {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}}，对应的矩阵如下：</font>{{</rawhtml>}}***
+		- ***{{<rawhtml>}}<font color=red>注意：在OpenGL中，相机是往z负方向看的，但在实际使用投影API时传入的near和far均为正值，所以计算时： {{<math>}}y^{\prime} = \frac {-n}{z} y{{</math>}}，这样推导出的矩阵如下：</font>{{</rawhtml>}}***
 		- {{<math>}}\left( \begin{array}{lcr}
 \frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
 0&\frac {1}{tan(\frac {fov}{2})}&0&0\\
@@ -193,7 +193,13 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 0&0&-1&0
 \end{array} \right){{</math>}}
 
-1. 视口变换 [to do]
+1. 视口变换，相对于观察和投影变换，视口变换比较简单，我们只需要将 x,y 分别从 [-1,1] 转到 [0,width] 和 [0,height] 即可,变换公式为：{{<math>}}x^{\prime} = width \cdot \frac {x+1}{2} {{</math>}}  {{<math>}}y^{\prime} = height \cdot \frac {y+1}{2} {{</math>}}
+	- 对应的矩阵为：{{<math>}}\left( \begin{array}{lcr}
+\frac {width}{2}&0&0&\frac {width}{2}\\
+0&\frac {height}{2}&0&\frac {height}{2}\\
+0&0&1&0\\
+0&0&0&1
+\end{array} \right){{</math>}}
 [^3]:(https://zhuanlan.zhihu.com/p/122411512)
 
     
@@ -240,11 +246,30 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 		- 在HLSL和GLSL中向量即可以看作行向量也可以看作列向量
 		- 在两种语言中，向量与矩阵相乘时，如果向量在矩阵的左边则为行向量，在矩阵右边为列向量
 		- 有时为了计算正交矩阵的逆矩阵(等于转置)与向量的乘积会将向量从矩阵的左边移动到矩阵的右边相乘或者相反，因为{{<math>}}M^T*\vec v= v^T*M{{</math>}}，这种用法常用于法线变换或法线贴图的TBN矩阵变换
-1. 左右手手坐标系
+1. 左右手手坐标系[^6]：通常情况下，在设计或使用不同的图形API时我们需要考虑两种不同的笛卡尔坐标系，即左手和右手坐标系。在两种坐标系中，x的正方向都指向右，y的正方向指向上。区分他们的方法比较简单，z正方向指向屏幕里的是左手坐标系，而z正方向指向屏幕外的是右手坐标系。它们之所以叫左手或右手坐标系的原因这些坐标系满足左手或右手定则，即当我们往x方向伸出手指，然后让手指弯向y方向，拇指所指向的方向为z的正方向，如下图：
+![左右手坐标系](/img/games101/part1/left_right_hand.jpg)
+	- 在图形API中左右手坐标系是一种约定，或者是默认的选择，并不是强制规范。比如D3D默认是左手坐标系，但也可以使用右手坐标系；OpenGL默认是右手坐标系，但也可以使用左手坐标系。D3D还专门提供了不同坐标系下的API，例如[LookAtRH](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb281711(v=vs.85))和[LookAtLH](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb281710(v=vs.85))分别代表获取右手和左手坐标系下的观察矩阵
+	- 左右手坐标系的影响面：
+		- 旋转：右手坐标系下旋转是逆时针为正，顺时针为负，左手坐标系刚才相反
+		- 相机的观察矩阵View，左手坐标系是往z正方向看，右手坐标系往z负方向看，具体区别请参考MVP中的[观察变换](#view)
+		- 相机的投影矩阵，在右手坐标系中相机往z正方向看，near和far为正值，所以推导出来的矩阵为：{{<math>}}\left( \begin{array}{lcr}
+\frac{1}{tan(\frac {fov}{2})*asp}&0&0&0\\
+0&\frac {1}{tan(\frac {fov}{2})}&0&0\\
+0&0&\frac{f+n}{f-n}&\frac {-2*f*n}{f-n}\\
+0&0&1&0
+\end{array} \right){{</math>}} 请注意该矩阵与MVP中的[投影变换](#projection)的差别
+		- 法线向量，相机观察与投影
 
-1. 法线向量坐标变换
+1. 法线向量坐标变换：如果直接对模型的法线进行与顶点相似的变换，当各个方向的缩放不相同时，可能会出现错误，[如下图所示](https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/transforming-normals)，我们对 a) 的三角形进行缩放(1,2)的变换，如果法线也采用相同的变换，会得到如 b) 所示的结果，很显示这个错误的，正确的结果应该如 c) 所示
+![非统一缩放会导致法线方向错误](/img/games101/part1/normaltrans.jpg)
+当我们对模型顶点变换时，对应的法线该怎么变换呢？对于模型的某一平面经过{{<math>}}p_0{{</math>}}，法线为{{<math>}}\vec n{{</math>}},可以写出平面的方程为{{<math>}}\vec n \cdot (p-p_0) = 0{{</math>}}，假设对模型的变换矩阵为 M 则{{<math>}}p-p_0{{</math>}}对应的变换为{{<math>}}M(p-p_0){{</math>}}，则平面方程对应的变换为：
+	- {{<math>}}\vec n M^{-1}M (p-p_0) = 0{{</math>}}  {{<rawhtml>}}<font color=red>(注意，这里的{{<math>}}\vec n{{</math>}}为行向量，{{<math>}}p-p_0{{</math>}}为列向量)</font>{{</rawhtml>}}
+	- 上式之所以成立是因为矩阵相乘具有结合律，并且{{<math>}} M^{-1}M {{</math>}}为单位矩阵
+	- 如果将{{<math>}}\vec n{{</math>}}看作列向量，则对应的变换为{{<math>}} (M^{-1})^T \vec n{{</math>}}
+	- 在HLSL、GLSL或Unity的Shader中，向量与矩阵相乘时如果被放到矩阵的左边会被当作行向量，所以我们一般在代码中看到对法线的变换如此： {{<math>}}\vec n M^{-1}{{</math>}}
 
 [^5]:(https://en.wikibooks.org/wiki/Cg_Programming/Vector_and_Matrix_Operations)
+[^6]:(https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb324490(v=vs.85))
 
 ---
 ### 五、作业一
@@ -265,7 +290,7 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 1. 作业解析：
 	1. 模型绕 z 轴旋转矩阵，矩阵实现细节请参考仿射变换的[旋转矩阵](#rotaion_z)，对应的代码如下：
 	1. 构建透视投影矩阵,实现细节请参考MVP中的[投影变换](#projection)
-	1. 提高项，实现细节请参考[Roderigus旋转矩阵推导](#Roderigus)
+	1. 提高项，实现细节请参考[Rodrigus旋转矩阵推导](#Rodrigus)
 	1. 作业1、2、3部分最终实现代码如下：
 	```c++
 	//1. 模型绕 z 轴旋转矩阵
@@ -300,9 +325,14 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 [^6]:(https://www.jianshu.com/p/8b4a1c5cf44b)
 ---
 
-### 六、Roderigus旋转矩阵推导 {{<rawhtml>}}<a name="Roderigus"></a>{{</rawhtml>}}
+### 六、Rodrigus旋转矩阵推导 {{<rawhtml>}}<a name="Rodrigus"></a>{{</rawhtml>}}
+在仿射变换章节中，我们已经推导出了绕x、y、z轴旋转的矩阵，对应绕任意轴旋转的矩阵，可以用欧拉角或四元数来表示，也可以用Rodrigues旋转公式来表示，Rodrigues旋转公式有两种表示方向，第一种是视频课程中表示方式，如下：
+1. {{<math>}}R(n,\alpha) = cos(\alpha)I+(1-cos(\alpha))\vec n \vec n ^T + sin(\alpha) N {{</math>}},其中I为3x3单位矩阵，N为{{<math>}} \left( \begin{array}{lcr}
+0& -n_z&n_y\\
+n_z& 0 &-n_x\\
+-n_y&n_x&0\end{array} \right){{</math>}}
+1. 第二种表示方式来自于[wikipedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)，如下：
+1. {{<math>}}R(n,\alpha) = I+sin(\alpha) N + (1-cos(\alpha)) N^2 {{</math>}}，I，N与1式中相同
 
-在不同的引擎或图形API中向量、矩阵是在实际实现或使用过程会有一些细微的差别，如果在编码时不注意，可会出现一些奇怪的Bug。比如作业一的投影矩阵，如果按闫老师课程中推导来实现，就会出现三角形倒置的情况。根据笔者的项目经验，在设计或使用图形API时需要注意以下三点：
-1. 行列矩阵的表示与内存布局，左结合与右结合
-3. 左右手坐标系的差异与影响
-4. 法线向量的坐标变换
+
+[//]:在不同的引擎或图形API中向量、矩阵是在实际实现或使用过程会有一些细微的差别，如果在编码时不注意，可会出现一些奇怪的Bug。比如作业一的投影矩阵，如果按闫老师课程中推导来实现，就会出现三角形倒置的情况。根据笔者的项目经验，在设计或使用图形API时需要注意以下三点：1.行列矩阵的表示与内存布局，左结合与右结合3.左右手坐标系的差异与影响4.法线向量的坐标变换
