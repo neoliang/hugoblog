@@ -261,7 +261,7 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 		- 法线向量，相机观察与投影
 
 1. 法线向量坐标变换：如果直接对模型的法线进行与顶点相似的变换，当各个方向的缩放不相同时，可能会出现错误，[如下图所示](https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/transforming-normals)，我们对 a) 的三角形进行缩放(1,2)的变换，如果法线也采用相同的变换，会得到如 b) 所示的结果，很显示这个错误的，正确的结果应该如 c) 所示
-![非统一缩放会导致法线方向错误](/img/games101/part1/normaltrans.jpg)
+![非统一缩放会导致法线方向错误](/img/games101/part1/normaltrans.jpeg)
 当我们对模型顶点变换时，对应的法线该怎么变换呢？对于模型的某一平面经过{{<math>}}p_0{{</math>}}，法线为{{<math>}}\vec n{{</math>}},可以写出平面的方程为{{<math>}}\vec n \cdot (p-p_0) = 0{{</math>}}，假设对模型的变换矩阵为 M 则{{<math>}}p-p_0{{</math>}}对应的变换为{{<math>}}M(p-p_0){{</math>}}，则平面方程对应的变换为：
 	- {{<math>}}\vec n M^{-1}M (p-p_0) = 0{{</math>}}  {{<rawhtml>}}<font color=red>(注意，这里的{{<math>}}\vec n{{</math>}}为行向量，{{<math>}}p-p_0{{</math>}}为列向量)</font>{{</rawhtml>}}
 	- 上式之所以成立是因为矩阵相乘具有结合律，并且{{<math>}} M^{-1}M {{</math>}}为单位矩阵
@@ -331,8 +331,12 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 0& -n_z&n_y\\
 n_z& 0 &-n_x\\
 -n_y&n_x&0\end{array} \right){{</math>}}
+1. 第一种表示方式闫老师在补充材料里有证明，详细请参考[这里](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)
 1. 第二种表示方式来自于[wikipedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)，如下：
-1. {{<math>}}R(n,\alpha) = I+sin(\alpha) N + (1-cos(\alpha)) N^2 {{</math>}}，I，N与1式中相同
+1. {{<math>}}R(n,\alpha) = I+sin(\alpha) N + (1-cos(\alpha)) N^2 {{</math>}}，其中I、N与1式中相同，wikipedia中的推导过程和示意图都相对复杂，看起来比较费劲。我将原来的三维示意图分成了两个部分比较简单的部分，并在示意图上备注各个步骤，简化了图形和推导过程，让其更加容易理解，具体如下：
+1. 对于围绕单位向量 {{<math>}}\vec n {{</math>}}旋转 {{<math>}}\alpha {{</math>}}角度的向量 {{<math>}}\vec v {{</math>}} ,我们可以将其分解成两部分 （1） {{<math>}} \vec v = \vec v_{\parallel}+\vec v_{\perp}  {{</math>}}
+![Rodrigus示意图1](/img/games101/part1/rodrigues1.jpg)
 
+![Rodrigus示意图2](/img/games101/part1/rodrigues2.jpg)
 
 [//]:在不同的引擎或图形API中向量、矩阵是在实际实现或使用过程会有一些细微的差别，如果在编码时不注意，可会出现一些奇怪的Bug。比如作业一的投影矩阵，如果按闫老师课程中推导来实现，就会出现三角形倒置的情况。根据笔者的项目经验，在设计或使用图形API时需要注意以下三点：1.行列矩阵的表示与内存布局，左结合与右结合3.左右手坐标系的差异与影响4.法线向量的坐标变换
