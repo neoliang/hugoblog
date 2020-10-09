@@ -329,8 +329,8 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 	    float a = angle/180.0f*PI;
 	    float c = cosf(a),s = sinf(a);
 	    Vector3f n = axis.normalized();
-	    N << 0,     -n.z(),  n.y(),
-	         n.z(),  0,     -n.x(),
+	    N << 0,    -n.z(), n.y(),
+	         n.z(), 0,    -n.x(),
 	        -n.y(), n.x(), 0;
 	    //wikipedia的方法
 	    return toMatrix4f(I + (N*N)*(1-c) + N*s);
