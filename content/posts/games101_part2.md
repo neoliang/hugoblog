@@ -324,16 +324,18 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 	//矩阵的推导过程请参考第六部分 Rodrigus旋转矩阵推导
 	Eigen::Matrix4f get_rotation(Vector3f axis, float angle)
 	{
-	    Eigen::Matrix4f I = Eigen::Matrix4f::Identity();
-	    Eigen::Matrix4f N;
+	    Eigen::Matrix3f I = Eigen::Matrix3f::Identity();
+	    Eigen::Matrix3f N;
 	    float a = angle/180.0f*PI;
 	    float c = cosf(a),s = sinf(a);
 	    Vector3f n = axis.normalized();
-	    N << 0,     -n.z(),  n.y(), 0,
-	         n.z(),  0,     -n.x(), 0,
-	         -n.y(), n.x(), 0,      0,
-	         0,      0,     0,      0;
-	    return I + (N*N)*(1-c) + N*s;
+	    N << 0,     -n.z(),  n.y(),
+	         n.z(),  0,     -n.x(),
+	        -n.y(), n.x(), 0;
+	    //wikipedia的方法
+	    return toMatrix4f(I + (N*N)*(1-c) + N*s);
+	    //闫老师的方法 n*n^t
+	    //return toMatrix4f(c*I + (1-c)*(n*n.transpose()) + s*N);
 	}```
 1. 三角形显示倒置：前面提到过，如果按闫老师课程中的推导过程来计算投影矩阵，会出现三角形倒置的情况,主要原因是虽然作业中与课程视频使用的都是右手坐标系，相机往z的负方向看，但作业中的near和far使用是正值。正确的做法是将矩阵的4行3列为的1改为-1，具体详情请参考MVP中的右手坐标系下的[投影变换](#projection)
 
@@ -342,10 +344,14 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 
 ### 六、Rodrigus旋转矩阵推导 {{<rawhtml>}}<a name="Rodrigus"></a>{{</rawhtml>}}
 在仿射变换章节中，我们已经推导出了绕x、y、z轴旋转的矩阵，对应绕任意轴旋转的矩阵，可以用欧拉角或四元数来表示，也可以用Rodrigues旋转公式来表示，Rodrigues旋转公式有两种表示方向，第一种是视频课程中表示方式，如下：
-1. {{<math>}}R(n,\alpha) = cos(\alpha)I+(1-cos(\alpha))\vec n \vec n ^T + sin(\alpha) N {{</math>}},其中I为3x3单位矩阵，N为{{<math>}} \left( \begin{array}{lcr}
+1. {{<math>}}R(\vec n,\alpha) = cos(\alpha)I+(1-cos(\alpha))\vec n \vec n ^T + sin(\alpha) N {{</math>}},其中I为3x3单位矩阵，N为{{<math>}} \left( \begin{array}{lcr}
 0& -n_z&n_y\\
 n_z& 0 &-n_x\\
--n_y&n_x&0\end{array} \right){{</math>}}
+-n_y&n_x&0\end{array} \right){{</math>}}，{{<math>}}\vec n \vec n ^T{{</math>}} 为 {{<math>}} \left( \begin{array}{lcr}
+n_x^2& n_x*n_y&n_x*n_z\\
+n_x*n_y& n_y^2 &n_y*nz\\
+n_x*n_z&n_y*n_z&n_z^2\end{array} \right){{</math>}}
+
 1. 第一种表示方式闫老师在补充材料里有证明，详细请参考[这里](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)
 1. 第二种表示方式来自于[wikipedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)，如下：
 1. {{<math>}}R(n,\alpha) = I+sin(\alpha) N + (1-cos(\alpha)) N^2 {{</math>}}，其中I、N与1式中相同，wikipedia中的推导过程和示意图都相对复杂，看起来比较费劲。我将原来的三维示意图分成了两个部分比较简单的部分，并在示意图上备注各个步骤，简化了图形和推导过程，让其更加容易理解，具体如下：
