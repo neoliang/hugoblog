@@ -319,6 +319,21 @@ x_u&y_u&z_u&-\vec u \cdot o\\
 	                    0,0,(zFar+zNear)/zD,-2.0f*zFar*zNear/zD,
 	                    0,0,-1,0;
 	    return projection;
+	}
+	//3. 得到绕任意 过原点的轴的旋转变换矩阵
+	//矩阵的推导过程请参考第六部分 Rodrigus旋转矩阵推导
+	Eigen::Matrix4f get_rotation(Vector3f axis, float angle)
+	{
+	    Eigen::Matrix4f I = Eigen::Matrix4f::Identity();
+	    Eigen::Matrix4f N;
+	    float a = angle/180.0f*PI;
+	    float c = cosf(a),s = sinf(a);
+	    Vector3f n = axis.normalized();
+	    N << 0,     -n.z(),  n.y(), 0,
+	         n.z(),  0,     -n.x(), 0,
+	         -n.y(), n.x(), 0,      0,
+	         0,      0,     0,      0;
+	    return I + (N*N)*(1-c) + N*s;
 	}```
 1. 三角形显示倒置：前面提到过，如果按闫老师课程中的推导过程来计算投影矩阵，会出现三角形倒置的情况,主要原因是虽然作业中与课程视频使用的都是右手坐标系，相机往z的负方向看，但作业中的near和far使用是正值。正确的做法是将矩阵的4行3列为的1改为-1，具体详情请参考MVP中的右手坐标系下的[投影变换](#projection)
 
