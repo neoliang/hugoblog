@@ -334,9 +334,22 @@ n_z& 0 &-n_x\\
 1. 第一种表示方式闫老师在补充材料里有证明，详细请参考[这里](https://sites.cs.ucsb.edu/~lingqi/teaching/resources/GAMES101_Lecture_04_supp.pdf)
 1. 第二种表示方式来自于[wikipedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)，如下：
 1. {{<math>}}R(n,\alpha) = I+sin(\alpha) N + (1-cos(\alpha)) N^2 {{</math>}}，其中I、N与1式中相同，wikipedia中的推导过程和示意图都相对复杂，看起来比较费劲。我将原来的三维示意图分成了两个部分比较简单的部分，并在示意图上备注各个步骤，简化了图形和推导过程，让其更加容易理解，具体如下：
-1. 对于围绕单位向量 {{<math>}}\vec n {{</math>}}旋转 {{<math>}}\alpha {{</math>}}角度的向量 {{<math>}}\vec v {{</math>}} ,我们可以将其分解成两部分 （1） {{<math>}} \vec v = \vec v_{\parallel}+\vec v_{\perp}  {{</math>}}
+1. 对于围绕单位向量 {{<math>}}\vec n {{</math>}}旋转 {{<math>}}\alpha {{</math>}}角度的向量 {{<math>}}\vec v {{</math>}} ,我们可以将其分解成两部分 
+（1） {{<math>}} \vec v = \vec v_{\parallel}+\vec v_{\perp}  {{</math>}}，当{{<math>}}\vec v{{</math>}}旋转{{<math>}}\alpha{{</math>}}到{{<math>}}\vec v^{\prime}{{</math>}}时，{{<math>}}\vec v_{\parallel}{{</math>}}保持不变，{{<math>}}\vec v_{\perp}{{</math>}}旋转到{{<math>}}\vec v_{\perp}^{\prime}{{</math>}}，可得：（2） {{<math>}}\vec v^{\prime}= \vec v_{\parallel} + \vec v_{\perp}^{\prime}{{</math>}}
 ![Rodrigus示意图1](/img/games101/part1/rodrigues1.jpg)
-
+这样我们只需要将 {{<math>}}\vec v_{\parallel}{{</math>}} {{<math>}}\vec v_{\perp}^{\prime}{{</math>}} 用 {{<math>}}\vec v{{</math>}} 和 {{<math>}}\vec n{{</math>}} 表示出来即可得到 {{<math>}}\vec v^{\prime}{{</math>}}，引入一个向量（3）{{<math>}}\vec w = \vec n \times \vec v{{</math>}}，沿{{<math>}}\vec n{{</math>}}的负方向观察，如下图：
 ![Rodrigus示意图2](/img/games101/part1/rodrigues2.jpg)
+我们可以得知：（5）{{<math>}}\vec v_{\perp}= - \vec n \times (\vec n \times \vec v){{</math>}}，由于{{<math>}}\vec v_{\perp}{{</math>}}，{{<math>}}\vec w{{</math>}}和{{<math>}}\vec v_{\perp}^{\prime}{{</math>}}的长度相等，并且{{<math>}}\vec w{{</math>}}与{{<math>}}\vec v_{\perp}^{\prime}{{</math>}}垂直，可以得到（6）{{<math>}}\vec v_{\perp}^{\prime} = \vec v_{\perp} cos(\alpha) + \vec wsin(\alpha){{</math>}}，由示意图1我们知道（4）{{<math>}}\vec v_{\parallel} = \vec v - \vec v_{\perp} {{</math>}}，从而得到{{<math>}}\vec v_{\parallel} = \vec v + \vec n \times(\vec n \times \vec v){{</math>}}，由以上几式可以得到：
+	- (7)    {{<math>}}\vec v_{\perp}^{\prime} = -(\vec n \times(\vec n \times \vec v))cos(\alpha) + (\vec n\times \vec v)sin(\alpha){{</math>}}
+	
+	- (8)    {{<math>}}\vec v^{\prime} = \vec v + (1-cos(\alpha))(\vec n \times(\vec n \times \vec v)) + sin(\alpha)(\vec n\times \vec v){{</math>}}，由于向量的叉乘可以写成矩阵相乘的形式，因此我们可以将该公式改写如下：
+	
+	- {{<math>}}R(\vec n,\alpha) = I + (1-cos(\alpha))N^2+sin(\alpha)N {{</math>}}
+
+	- 其中N为{{<math>}} \left( \begin{array}{lcr}
+0& -n_z&n_y\\
+n_z& 0 &-n_x\\
+-n_y&n_x&0\end{array} \right){{</math>}}
+
 
 [//]:在不同的引擎或图形API中向量、矩阵是在实际实现或使用过程会有一些细微的差别，如果在编码时不注意，可会出现一些奇怪的Bug。比如作业一的投影矩阵，如果按闫老师课程中推导来实现，就会出现三角形倒置的情况。根据笔者的项目经验，在设计或使用图形API时需要注意以下三点：1.行列矩阵的表示与内存布局，左结合与右结合3.左右手坐标系的差异与影响4.法线向量的坐标变换
