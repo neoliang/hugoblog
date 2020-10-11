@@ -117,6 +117,7 @@ int main(){
 ```
 程序输出的结果为：`(1.70711,4.12132)`，相关代码已上传到github[^pa0]
 
+下一篇：[GAMES101-学习笔记(1)-坐标变换](/posts/games101_part2)
 [^vscloud]:(https://zhuanlan.zhihu.com/p/64849549)
 [^3]:(http://www.fixedbyvonnie.com/2014/11/virtualbox-showing-32-bit-guest-versions-64-bit-host-os/)
 [^4]:(https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.zip)
