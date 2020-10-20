@@ -15,25 +15,7 @@ categories:
 测试shadertoy,p5js、video及shader编辑
 <!--more-->
 
-## 一、黑洞简介
   
-
-黑洞是恒星的一种，它的质量和引力巨大以致于连光都不能从内部逃脱。在黑洞周围，由于强引力的作用会引发时空非常大扭曲。这样，即使是被黑洞挡着的恒星发出的光，虽然有一部分会落入黑洞中消失，可另一部分也会通过弯曲的空间中绕过黑洞往前传播，这就是引力透镜效应。
-
-![Anatomy of a black hole. Credit: Illustration: ESO, ESA/Hubble, M.Kornmesser/N.Bartmann](/img/blackhole/intro.jpg)
-
-
-一个黑洞由四个部分组成（如上图所示 ）
-  
-
-1. 奇点，位于黑洞的最中心，体积无限小，质量无限大的点，这两种特性使得奇点的密度无限大，具有很强大的引力，以至于所有掉入黑洞的物质和能量最终都会坍缩和终结于这里。
-1. 事件视界，以奇点为中心某一特定半径的球形区域，物质和能量一旦跨越该边界将被黑洞引力吸入奇点，一去不复返。
-1. 吸积盘，事件视界之外的气体、星尘在黑洞强大的引力作用下，会朝向黑洞下落。这个过程被称作“黑洞吸积”。由于气体具有一定的角动量，这些气体在下落过程中会形成一个围绕黑洞高速旋转的盘状结构，如同太阳系的各大行星轨道平面一样，这就是黑洞吸积盘[^2]。
-1. 相对论喷流，吸积盘上的气体、星尘有部分会跨越事件视界落入黑洞，从而产生粒子，能量等从黑洞的两极接近光速喷射而出，形成相对论喷流。  
-[^2]:(https://zhuanlan.zhihu.com/p/30445343)
-
-
-
 ### P5 Instance
 {{<p5js_ins  >}}
 
@@ -71,8 +53,8 @@ sketch.draw = ()=>{
 }
 {{</p5js_ins >}}
 
-### P5
-#### 蒙得里安梯田
+
+## 1. 多项式插值
 {{<rawhtml>}}
   Sigma: <span id="demo"></span><br>
   <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
@@ -93,42 +75,174 @@ onSlideInput = function() {
 slider.oninput = onSlideInput;
 onSlideInput();
 
-</script>
-{{</rawhtml>}}
-{{<p5js id=interpolation >}}
-function MakeParticle(col,lifetime)
+function GaussianElimination(matrix)
 {
-    let pos  = [random(0,width), random(0,height)]; let pre_pos = pos;
-    return function(){ //update particle  return true if dead
-      stroke(col); line(pre_pos[0],pre_pos[1],pos[0],pos[1]);     
-      if (lifetime-- <= 0) return true;
-      let a = noise(pos[0]/2000,pos[1]/2000)*2000;
-      pre_pos = pos;
-      pos = [pos[0]+cos(a)*5,pos[1] +sin(a)*5];
-      return false;
+    let N = matrix.length;
+    if (N != matrix[0].length - 1)
+        return
+    for (let row = 0; row < N - 1; ++row)
+    {
+        //step0 find maxrow and swap
+        let maxE = matrix[row][row];
+        let maxIdx = row;
+        for (let i = row + 1; i < N; ++i)
+        {
+            if (maxE < matrix[i][row])
+            {
+                maxE = matrix[i][row];
+                maxIdx = i;
+            }
+        }
+        //0.1 swap
+        if (maxIdx != row)
+        {
+            for (let j = row; j < N + 1; ++j)
+            {
+                let t = matrix[maxIdx][j];
+                matrix[maxIdx][j] = matrix[row][j];
+                matrix[row][j] = t;
+            }
+        }
+        if (Math.abs(matrix[row][row]) < 0.001)
+        {
+          return;
+        }
+        //elimination cols below row
+        for (let i = row + 1; i < N; ++i)
+        {
+            let ef = -matrix[i][row] / matrix[row][row];
+            for (let j = row; j < N + 1; ++j)
+            {
+                matrix[i][j] += ef * matrix[row][j];
+            }
+        }
+    }
+    //elimination cols up row
+    for (let row = N - 1; row >= 0; --row)
+    {
+        matrix[row][N] = matrix[row][N] / matrix[row][row];
+        matrix[row][row] = 1.0;
+        for (let j = row - 1; j >= 0; --j)
+        {
+            //
+            matrix[j][N] -= matrix[row][N] * matrix[j][row];
+            matrix[j][row] = 0;
+        }
     }
 }
-function MakeParticleSystem(num,col,lifetime)
+
+function GetPolynomialInterpolation(points)
 {
-    let parts = Array.from({length:num},_=>MakeParticle(col,lifetime)); //create num of particles   
-    return  _=> parts.map(p=>p()).every(dead=>dead); //update layer until all particles die
+    if (points == null || points.length <= 1) //点必须大于1
+    {
+        return null;
+    }
+    let n = points.length;
+    let matrix = Array.from({length:n});
+    for (let i = 0; i < n; ++i)
+    {
+        matrix[i] = Array.from({length:n});
+        matrix[i][0] = 1;//常数项
+        for (let j = 1; j < n; ++j)
+        {
+            matrix[i][j] = matrix[i][j - 1] * points[i].x;
+        }
+        matrix[i][n] = points[i].y; 
+    }
+    GaussianElimination(matrix);
+    return (x) =>
+    {
+        let y = matrix[0][n];
+        let dx = x;
+        for (let i = 1; i < n; ++i)
+        {
+            y += matrix[i][n] * dx;
+            dx *= x;
+        }
+        return y;
+    };
 }
-function MakeParticleLayer(configs)
+</script>
+{{</rawhtml>}}
+{{<p5js id=interpolation height=420 >}}
+function P(x,y){
+  return {x:x,y:y};
+}
+function DrawFunc(f, xa, xb,c)
 {
-  let layers = configs.map(cfg =>MakeParticleSystem(cfg.num,cfg.col,cfg.lifetime));
-  let iter = 0;
-  return _=> {//run particle layer , if dead then next 
-    if( iter < layers.length && layers[iter]()) ++iter;
+    let x = xa;
+    let y = f(x);
+    let N = 200;
+    for (let i = 1; i <= N; ++i)
+    {
+        let t = float(i) / N;
+        let x1 = xa*(1-t)+t*xb;
+        let y1 = f(x1);
+        //stroke(c);
+        line(x,y,x1,y1);
+
+        x = x1;
+        y = y1;
+    }
+}
+let radius = 8;
+let points = [P(50,50),P(100,250),P(300,height*0.5),P(width*0.75,height*0.7),P(width*0.9,height*0.68)]
+let selectedIdx = -1;
+let interFunc = null;
+function distance(a,b)
+{
+  return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+}
+function mousePressed(){
+  console.log("mousePressed",mouseX,mouseY)
+  selectedIdx = -1;
+  for(let i = 0;i<points.length;++i)
+  {
+    let d = distance(points[i],P(mouseX,mouseY))
+    if(d <= radius) 
+    {
+      selectedIdx = i;
+      break;
+    }
+  }
+  if(mouseButton === RIGHT && selectedIdx !== -1)//del selected
+  {
+    points[selectedIdx] = points[points.length-1];
+    points.pop();
+    selectedIdx = -1;
+    interFunc = parent.GetPolynomialInterpolation(points)
+  }
+  else if(selectedIdx == -1)
+  {
+    selectedIdx = points.length
+    points.push(P(mouseX,mouseY))
+    interFunc = parent.GetPolynomialInterpolation(points)
   }
 }
+function mouseReleased(){
+  selectedIdx = -1;
+}
+function mouseDragged() {
+  if(selectedIdx >=0)
+  {
+    points[selectedIdx]=P(mouseX,mouseY)
+    interFunc = parent.GetPolynomialInterpolation(points)
+  }
+}
+
 function setup () {
   //createCanvas (800, 400);
+  interFunc = parent.GetPolynomialInterpolation(points)
+}
+function draw(){
   colorMode(RGB,1.0);background (.976, .949, .878);
-  draw = MakeParticleLayer([{col:color(.667,.133, .141,0.35),num : 4000*parent.sigma,lifetime:100},
-      {col:color(1., .812, .337,.25),num : 800,lifetime:55},
-      {col:color(0.,.369, .608,0.25),num : 600,lifetime:35},
-      {col:color(.667,.133, .141,0.35),num : 200,lifetime:100},
-    ]);
+  fill(0)
+  points.forEach(p=>ellipse(p.x,p.y,radius,radius))
+  if(interFunc != null)
+  {
+    DrawFunc(interFunc,0,width);
+  }
+  
 }
 {{</p5js>}}
 
