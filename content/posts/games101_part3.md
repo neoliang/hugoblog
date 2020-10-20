@@ -17,3 +17,7 @@ categories:
 本文是GAMES101课程的光栅化章节中的三角光栅化、深度测试与抗锯齿组成
 <!--more-->
 ---
+
+1.insidetriangle使用重心坐标来实现
+1.ssaa,msaa (MSAA的结果与绘制顺序有关)
+2.render queue

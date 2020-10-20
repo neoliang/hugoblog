@@ -32,18 +32,43 @@ categories:
 1. 相对论喷流，吸积盘上的气体、星尘有部分会跨越事件视界落入黑洞，从而产生粒子，能量等从黑洞的两极接近光速喷射而出，形成相对论喷流。  
 [^2]:(https://zhuanlan.zhihu.com/p/30445343)
 
+
+{{<rawhtml>}}
+  Sigma: <span id="demo"></span><br>
+  <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
+  
+<script type="text/javascript" >
+function mix(a,b,f){
+  return a*f+(1-f)*b;
+}  
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+
+onSlideInput = function() {
+  output.innerHTML = slider.value/100;
+  sigma = (slider.value)/100.0;
+  run_interpolation();
+}
+slider.oninput = onSlideInput;
+onSlideInput();
+
+</script>
+{{</rawhtml>}}
 ### P5 Instance
-{{<p5js_ins >}}
+{{<p5js_ins id=interpolation >}}
+
+
 let w = width,h = height;
-sketch.colorMode(sketch.HSB,1,1,1,1)
+sketch.colorMode(sketch.HSB,1,1,mix(0.8,0.1,0.5),1)
 sketch.background(1);
 sketch.noStroke()
 
 let cols =[
-  sketch.color(0.0,0.7,0.8),
+  sketch.color(0.0,0.7,sigma),
   sketch.color(0.7,0.1,0.2),
   sketch.color(0.75,0.0,0.8)
   ]
+
 sketch.frameRate(30)
 let frame = 0
 sketch.draw = ()=>{
@@ -106,11 +131,10 @@ function setup () {
 {{</p5js>}}
 
 ---
+
 #### 气球
 {{<p5js hideCode=false noSetup=true height=900 code-height=400 >}}
-function mix(a,b,v){
-return Array.from(a,(v1,i)=> v1*v+b[i]*(1-v))
-}
+
 function ballonTail(x,y,t)
 {
 bezier(x,y,
