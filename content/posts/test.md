@@ -33,29 +33,9 @@ categories:
 [^2]:(https://zhuanlan.zhihu.com/p/30445343)
 
 
-{{<rawhtml>}}
-  Sigma: <span id="demo"></span><br>
-  <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
-  
-<script type="text/javascript" >
-function mix(a,b,f){
-  return a*f+(1-f)*b;
-}  
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
 
-onSlideInput = function() {
-  output.innerHTML = slider.value/100;
-  sigma = (slider.value)/100.0;
-  run_interpolation();
-}
-slider.oninput = onSlideInput;
-onSlideInput();
-
-</script>
-{{</rawhtml>}}
 ### P5 Instance
-{{<p5js_ins id=interpolation >}}
+{{<p5js_ins  >}}
 
 
 let w = width,h = height;
@@ -93,7 +73,29 @@ sketch.draw = ()=>{
 
 ### P5
 #### 蒙得里安梯田
-{{<p5js >}}
+{{<rawhtml>}}
+  Sigma: <span id="demo"></span><br>
+  <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
+  
+<script type="text/javascript" >
+function mix(a,b,f){
+  return a*f+(1-f)*b;
+}  
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+run_interpolation = null
+onSlideInput = function() {
+  output.innerHTML = slider.value/100;
+  sigma = (slider.value)/100.0;
+  if(run_interpolation != null)
+    run_interpolation();
+}
+slider.oninput = onSlideInput;
+onSlideInput();
+
+</script>
+{{</rawhtml>}}
+{{<p5js id=interpolation >}}
 function MakeParticle(col,lifetime)
 {
     let pos  = [random(0,width), random(0,height)]; let pre_pos = pos;
@@ -122,7 +124,7 @@ function MakeParticleLayer(configs)
 function setup () {
   //createCanvas (800, 400);
   colorMode(RGB,1.0);background (.976, .949, .878);
-  draw = MakeParticleLayer([{col:color(.667,.133, .141,0.35),num : 4000,lifetime:100},
+  draw = MakeParticleLayer([{col:color(.667,.133, .141,0.35),num : 4000*parent.sigma,lifetime:100},
       {col:color(1., .812, .337,.25),num : 800,lifetime:55},
       {col:color(0.,.369, .608,0.25),num : 600,lifetime:35},
       {col:color(.667,.133, .141,0.35),num : 200,lifetime:100},

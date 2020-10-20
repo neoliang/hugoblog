@@ -1,5 +1,5 @@
 
-{{ $id := delimit (shuffle (seq 1 9)) "" }}
+{{ $id := or (.Get "id") (delimit (shuffle (seq 1 9)) "") }}
 {{ $editor_id := printf "editor_%s" $id }}
 {{ $code_height := or (.Get "code-height") 360 }}
 {{ $height := or (.Get "height") 360}}
@@ -55,7 +55,7 @@
   if(hideCode_{{$id | safeJS }}.length > 0)
     hideCode_{{$id | safeJS }} = hideCode_{{$id | safeJS }}[0].replace(/~~~/g,"");
   codes_{{$id | safeJS }} =  codes_{{$id | safeJS }}.replace(/~~~[\s\S|.]*~~~/,"");
-  var runeditor_{{$id | safeJS  }} = createAceEditor({
+  var run_{{$id | safeJS  }} = createAceEditor({
     parent :$("#parent_{{$editor_id}}"),
     id:"{{$editor_id}}",
     height:{{ $code_height }},
@@ -77,7 +77,7 @@
     }
     lastSize_{{$id | safeJS }} = iframe.width();
     var scale = {{$height}}/720
-    runeditor_{{$id | safeJS }}();
+    run_{{$id | safeJS }}();
     iframe.height(iframe.contents().find("html").height()+4);
 
   };
