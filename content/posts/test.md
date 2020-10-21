@@ -17,47 +17,12 @@ categories:
 
   
 ### P5 Instance
-{{<p5js_ins  >}}
-
-
-let w = width,h = height;
-sketch.colorMode(sketch.HSB,1,1,mix(0.8,0.1,0.5),1)
-sketch.background(1);
-sketch.noStroke()
-
-let cols =[
-  sketch.color(0.0,0.7,sigma),
-  sketch.color(0.7,0.1,0.2),
-  sketch.color(0.75,0.0,0.8)
-  ]
-
-sketch.frameRate(30)
-let frame = 0
-sketch.draw = ()=>{
-  sketch.background(1);
-  sketch.stroke(0,0,0.75);
-  sketch.noFill();
-  sketch.rect(0,0,w,h);
-  let i = 0
-  ++frame
-  for(let x = 40;x<w;x+=50+(i%3)*20)
-  {
-    sketch.fill(cols[i++%3])
-    for(let y = 40;y<h;y+=45)
-    {
-      let t = sketch.noise(x/500,(y)/500)*40
-      let s = (Math.sin((frame/15+t))*-0.5+0.5)*30 
-      sketch.ellipse(x+sketch.noise(x/100,y/100,frame/10),y,s,s)
-    }
-  }
-}
-{{</p5js_ins >}}
 
 
 ## 1. 多项式插值
 {{<rawhtml>}}
-  Sigma: <span id="demo"></span><br>
-  <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
+  最小二乘法 M:<span id="demo"></span><br>
+  <input type="range" min="0" max="100" value="10" class="slider" id="myRange">
   
 <script type="text/javascript" >
 function mix(a,b,f){
@@ -66,11 +31,18 @@ function mix(a,b,f){
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 run_interpolation = null
+LeastM = 5
+ValueChangedCallback = null
 onSlideInput = function() {
-  output.innerHTML = slider.value/100;
-  sigma = (slider.value)/100.0;
-  if(run_interpolation != null)
-    run_interpolation();
+  
+  let m = Math.round((slider.value)/100.0 *8 + 2);
+  output.innerHTML = m;
+  if(m != LeastM){
+    LeastM = m
+    if(ValueChangedCallback !== null)
+      ValueChangedCallback()
+  }
+
 }
 slider.oninput = onSlideInput;
 onSlideInput();
@@ -131,7 +103,7 @@ function GaussianElimination(matrix)
     }
 }
 
-function GetPolynomialInterpolation(points)
+function Polynomial(points)
 {
     if (points == null || points.length <= 1) //点必须大于1
     {
@@ -143,15 +115,14 @@ function GetPolynomialInterpolation(points)
     {
         matrix[i] = Array.from({length:n});
         matrix[i][0] = 1;//常数项
-        for (let j = 1; j < n; ++j)
+        for (let j = 1; j < n; ++j)//a0+a1x+a2x^2
         {
             matrix[i][j] = matrix[i][j - 1] * points[i].x;
         }
         matrix[i][n] = points[i].y; 
     }
     GaussianElimination(matrix);
-    return (x) =>
-    {
+    return x => {
         let y = matrix[0][n];
         let dx = x;
         for (let i = 1; i < n; ++i)
@@ -160,7 +131,32 @@ function GetPolynomialInterpolation(points)
             dx *= x;
         }
         return y;
-    };
+    }
+}
+let add = (a,b) => a+b
+//f(x) = a0+a1x+a2x^2...+amx^m
+function LeastSquare(points,m)
+{
+  m = Math.min(points.length-1,m)
+  let matrix = Array.from({length:m+1})
+  for (let j = 0; j <= m; j++) {
+    matrix[j]=Array.from({length:m+2})
+    for (let i = 0; i <=m; i++) {
+      matrix[j][i] = points.map(p=>p.x**i * p.x**j).reduce(add)
+    }
+    matrix[j][m+1] = points.map(p=>p.y * p.x**j).reduce(add)
+  }
+  GaussianElimination(matrix);
+  return x => {
+        let y = matrix[0][m+1];
+        let dx = x;
+        for (let i = 1; i <= m; ++i)
+        {
+            y += matrix[i][m+1] * dx;
+            dx *= x;
+        }
+        return y;
+    }
 }
 </script>
 {{</rawhtml>}}
@@ -170,53 +166,41 @@ function P(x,y){
 }
 function DrawFunc(f, xa, xb,c)
 {
-    let x = xa;
-    let y = f(x);
+    let x = xa, y = f(x)
     let N = 200;
-    for (let i = 1; i <= N; ++i)
+    stroke(c);
+    for (let t = 1/N; t <= 1; t+=1.0/N)
     {
-        let t = float(i) / N;
         let x1 = xa*(1-t)+t*xb;
-        let y1 = f(x1);
-        //stroke(c);
+        let y1 = f(x1);       
         line(x,y,x1,y1);
-
-        x = x1;
-        y = y1;
+        x = x1,y = y1;
     }
 }
 let radius = 8;
-let points = [P(50,50),P(100,250),P(300,height*0.5),P(width*0.75,height*0.7),P(width*0.9,height*0.68)]
+let points = [P(0.05,0.4),P(0.2,0.15),P(0.4,0.5),P(0.65,0.7),P(0.9,0.3)].map(p=>P(p.x*width,p.y*height))
 let selectedIdx = -1;
-let interFunc = null;
 function distance(a,b)
 {
   return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
 }
+//double click to delete 
+function doubleClicked() {
+  let mP = P(mouseX,mouseY);
+  let clickedIdx = points.findIndex(p=> distance(p,mP) <= radius)
+  points[clickedIdx] = points[points.length-1];
+  points.pop();
+  DrawInterpolations()
+}
 function mousePressed(){
-  console.log("mousePressed",mouseX,mouseY)
-  selectedIdx = -1;
-  for(let i = 0;i<points.length;++i)
-  {
-    let d = distance(points[i],P(mouseX,mouseY))
-    if(d <= radius) 
-    {
-      selectedIdx = i;
-      break;
-    }
-  }
-  if(mouseButton === RIGHT && selectedIdx !== -1)//del selected
-  {
-    points[selectedIdx] = points[points.length-1];
-    points.pop();
-    selectedIdx = -1;
-    interFunc = parent.GetPolynomialInterpolation(points)
-  }
-  else if(selectedIdx == -1)
+  let mP = P(mouseX,mouseY);
+  selectedIdx = points.findIndex(p=> distance(p,mP) <= radius)
+  console.log("mousePressed",mouseX,mouseY,selectedIdx)
+  if(selectedIdx == -1)
   {
     selectedIdx = points.length
     points.push(P(mouseX,mouseY))
-    interFunc = parent.GetPolynomialInterpolation(points)
+    DrawInterpolations()
   }
 }
 function mouseReleased(){
@@ -226,23 +210,29 @@ function mouseDragged() {
   if(selectedIdx >=0)
   {
     points[selectedIdx]=P(mouseX,mouseY)
-    interFunc = parent.GetPolynomialInterpolation(points)
+    DrawInterpolations()
   }
 }
-
-function setup () {
-  //createCanvas (800, 400);
-  interFunc = parent.GetPolynomialInterpolation(points)
-}
-function draw(){
-  colorMode(RGB,1.0);background (.976, .949, .878);
-  fill(0)
-  points.forEach(p=>ellipse(p.x,p.y,radius,radius))
-  if(interFunc != null)
-  {
-    DrawFunc(interFunc,0,width);
-  }
+function DrawInterpolations()
+{
   
+  background (.976, .949, .878);
+  fill(color(1., .812, .337))
+  strokeWeight(0.5)
+  points.forEach(p=>ellipse(p.x,p.y,radius,radius))
+  let polyInterFunc = parent.Polynomial(points)
+  let black = color(0.,.369, .608)
+  strokeWeight(1)
+  DrawFunc(polyInterFunc,0,width,black);
+  let leastInterFunc = parent.LeastSquare(points,parent.LeastM);
+  let red = color(.667,.133, .141)
+  DrawFunc(leastInterFunc,0,width,red);
+  
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  DrawInterpolations();
+  parent.ValueChangedCallback = DrawInterpolations
 }
 {{</p5js>}}
 
