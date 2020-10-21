@@ -22,7 +22,9 @@ categories:
 ## 1. 多项式插值
 {{<rawhtml>}}
   最小二乘法 M:<span id="demo"></span><br>
-  <input type="range" min="0" max="100" value="10" class="slider" id="myRange">
+  <input type="range" min="0" max="100" value="10" class="slider" id="myRange"><br>
+   Gauss 基函数 sigma:<span id="sigmaValue"></span><br>
+     <input type="range" min="0" max="100" value="50" class="slider" id="sigmaRange"><br>
   
 <script type="text/javascript" >
 function mix(a,b,f){
@@ -32,8 +34,9 @@ var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 run_interpolation = null
 LeastM = 5
+
 ValueChangedCallback = null
-onSlideInput = function() {
+let onSlideInput = function() {
   
   let m = Math.round((slider.value)/100.0 *8 + 2);
   output.innerHTML = m;
@@ -46,6 +49,22 @@ onSlideInput = function() {
 }
 slider.oninput = onSlideInput;
 onSlideInput();
+
+GaussSigma = 1
+var sigmaSlider = document.getElementById("sigmaRange");
+var sigmaOutput = document.getElementById("sigmaValue");
+let onSigmaSlideInput = function(){
+    let s = Math.round((sigmaSlider.value)/100.0 *29 + 1);
+    sigmaOutput.innerHTML = s
+    if(s != GaussSigma)
+    {
+      GaussSigma = s
+      if(ValueChangedCallback != null)
+        ValueChangedCallback()
+    }
+}
+sigmaSlider.oninput = onSigmaSlideInput
+onSigmaSlideInput()
 
 function GaussianElimination(matrix)
 {
@@ -158,6 +177,44 @@ function LeastSquare(points,m)
         return y;
     }
 }
+function G(points,x,i){
+  let dx = x-points[i].x;
+  return Math.exp(-0.5*dx*dx/(GaussSigma*GaussSigma))
+}
+function Gaussian(points)
+{
+    if (points == null || points.length <= 1) //点必须大于1
+    {
+        return null;
+    }
+    let n = points.length;
+    let matrix = Array.from({length:n});
+    for (let i = 0; i < n; ++i)
+    {
+        matrix[i] = Array.from({length:n});
+        matrix[i][0] = 1;//常数项
+        for (let j = 1; j < n; ++j)
+        {
+            console.log(G(points,points[i].x,j));
+            matrix[i][j] = G(points,points[i].x,j);
+
+        }
+
+        matrix[i][n] = points[i].y; 
+        console.log(matrix[i]);
+    }
+    console.log("ddd",matrix)
+    GaussianElimination(matrix);
+
+    return x => {
+        let y = matrix[0][n];
+        for (let i = 1; i < n; ++i)
+        {
+            y += matrix[i][n] * G(points,x,i);
+        }
+        return y;
+    }
+}
 </script>
 {{</rawhtml>}}
 {{<p5js id=interpolation height=420 >}}
@@ -215,19 +272,20 @@ function mouseDragged() {
 }
 function DrawInterpolations()
 {
-  
   background (.976, .949, .878);
   fill(color(1., .812, .337))
-  strokeWeight(0.5)
+  strokeWeight(1.)
   points.forEach(p=>ellipse(p.x,p.y,radius,radius))
   let polyInterFunc = parent.Polynomial(points)
-  let black = color(0.,.369, .608)
+  let blue = color(0.,.369, .608)
   strokeWeight(1)
-  DrawFunc(polyInterFunc,0,width,black);
+  DrawFunc(polyInterFunc,0,width,blue);
   let leastInterFunc = parent.LeastSquare(points,parent.LeastM);
   let red = color(.667,.133, .141)
   DrawFunc(leastInterFunc,0,width,red);
-  
+  let gaussianInterFunc = parent.Gaussian(points);
+  let yellow = color(0.1,0.8)
+  DrawFunc(gaussianInterFunc,0,width,yellow);
 } 
 function setup () {  
   colorMode(RGB,1.0)
