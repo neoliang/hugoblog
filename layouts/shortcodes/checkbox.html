@@ -1,0 +1,7 @@
+{{ $id :=  (.Get "id")}}
+{{ $title := or (.Get "title") $id }}
+
+<label class="checkbox-container">{{$title}}
+  <input type="checkbox" checked="checked" id="{{$id}}">
+  <span class="checkmark"></span>
+</label>

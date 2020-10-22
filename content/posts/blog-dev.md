@@ -9,6 +9,7 @@ classes:
 - feature-figcaption-hidden
 - feature-chart
 - feature-ace
+- feature-ui
 categories:
 - Demo
 
@@ -79,6 +80,24 @@ categories:
 #### 2020-10-11
 - 代码编辑器运行按钮嵌入（参考Shadertoy） 
 - 代码编辑器折叠按钮和文字美化 （参考Shadertoy） 
+
+#### 2020-10-22
+- 支持简单的ui嵌入
+{{<row>}}
+{{<col width= 0.4 >}}
+{{<sliderbar id=test1 width=0.9 title=sigma >}}
+{{</col>}}
+{{<col width= 0.4 >}}
+{{<sliderbar id=test2 width=0.7 >}}
+{{<sliderbar id=test2 width=0.7 >}}
+{{</col>}}
+{{<col width= 0.2 >}}
+{{<checkbox id=abcd >}}
+{{<checkbox id=tg2dd >}}
+{{<checkbox id=tjjd2 >}}
+  {{<checkbox id=tjjd2 >}}
+{{</col>}}
+{{</row>}}
 
 ### 待完善功能
 

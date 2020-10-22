@@ -1,0 +1,8 @@
+
+{{ $id :=  (.Get "id")}}
+{{$w := mul (or (.Get "width") 1) 100.0}}
+{{ $title := or (.Get "title") $id }}
+
+
+<span id="slider_value_{{$id}}">{{$title}}</span><br>
+<input type="range" min="0" max="100" value="10" class="slider" id="slider_{{$id}}" style="width: {{$w}}%"><br>

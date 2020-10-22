@@ -58,7 +58,12 @@
 		<script src="/js/ace.min/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/js/acehelper.js" type="text/javascript" charset="utf-8"></script>
 			{{- end -}}
-		{{- end -}}		
+		{{- end -}}
+		{{ if or (in .Site.Params.classes "feature-ui") (in .Params.classes "feature-ui") -}}
+			{{- if not (or (in .Site.Params.classes "feature-noui") (in .Params.classes "feature-noui") ) -}}
+		<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/simpleui.css" />
+			{{- end -}}
+		{{- end -}}			
 		{{ with .Site.Params.head }}{{ range . }}
 		{{ . | safeHTML }}{{ end }}{{ end }}
 		<script src="{{ "js/story.js" | absURL }}"></script>

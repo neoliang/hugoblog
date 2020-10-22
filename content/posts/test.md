@@ -9,6 +9,7 @@ classes:
 - feature-figcaption-hidden
 - feature-chart
 - feature-ace
+- feature-ui
 categories:
 - Demo
 ---
@@ -19,6 +20,21 @@ categories:
 ### P5 Instance
 
 
+{{<row>}}
+{{<col width= 0.4 >}}
+{{<sliderbar id=test1 width=0.9 title=sigma >}}
+{{</col>}}
+{{<col width= 0.4 >}}
+{{<sliderbar id=test2 width=0.7 >}}
+{{<sliderbar id=test2 width=0.7 >}}
+{{</col>}}
+{{<col width= 0.2 >}}
+{{<checkbox id=abcd >}}
+{{<checkbox id=tg2dd >}}
+{{<checkbox id=tjjd2 >}}
+  {{<checkbox id=tjjd2 >}}
+{{</col>}}
+{{</row>}}
 ## 1. 多项式插值
 {{<rawhtml>}}
   最小二乘法 M:<span id="demo"></span><br>
