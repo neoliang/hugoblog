@@ -187,7 +187,7 @@ function Polynomial(points)
 相应的插值图形如下：
 >鼠标左键选中点拖动，单击空白处添加新点，双击删除
 
-{{<p5js hideCode=true >}}
+{{<p5js defaultFold=true >}}
 let radius = 6
 let  P = (x,y)=>{return {x:x,y:y}}
 let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
