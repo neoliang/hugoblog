@@ -100,15 +100,13 @@ function GaussianElimination(matrix)
                 maxIdx = i;
             }
         }
+
         //0.1 swap
         if (maxIdx != row)
         {
-            for (let j = row; j < N + 1; ++j)
-            {
-                let t = matrix[maxIdx][j];
-                matrix[maxIdx][j] = matrix[row][j];
-                matrix[row][j] = t;
-            }
+          let t = matrix[maxIdx];
+          matrix[maxIdx] = matrix[row]
+          matrix[row] = t; 
         }
         if (Math.abs(matrix[row][row]) < 0.001)
         {
@@ -211,15 +209,11 @@ function Gaussian(points)
         matrix[i][0] = 1;//常数项
         for (let j = 1; j < n; ++j)
         {
-            console.log(G(points,points[i].x,j));
             matrix[i][j] = G(points,points[i].x,j);
 
         }
-
         matrix[i][n] = points[i].y; 
-        console.log(matrix[i]);
     }
-    console.log("ddd",matrix)
     GaussianElimination(matrix);
 
     return x => {
@@ -233,10 +227,12 @@ function Gaussian(points)
 }
 </script>
 {{</rawhtml>}}
+{{<jsfile src=/js/posts/interpolation.js >}}
 {{<p5js id=interpolation height=420 >}}
 function P(x,y){
   return {x:x,y:y};
 }
+
 function DrawFunc(f, xa, xb,c)
 {
     let x = xa, y = f(x)
@@ -252,40 +248,7 @@ function DrawFunc(f, xa, xb,c)
 }
 let radius = 8;
 let points = [P(0.05,0.4),P(0.2,0.15),P(0.4,0.5),P(0.65,0.7),P(0.9,0.3)].map(p=>P(p.x*width,p.y*height))
-let selectedIdx = -1;
-function distance(a,b)
-{
-  return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
-}
-//double click to delete 
-function doubleClicked() {
-  let mP = P(mouseX,mouseY);
-  let clickedIdx = points.findIndex(p=> distance(p,mP) <= radius)
-  points[clickedIdx] = points[points.length-1];
-  points.pop();
-  DrawInterpolations()
-}
-function mousePressed(){
-  let mP = P(mouseX,mouseY);
-  selectedIdx = points.findIndex(p=> distance(p,mP) <= radius)
-  console.log("mousePressed",mouseX,mouseY,selectedIdx)
-  if(selectedIdx == -1)
-  {
-    selectedIdx = points.length
-    points.push(P(mouseX,mouseY))
-    DrawInterpolations()
-  }
-}
-function mouseReleased(){
-  selectedIdx = -1;
-}
-function mouseDragged() {
-  if(selectedIdx >=0)
-  {
-    points[selectedIdx]=P(mouseX,mouseY)
-    DrawInterpolations()
-  }
-}
+
 function DrawInterpolations()
 {
   background (.976, .949, .878);
@@ -307,6 +270,7 @@ function setup () {
   colorMode(RGB,1.0)
   DrawInterpolations();
   parent.ValueChangedCallback = DrawInterpolations
+  parent.createInterpolation(this,points,radius,DrawInterpolations)
 }
 {{</p5js>}}
 

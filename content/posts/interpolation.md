@@ -28,10 +28,11 @@ categories:
 - x=2，y=6
 - x=4，y=5
 - x=5，y=7
-- 求x=3时，y=?
-这个题怎么做[^2]？
-[^2]:(https://www.matongxue.com/madocs/126/)
+- 求x=3时，y=?这个题怎么做[^2]？
 
+可以用插值来解决这问题，下面我们详细介绍。
+
+[^2]:(https://www.matongxue.com/madocs/126/)
 
 # 插值
 
@@ -49,51 +50,159 @@ categories:
 
 考虑上面估计周三火星到太阳的距离，即求{{<math>}}f(3){{</math>}},由于3在2和4之间，最简单的办法就是对x=2和x=4对应的两个点(x_a,y_a)和(x_b,y_b)做线性插值，对应的公式为：
 - {{<math>}}y=y_a+(y_b-y_a) * \frac{x-x_a}{x_b-x_a}{{</math>}}
-这种近似太粗糙，分段的线性插值在每一个插值点的突变比较明显，左右不连续，如下图所示
+相应的插值结果如下图所示
+>鼠标左键选中点拖动，单击空白处添加新点，双击删除
+
+{{<jsfile src=/js/posts/interpolation.js >}}
 
 {{<p5js id=interpolation defaultFold=true >}}
 let  P = (x,y)=>{return {x:x,y:y}}
-function DrawFunc(f, xa, xb,c)
+let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
+function LinearInterpolation(points)
 {
-    let x = xa, y = f(x)
-    let N = 200;
-    stroke(c);
-    for (let t = 1/N; t <= 1; t+=1.0/N)
-    {
-        let x1 = xa*(1-t)+t*xb;
-        let y1 = f(x1);       
-        line(x,y,x1,y1);
-        x = x1,y = y1;
-    }
-}
-let points = [P(0.05,0.4),P(0.2,0.2),P(0.3,0.5),P(0.65,0.8),P(0.9,0.3)].map(p=>P(p.x*width,p.y*height))
-function LinearInterpolation(ps)
-{
+  let ps = points.map(p=>P(p.x,p.y))//copy
+  ps.sort((a,b)=>a.x-b.x)
   return x=>{
     let i = ps.findIndex(p=>p.x > x)
-    if(i > 0){
-      let f = (x - ps[i-1].x)/(ps[i].x-ps[i-1].x)
-      return ps[i-1].y*(1-f)+f*ps[i].y;
-    }
-    return 0;
+    i = Math.min(ps.length-1,Math.max(i,1))
+    //线性插值
+    let f = (x - ps[i-1].x)/(ps[i].x-ps[i-1].x)
+    return ps[i-1].y*(1-f)+f*ps[i].y;
   }
 }
 function DrawInterpolations()
 {
   background (.976, .949, .878);
-  fill(color(1., .812, .337))
-  strokeWeight(1.)
-  points.forEach(p=>ellipse(p.x,p.y,5,5))
+  fill(color(1, 0.81, 0.34))
+  points.forEach(p=>ellipse(p.x,p.y,6,6))
   let polyInterFunc = LinearInterpolation(points)
-  let blue = color(0.,.369, .608)
-  strokeWeight(1)
-  DrawFunc(polyInterFunc,points[0].x,points[points.length-1].x,blue);
+  let blue = color(0,0.369, 0.608)
+  parent.DrawFunc(this,polyInterFunc,blue);
 } 
 function setup () {  
   colorMode(RGB,1.0)
   DrawInterpolations();
+  parent.createInterpolation(this,points,6,DrawInterpolations)
 }
 {{</p5js>}}
+分段的线性插值在每一个插值点的突变比较明显，自然界中很少见这种弯折的线段，不管是汽车的行驶路线还是行星的运动轨迹，都是平滑的，都不会在在某一个点有明显的突变或弯折。因为运行的物体速度或加速度的变化在时间上是连续的，不太可能会出现跳跃情况。这就要相应的插值函数具有多阶可导的性质，多项式插值就是其中一类函数。
+
 ## 二、多项式插值
 
+多项式插值是线性插值的推广。线性插值是一个线性函数。我们现在用一个更高阶的多项式代替这个插值。 对于n个点{{<math>}}P_j(x_j,y_j), j=1,2,\dots,n{{</math>}}，可以使用多项式函数
+- {{<math>}}f(x)=\sum_{i=0}^{n-1}\alpha_i B_i(x){{</math>}} 插值 {{<math>}}\{P_j\}{{</math>}}，其中 {{<math>}}B_i(x)=x^i{{</math>}}
+求插值函数有多种方法，我们逐一来介绍
 
+### 2.1 线性方程
+考虑上面的火星运行轨迹，有四个已知点，可以联立方程组求出{{<math>}}f(x)=a+bx+cx^2+dx^3{{</math>}}这个三次多项式的参数{{<math>}}a,b,c,d{{</math>}}
+{{<math>}}
+\begin{cases}
+    3=a+b+c+d\\
+    6=a+2b+4c+8d\\
+    5=a+4b+16c+64d\\
+    7=a+5b+25c+125d
+\end{cases}
+{{</math>}}
+有4个未知数和4个方程，我们可以求出三次多项式（如果有唯一解的话）一定同时经过已知的四个点。
+
+求解线性方程组常用的方法是高斯消元法，高斯消元法的实现比较简单，通常用矩阵来表示方程组的系数，我们先从上到下，从左到右逐列消除矩阵左下角的的元素，然后按相反的操作顺序消除右上角的元素，即可解出方程，具体过程如下[^3]：
+![高斯消元法实现过程](/img/gaussian_elimination.jpg)
+值得注意的是，我们在消除左下角的元素时，可能会出现当前对角线的元素为零的情况，但我们可以找到该元素所有的列后面最大的非零元素，然后将最大元素所在的行与当前行变换即可。如果最大元素为零，那么表示方程无解。相关代码如下：
+{{<ace allowRunning=true >}}
+function GaussianElimination(matrix)
+{
+    let N = matrix.length;
+    if (N != matrix[0].length - 1)
+        return
+    for (let row = 0; row < N - 1; ++row)
+    {
+        //step0 find max index of row
+        let maxE = matrix[row][row];
+        let maxIdx = row;
+        for (let i = row + 1; i < N; ++i)
+        {
+            if (maxE < matrix[i][row])
+            {
+                maxE = matrix[i][row];
+                maxIdx = i;
+            }
+        }
+        //0.1 swap max row
+        if (maxIdx != row)
+        {
+          let t = matrix[maxIdx];
+          matrix[maxIdx] = matrix[row]
+          matrix[row] = t;
+        }
+        if (Math.abs(matrix[row][row]) < 0.0001)
+        {
+          return;
+        }
+        //step 1 elimination cols below row
+        for (let i = row + 1; i < N; ++i)
+        {
+            let ef = -matrix[i][row] / matrix[row][row];
+            for (let j = row; j < N + 1; ++j)
+            {
+                matrix[i][j] += ef * matrix[row][j];
+            }
+        }
+    }
+    //step2 elimination cols up row
+    for (let row = N - 1; row >= 0; --row)
+    {
+        matrix[row][N] = matrix[row][N] / matrix[row][row];
+        matrix[row][row] = 1.0;
+        for (let j = row - 1; j >= 0; --j)
+        {
+            matrix[j][N] -= matrix[row][N] * matrix[j][row];
+            matrix[j][row] = 0;
+        }
+    }
+}  
+//多项式插值
+function Polynomial(points)
+{
+    let n = points.length;
+    let matrix = Array.from({length:n},(_,i)=>{
+      //f(x) = a0+a1*x+a2*x^2...+an*x^n
+      let vecA = Array.from({length:n},(v,k)=>points[i].x**k)
+      vecA.push(points[i].y)
+      return vecA
+    })
+    GaussianElimination(matrix);
+    return x => {
+        let y = matrix[0][n];
+        let dx = x;
+        for (let i = 1; i < n; ++i)
+        {
+            y += matrix[i][n] * dx;
+            dx *= x;
+        }
+        return y;
+    }
+}
+{{</ace>}}
+
+相应的插值图形如下：
+>鼠标左键选中点拖动，单击空白处添加新点，双击删除
+
+{{<p5js hideCode=true >}}
+let radius = 6
+let  P = (x,y)=>{return {x:x,y:y}}
+let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
+function DrawInterpolations()
+{
+  background (.976, .949, .878);
+  points.forEach(p=>ellipse(p.x,p.y,radius,radius))
+  let polyInterFunc = parent.Polynomial(points)
+  let blue = color(0.,.369, .608)
+  parent.DrawFunc(this,polyInterFunc,blue);
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  DrawInterpolations();
+  parent.createInterpolation(this,points,radius,DrawInterpolations)
+}
+{{</p5js>}}
+[^3]:(https://en.wikipedia.org/wiki/Gaussian_elimination)
