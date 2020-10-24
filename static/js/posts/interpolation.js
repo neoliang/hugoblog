@@ -1,7 +1,6 @@
 function P(x,y){
   return {x:x,y:y};
 }
-
 function DrawFunc(p5,f,c,xa=0, xb=null)
 {
     if(xb === null) xb = p5.width
@@ -12,7 +11,7 @@ function DrawFunc(p5,f,c,xa=0, xb=null)
     {
         let x1 = xa*(1-t)+t*xb;
         let y1 = f(x1);       
-        p5.line(x,y,x1,y1);
+        p5.line(x,p5.height-y,x1,p5.height-y1);
         x = x1,y = y1;
     }
 }
@@ -25,7 +24,7 @@ function createInterpolation(p5,points,radius,onPointsChanged){
     let selectedIdx = -1;
     //double click to delete 
     p5.doubleClicked = ()=>{
-      let mP = P(p5.mouseX,p5.mouseY);
+      let mP = P(p5.mouseX,p5.height - p5.mouseY);
       let clickedIdx = points.findIndex(p=> distance(p,mP) <= radius)
       if(clickedIdx >=0){
         points[clickedIdx] = points[points.length-1];
@@ -36,7 +35,7 @@ function createInterpolation(p5,points,radius,onPointsChanged){
 
     }
     p5.mousePressed =()=>{
-      let mP = P(p5.mouseX,p5.mouseY);
+      let mP = P(p5.mouseX,p5.height - p5.mouseY);
       selectedIdx = points.findIndex(p=> distance(p,mP) <= radius)
       
       if(selectedIdx == -1)
@@ -52,7 +51,7 @@ function createInterpolation(p5,points,radius,onPointsChanged){
     p5.mouseDragged =()=>{
       if(selectedIdx >=0)
       {
-        points[selectedIdx]=P(p5.mouseX,p5.mouseY);
+        points[selectedIdx]=P(p5.mouseX,p5.height - p5.mouseY);
         onPointsChanged()
       }
     }
