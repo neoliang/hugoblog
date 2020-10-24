@@ -283,8 +283,8 @@ function setup () {
 {{<math>}}G_i(x)=y_i f_i(x_i){{</math>}}，[^4]
   - {{<math>}}f_i(x_j)=\begin{cases}1&i=j\\0&i\ne j\end{cases}{{</math>}}
   - 对于经过三个点的函数，可以如下构造{{<math>}}f_1(x){{</math>}}很显然可以满足上述条件（代值进去就可以验算）：{{<math>}} f_1(x)=\frac{(x-x_2)(x-x_3)}{(x_1-x_2)(x_1-x_3)}{{</math>}}
-  - 更一般地有： {{<math>}}\displaystyle f_i(x)=\prod_{j=0,j\ne i}^{n}\frac{(x-x_j)}{(x_i-x_j)}{{</math>}}，很明显满足上述条件
-> 为了直观说明原因，上述图示中使用的函数{{<math>}}G_i(x){{</math>}}并不是拉格朗日函数，而是正态分布函数
+  - 更一般地有： {{<math>}}\displaystyle f_i(x)=\prod_{j=0,j\ne i}^{n}\frac{(x-x_j)}{(x_i-x_j)}{{</math>}}
+> 为了直观说明原理，上述图示中使用的函数{{<math>}}G_i(x){{</math>}}并不是拉格朗日函数，而是正态分布函数
 
 拉格朗日插值的结果与多项式完全相同，对应的代码如下：
 {{<ace allowRunning=true height=220 >}}
