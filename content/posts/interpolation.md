@@ -54,27 +54,7 @@ categories:
 >鼠标左键选中点拖动，单击空白处添加新点，双击删除
 
 {{<jsfile src=/js/posts/interpolation.js >}}
-{{<rawhtml>}}
-<script type="text/javascript">
-let points = [[0.2,0.7],[0.5,0.5],[0.85,0.85]]
-let radius = 8
-let sigma = 60;
-let absPoints = (p5) =>
-  points.map(p=>P(p[0]*p5.width,p[1]*p5.height))
-function DrawLagrangePoints(p5,c=0)
-{
-  p5.fill(1.0,0.8,0.4)
-  p5.stroke(c)
-  absPoints(p5).forEach(p=>p5.ellipse(p.x,p5.height-p.y,radius,radius))
-}
-function GetLagrangeGs(p5){ 
-  let gs = absPoints(p5).map(p=> {
-    return x=> p.y*Math.exp(-0.5*(x-p.x)**2/(sigma*sigma))
-  })  
-  return gs;  
-}
-</script>
-{{</rawhtml>}}
+
 {{<p5js id=interpolation defaultFold=true >}}
 let  P = (x,y)=>{return {x:x,y:y}}
 let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
@@ -229,7 +209,28 @@ function setup () {
 
 
 ### 2.2 拉格朗日插值法
-
+{{<rawhtml>}}
+<script type="text/javascript">
+let points = [[0.2,0.7],[0.5,0.5],[0.85,0.85]]
+let radius = 8
+let sigma = 60;
+let absPoints = (p5) =>
+  points.map(p=>P(p[0]*p5.width,p[1]*p5.height))
+function DrawLagrangePoints(p5,c=0)
+{
+  p5.fill(1.0,0.8,0.4)
+  p5.stroke(c)
+  absPoints(p5).forEach(p=>p5.ellipse(p.x,p5.height-p.y,radius,radius))
+}
+function GetLagrangeGs(p5){ 
+  let gs = absPoints(p5).map(p=> {
+    let s = sigma*p5.height/300
+    return x=> p.y*Math.exp(-0.5*(x-p.x)**2/(s*s))
+  })  
+  return gs;  
+}
+</script>
+{{</rawhtml>}}
 除了解线性方程组外，多项式插值还可以通过另外一种方式来实现，这就是以法国18世纪数学家约瑟夫·拉格朗日命名的一种多项式插值方法。虽然插值公式看起来比较复杂，但核心原理却比较简单：对于经过个n个点的函数{{<math>}}f(x){{</math>}}，可以分解成{{<math>}}n{{</math>}}个函数{{<math>}}G_i(x){{</math>}}相加来实现，{{<math>}}G_i(x){{</math>}}在点{{<math>}}(x_i,y_i){{</math>}}等于{{<math>}}y_i{{</math>}},而其它点等于0，插值公式表示如下：
 - {{<math>}}f(x)=\sum_{i=0}^n G_i(x){{</math>}}，其中{{<math>}}\begin{cases}
   G_i(x)= y_i&x=x_i\\
