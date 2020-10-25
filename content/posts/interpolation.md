@@ -83,7 +83,7 @@ function DrawInterpolations()
 function setup () {  
   colorMode(RGB,1.0)
   DrawInterpolations();
-  parent.createInterpolation(this,points,6,DrawInterpolations)
+  parent.HandleMouse(this,points,6,DrawInterpolations)
 }
 {{</p5js>}}
 分段的线性插值在每一个插值点的突变比较明显，自然界中很少见这种弯折的线段，不管是汽车的行驶路线还是行星的运动轨迹，都是平滑的，都不会在在某一个点有明显的突变或弯折。因为运行的物体速度或加速度的变化在时间上是连续的，不太可能会出现跳跃情况。这就要相应的插值函数具有多阶可导的性质，多项式插值就是其中一类函数。
@@ -204,7 +204,7 @@ function setup () {
   colorMode(RGB,1.0)
   fill(color(1, 0.81, 0.34))
   DrawInterpolations();
-  parent.createInterpolation(this,points,radius,DrawInterpolations)
+  parent.HandleMouse(this,points,radius,DrawInterpolations)
 }
 {{</p5js>}}
 [^3]:(https://en.wikipedia.org/wiki/Gaussian_elimination)
@@ -326,7 +326,7 @@ function setup () {
   colorMode(RGB,1.0)
   fill(color(1, 0.81, 0.34))
   DrawInterpolations();
-  parent.createInterpolation(this,points,radius,DrawInterpolations)
+  parent.HandleMouse(this,points,radius,DrawInterpolations)
 }
 {{</p5js>}}
 
@@ -385,7 +385,7 @@ function setup () {
   colorMode(RGB,1.0)
   fill(color(1, 0.81, 0.34))
   DrawInterpolations();
-  parent.createInterpolation(this,points,radius,DrawInterpolations)
+  parent.HandleMouse(this,points,radius,DrawInterpolations)
 }
 {{</p5js>}}
 

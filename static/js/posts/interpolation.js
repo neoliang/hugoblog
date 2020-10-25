@@ -19,7 +19,7 @@ function distance(a,b)
 {
   return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
 }
-function createInterpolation(p5,points,radius,onPointsChanged){
+function HandleMouse(p5,points,radius,onPointsChanged){
 
     let selectedIdx = -1;
     //double click to delete 
@@ -41,7 +41,7 @@ function createInterpolation(p5,points,radius,onPointsChanged){
       if(selectedIdx == -1)
       {
         selectedIdx = points.length
-        points.push(P(p5.mouseX,p5.mouseY))
+        points.push(P(p5.mouseX,p5.height- p5.mouseY))
         onPointsChanged()
       }
     }
