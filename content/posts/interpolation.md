@@ -10,12 +10,13 @@ classes:
 - feature-ui
 - feature-math
 categories:
-- Demo
+- Math
 ---
-在数学的数值分析领域中，内插或称插值（interpolation）是一种通过已知的、离散的数据点，在范围内推求新数据点的过程或方法。求解科学和工程的问题时，通常有许多数据点借由采样、实验等方法获得，这些数据可能代表了有限个数值函数，其中自变量的值。而根据这些数据，我们往往希望得到一个连续的函数（也就是曲线）；或者更密集的离散方程与已知数据互相吻合，这个过程叫做拟合[^1]。
+本文描述不同的插值与拟合算法实现，并用程序语言以图形化的方式展示不同插值和拟合函数，通过图形化的表示，我们可以直观和清晰认识到各种不同插值和拟合函数优缺点，例如函数的平滑度、准确度等。
+<!--more-->
+插值（interpolation）是一种通过已知的、离散的数据点，在范围内求新数据点的过程或方法。求解科学和工程的问题时，通常有许多数据点借由采样、实验等方法获得，这些数据可能代表了有限个数值函数，其中自变量的值。而根据这些数据，我们往往希望得到一个连续的函数（也就是曲线）；或者更密集的离散方程与已知数据互相吻合，这个过程叫做拟合[^1]。
 
 [^1]:(https://en.wikipedia.org/wiki/Interpolation)
-<!--more-->
 
 比如天文学家开普勒观察火星运行之后记录（下列数字纯属虚构）：
 周一，火星距离太阳3万公里
@@ -30,11 +31,13 @@ categories:
 - x=5，y=7
 - 求x=3时，y=?这个题怎么做[^2]？
 
-可以用插值来解决这问题，下面我们详细介绍。
+有许多不同的插值方法可以解决上述的问题，其中一些在将下面描述。在选择适当的算法时需要考虑的一些问题是：方法有多准确？ 它的计算成本有多高？ 插值有多平滑？
 
 [^2]:(https://www.matongxue.com/madocs/126/)
 
-# 插值
+# 什么是插值？
+
+前面提到拟合是根据数已知的数据集，我们可以找到一个连续的函数或者更密集的离散方程与已知数据互相吻合，插值是已经数据点全部经过拟合函数的一种特殊情况。
 
 给定n个离散数据点（称为节点）{{<math>}} (x_{k},y_{k}) k=1,2,...,n{{</math>}}。对于{{<math>}}x,(x\neq x_{k},k=1,2,...n){{</math>}}，求{{<math>}}x{{</math>}}所对应的{{<math>}}y{{</math>}}的值称为内插。
 
@@ -44,7 +47,7 @@ categories:
 
 则称{{<math>}}g(x){{</math>}}为{{<math>}}f(x){{</math>}}关于节点{{<math>}}x_{1},x_{2},x_{3}...x_{n}{{</math>}}在{{<math>}}G{{</math>}}上的插值函数。
 
-有许多不同的插值方法可以解决上述的问题，其中一些在下面描述。在选择适当的算法时需要考虑的一些问题是：方法有多准确？ 它的计算成本有多高？ 插值有多平滑？ 需要多少数据点？
+
 
 ## 一、线性插值
 
@@ -388,5 +391,94 @@ function setup () {
   parent.HandleMouse(this,points,radius,DrawInterpolations)
 }
 {{</p5js>}}
+虽然魏尔施特拉斯逼近定理表明，闭区间上的连续函数可用多项式级数一致逼近，但是多项式插值也有一些缺点，例如矩阵病态问题引起的不稳定[^5]和龙格振荡现象[^6]。使用正交多项式基可以解决上述的问题，例如Bernstein基函数和高斯基函数（？证明）,下面详情介绍高斯基函数
+
+## 三、径向基函数(RBF)插值
+
+ 多项式插值使用的是不同阶函数的线性组合 ，而径向基函数插值是使用高斯基函数的线性组合 {{<math>}} f(x)=b_0 + \sum_{i=1}^{n}b_i g_i(x) {{</math>}}，其中：
+   -  {{<math>}}g_i(x)=e^{-\frac{(x-x_i)^2}{2\sigma^2}}{{</math>}}
+
+即{{<math>}}g_i(x){{</math>}}的对称轴在插值点上，{{<math>}}i=1,…,n{{</math>}}，RBF的求解比较简单，可以将{{<math>}}b_0,\sigma{{</math>}}设置为常量，将n个点的值带入可以得到n个方程式，直接使用我们前面实现的高斯消元法即可将系数求出，相应的代码如下：
+{{<ace allowRunning=true >}}
+let b0 = 0
+function RBF(ps,sigma)
+{
+  let n = ps.length
+  let matrix = Array.from({length:n},()=>Array.from({length:n+1}))
+  let gix = (x,i)=> Math.exp(-0.5*(x-ps[i].x)**2/sigma**2)
+  for(let row=0;row<n;++row)
+  {
+    for(let i=0;i<n;++i)
+    {   
+      matrix[row][i] = gix(ps[row].x,i)
+    }
+    matrix[row][n] = ps[row].y-b0;
+  }
+  GaussianElimination(matrix)
+  return x =>{
+    let y = 1;
+    for(let i = 0;i<n;++i)
+      y += matrix[i][n]*gix(x,i)
+    return y
+  }
+}
+{{</ace>}}
+
+相应的插值图形如下：
+>鼠标左键选中点拖动，单击空白处添加新点，双击删除，左右滑动设置不同的sigma
+
+{{<sliderbar id=sigma width=0.7 title=Sigma >}}
+{{<rawhtml>}}
+<script type="text/javascript" >
+function mix(a,b,f){
+  return a*f+(1-f)*b;
+}  
+GaussianSigma = 1
+let minSigma = 1
+let maxSigma = 60
+var slider = document.getElementById("slider_sigma");
+var output = document.getElementById("slider_value_sigma");
+SigmaValueChangedCallback = null
+let onSlideInput = function() {
+  
+  let m = Math.round((slider.value)/100.0 *(maxSigma-minSigma) + minSigma);
+  output.innerHTML = "Sigma:" + m;
+  if(m != GaussianSigma){
+    GaussianSigma = m
+    if(SigmaValueChangedCallback !== null)
+      SigmaValueChangedCallback()
+  }
+
+}
+slider.value = 0;
+slider.oninput = onSlideInput;
+onSlideInput();
+
+</script>
+{{</rawhtml>}}
+{{<p5js defaultFold=true codeHeight=280 >}}
+let radius = 6
+let  P = (x,y)=>{return {x:x,y:y}}
+let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
+function DrawInterpolations()
+{
+  background (.976, .949, .878);
+  points.forEach(p=>ellipse(p.x,height-p.y,radius,radius))
+  let interFunc = parent.RBF(points,parent.GaussianSigma)
+  let blue = color(0.,.369, .608)
+  parent.Plot(this,interFunc,blue);
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
+  DrawInterpolations();
+  parent.HandleMouse(this,points,radius,DrawInterpolations)
+  parent.SigmaValueChangedCallback = DrawInterpolations
+}
+{{</p5js>}}
+
+上图的插值函数除了插值点附近，其余点基本为零，形状看起来并是很好。原因是我们将RBF的{{<math>}}\sigma{{</math>}}设置为1，通过调整不同的{{<math>}}\sigma{{</math>}}值，可以得到更好的插值函数形状。
 
 [^4]:(https://www.matongxue.com/madocs/498/)
+[^5]:(https://baike.baidu.com/item/%E7%97%85%E6%80%81%E7%9F%A9%E9%98%B5)
+[^6]:(https://en.wikipedia.org/wiki/Runge%27s_phenomenon)
