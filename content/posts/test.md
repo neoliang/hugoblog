@@ -508,6 +508,16 @@ draw = ()=>{
 }
 {{</p5js >}}
 
+
+{{<math>}}
+\begin{cases}
+    y_0&=&a_0+a_1x_0+a_2x_0^2+...+a_mx_0^m\\
+    y_1&=&a_0+a_1x_1+a_2x_1^2+...+a_mx_1^m\\
+    &\vdots&  \\
+    y_n&=&a_0+a_1x_n+a_2x_n^2+...+a_mx_n^m\\
+\end{cases}
+{{</math>}}
+
 ## shader 嵌入测试
 {{<shader >}}
 

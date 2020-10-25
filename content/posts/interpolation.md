@@ -234,6 +234,10 @@ function GetLagrangeGs(p5){
   })  
   return gs;  
 }
+function a2d(m,n) //mxn 2d array
+{
+  return Array.from({length:m},()=>Array.from({length:n}))
+}
 </script>
 {{</rawhtml>}}
 除了解线性方程组外，多项式插值还可以通过另外一种方式来实现，这就是以法国18世纪数学家约瑟夫·拉格朗日命名的一种多项式插值方法。虽然插值公式看起来比较复杂，但核心原理却比较简单：对于经过个n个点的函数{{<math>}}f(x){{</math>}}，可以分解成{{<math>}}n{{</math>}}个函数{{<math>}}G_i(x){{</math>}}相加来实现，{{<math>}}G_i(x){{</math>}}在点{{<math>}}(x_i,y_i){{</math>}}等于{{<math>}}y_i{{</math>}},而其它点等于0，插值公式表示如下：
@@ -348,7 +352,7 @@ function setup () {
 function Newtown(ps)
 {
   let n = ps.length
-  let f = Array.from({length:n},()=>Array.from({length:n}))
+  let f = a2d(n,n)
   for(let i =0;i<n-1;++i) 
     f[i][i+1] = (ps[i+1].y-ps[i].y)/(ps[i+1].x-ps[i].x)
   for(let k=2;k<n;++k){
@@ -404,7 +408,7 @@ let b0 = 0
 function RBF(ps,sigma)
 {
   let n = ps.length
-  let matrix = Array.from({length:n},()=>Array.from({length:n+1}))
+  let matrix = a2d(n,n+1)
   let gix = (x,i)=> Math.exp(-0.5*(x-ps[i].x)**2/sigma**2)
   for(let row=0;row<n;++row)
   {
@@ -478,6 +482,126 @@ function setup () {
 {{</p5js>}}
 
 上图的插值函数除了插值点附近，其余点基本为零，形状看起来并是很好。原因是我们将RBF的{{<math>}}\sigma{{</math>}}设置为1，通过调整不同的{{<math>}}\sigma{{</math>}}值，可以得到更好的插值函数形状。
+
+## 四、函数拟合
+使用多项式插值时，当数据点个数较多时，插值会导致多项式曲线阶数过高，带来不稳定因素。可通过固定幂基函数的最高次数来逼近这个数据点，所谓的逼近是指让目标函数{{<math>}}f(x){{</math>}}与数据点的距离尽可能小，令 {{<math>}}\varepsilon=\sum_{j=0}^{n}|f(x_j)-y_j|{{</math>}}，即寻找让 {{<math>}}\varepsilon {{</math>}}最小的{{<math>}}f(x){{</math>}}。{{<math>}}\varepsilon {{</math>}}的表达式中绝对值，并不好求导数。可以改写成这样的形式：{{<math>}}\varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2{{</math>}}，使用最小二乘法来求解。
+
+### 4.1 最小二乘法
+固定幂基函数的最高次数 m(m < n)。设{{<math>}} f(x) = \sum_{i=0}^{m} a_iB_i(x){{</math>}}，其中基函数 {{<math>}} B_i(x) = x^i{{</math>}}。
+- 令{{<math>}}\varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2{{</math>}}
+- 对{{<math>}}\varepsilon{{</math>}}求{{<math>}}a_j{{</math>}}偏导： {{<math>}}\frac{\partial\varepsilon}{\partial a_j}=2\sum_{k=0}^{n}(f(x_k)-y_k)x_k^j{{</math>}}，求解{{<math>}}\frac{\partial\varepsilon}{\partial a_j}=0{{</math>}}方程组即可得到所有的{{<math>}}a_j{{</math>}}
+- {{<math>}}\frac{\partial\varepsilon}{\partial a_j}=0 \Rightarrow \sum_{k=0}^{n}f(x_k)x_k^j=\sum_{k=0}^{n}y_k x_k^j{{</math>}}
+- 改写成向量的形式：{{<math>}}\vec f\cdot \vec x^j = \vec y \cdot \vec x^j{{</math>}}，其中
+  - {{<math>}}\vec y = (y_0,y_1,...,y_n){{</math>}}
+  - {{<math>}}\vec  x^j=(x_0^j,x_1^j,...x_n^j){{</math>}}
+
+  - {{<math>}}\vec f = (f(x_0),f(x_1),f(x_n))= (\vec a\cdot \vec x_0,\vec a\cdot \vec x_1,...,\vec a\cdot \vec x_n){{</math>}}
+
+对所以{{<math>}}a_j{{</math>}}求偏导，可以联立出一个方程组，通过求解方程组，我们就可以得到拟合函数的所有系数。
+
+### 4.2 岭回归拟合
+
+在上述的求解线性方程过程中,当矩阵不是列满秩时，或者某些列之间的线性相关性比较大时， 矩阵的行列式接近于0，接近于奇异，上述问题变为一个不适定问题，计算误差会很大，缺乏稳定性与可靠性。为了解决这个问题，我们需要将不适定问题转化为适定问题：可以为上述优化函数加上一个正则化项，变为：
+- {{<math>}}\varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2 + \lambda \sum_{j=0}^{n} a_j {{</math>}}，相应的方程组变为：
+-  {{<math>}}\lambda + \sum_{k=0}^{n}f(x_k)x_k^j  =\sum_{k=0}^{n}y_k x_k^j{{</math>}}
+
+根据上述公式，可以编写相应的代码如下：
+{{<ace allowRunning=true >}}
+function LeastSqure(ps,m,lambda=0)
+{
+  m = Math.min(ps.length,m)
+  let matrix = a2d(m,m+1)
+  for(let j = 0;j<m;++j)
+  {
+    for(let k=0;k<m;++k)
+    {
+      matrix[j][k] = ps.map(p=>p.x**j * p.x**k).reduce((t,v)=>t+v,0)
+    }
+    matrix[j][j] += lambda;//岭回归
+    matrix[j][m] = ps.map(p=>p.x**j * p.y).reduce((t,v)=>t+v,0)
+  }
+  GaussianElimination(matrix);
+  return x => {
+      let y = matrix[0][m];
+      let dx = x;
+      for (let i = 1; i < m; ++i)
+      {
+          y += matrix[i][m] * dx;
+          dx *= x;
+      }
+      return y;
+  }  
+}
+{{</ace>}}
+
+相应的插值图形如下：
+>鼠标左键选中点拖动，单击空白处添加新点，双击删除，左右滑动设置不同的m和{{<math>}}\lambda{{</math>}}
+
+
+{{<sliderbar id=leastM width=0.7 title=m >}}
+{{<sliderbar id=lambda width=0.7 title=lambda:0 >}}
+{{<rawhtml>}}
+<script type="text/javascript" >
+leastM = 1
+leastLambda = 0
+LeastValueChangedCallback = null
+{
+  let slider = document.getElementById("slider_leastM");
+  let output = document.getElementById("slider_value_leastM");
+  slider.oninput = function() { 
+    let m = Math.round((slider.value)/100.0 * 18 + 2);
+    output.innerHTML = "m:" + m;
+    if(m != leastM){
+      leastM = m
+      if(LeastValueChangedCallback !== null){
+        LeastValueChangedCallback()
+      }
+    }
+
+  }
+  slider.value = 5;
+  slider.oninput();
+}
+{
+  let slider = document.getElementById("slider_lambda");
+  let output = document.getElementById("slider_value_lambda");
+  slider.oninput = function() { 
+    let m = Math.round((slider.value)/100.0 * 50);
+    output.innerHTML = "lambda:" + m;
+    if(m != leastLambda){
+      leastLambda = m
+      if(LeastValueChangedCallback !== null){
+        LeastValueChangedCallback()
+      }
+    }
+
+  }
+  slider.value = 0;
+  slider.oninput();
+}
+</script>
+{{</rawhtml>}}
+{{<p5js defaultFold=true codeHeight=280 >}}
+let radius = 6
+let  P = (x,y)=>{return {x:x,y:y}}
+let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
+function DrawInterpolations()
+{
+  background (.976, .949, .878);
+  points.forEach(p=>ellipse(p.x,height-p.y,radius,radius))
+  let interFunc = parent.LeastSqure(points,parent.leastM,parent.leastLambda)
+  let blue = color(0.,.369, .608)
+  parent.Plot(this,interFunc,blue);
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
+  DrawInterpolations();
+  parent.HandleMouse(this,points,radius,DrawInterpolations)
+  parent.LeastValueChangedCallback = DrawInterpolations
+}
+{{</p5js>}}
+
 
 [^4]:(https://www.matongxue.com/madocs/498/)
 [^5]:(https://baike.baidu.com/item/%E7%97%85%E6%80%81%E7%9F%A9%E9%98%B5)
