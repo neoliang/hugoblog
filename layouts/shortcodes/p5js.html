@@ -1,7 +1,7 @@
 
 {{ $id := or (.Get "id") (delimit (shuffle (seq 1 9)) "") }}
 {{ $editor_id := printf "editor_%s" $id }}
-{{ $code_height := or (.Get "code-height") 360 }}
+{{ $code_height := or (.Get "codeHeight") 360 }}
 {{ $height := or (.Get "height") 360}}
 {{ $hideCode := or (.Get "hideCode") false  }}
 {{ $noSetup := or (.Get "noSetup") false }}

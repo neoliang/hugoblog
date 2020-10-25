@@ -50,7 +50,7 @@ categories:
 
 考虑上面估计周三火星到太阳的距离，即求{{<math>}}f(3){{</math>}},由于3在2和4之间，最简单的办法就是对x=2和x=4对应的两个点(x_a,y_a)和(x_b,y_b)做线性插值，对应的公式为：
 - {{<math>}}y=y_a+(y_b-y_a) * \frac{x-x_a}{x_b-x_a}{{</math>}}
-相应的插值结果如下图所示
+对任意相邻的两个点做线性插值，可以得到分段线性插值，相应的插值结果如下图所示
 >鼠标左键选中点拖动，单击空白处添加新点，双击删除
 
 {{<jsfile src=/js/posts/interpolation.js >}}
@@ -64,6 +64,7 @@ function LinearInterpolation(points)
   ps.sort((a,b)=>a.x-b.x)
   return x=>{
     let i = ps.findIndex(p=>p.x > x)
+    if(i<0) i=ps.length-1
     i = Math.min(ps.length-1,Math.max(i,1))
     //线性插值
     let f = (x - ps[i-1].x)/(ps[i].x-ps[i-1].x)
@@ -77,7 +78,7 @@ function DrawInterpolations()
   points.forEach(p=>ellipse(p.x,height-p.y,6,6))
   let polyInterFunc = LinearInterpolation(points)
   let blue = color(0,0.369, 0.608)
-  parent.DrawFunc(this,polyInterFunc,blue);
+  parent.Plot(this,polyInterFunc,blue);
 } 
 function setup () {  
   colorMode(RGB,1.0)
@@ -187,7 +188,7 @@ function Polynomial(points)
 相应的插值图形如下：
 >鼠标左键选中点拖动，单击空白处添加新点，双击删除
 
-{{<p5js defaultFold=true >}}
+{{<p5js defaultFold=true codeHeight=280 >}}
 let radius = 6
 let  P = (x,y)=>{return {x:x,y:y}}
 let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
@@ -197,10 +198,11 @@ function DrawInterpolations()
   points.forEach(p=>ellipse(p.x,height-p.y,radius,radius))
   let polyInterFunc = parent.Polynomial(points)
   let blue = color(0.,.369, .608)
-  parent.DrawFunc(this,polyInterFunc,blue);
+  parent.Plot(this,polyInterFunc,blue);
 } 
 function setup () {  
   colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
   DrawInterpolations();
   parent.createInterpolation(this,points,radius,DrawInterpolations)
 }
@@ -212,13 +214,13 @@ function setup () {
 {{<rawhtml>}}
 <script type="text/javascript">
 let points = [[0.2,0.7],[0.5,0.5],[0.85,0.85]]
-let radius = 8
+let radius = 6
 let sigma = 60;
 let absPoints = (p5) =>
   points.map(p=>P(p[0]*p5.width,p[1]*p5.height))
 function DrawLagrangePoints(p5,c=0)
 {
-  p5.fill(1.0,0.8,0.4)
+  p5.fill(p5.color(1, 0.81, 0.34))
   p5.stroke(c)
   absPoints(p5).forEach(p=>p5.ellipse(p.x,p5.height-p.y,radius,radius))
 }
@@ -259,7 +261,7 @@ color(0.,.369, .608),
   background (.976, .949, .878);
   parent.DrawLagrangePoints(this);
   let fs = parent.GetLagrangeGs(this);
-  fs.forEach((f,i)=>parent.DrawFunc(this,f,cols[i]))
+  fs.forEach((f,i)=>parent.Plot(this,f,cols[i]))
 } 
 function setup () {  
   colorMode(RGB,1.0)
@@ -276,15 +278,15 @@ function setup () {
   let fs = parent.GetLagrangeGs(this);
   parent.DrawLagrangePoints(this);
   let finalF = x=>  fs.reduce((v,f)=>+f(x)+v,0)
-  parent.DrawFunc(this,finalF,color(0.1,0.8))
+  parent.Plot(this,finalF,color(0.1,0.8))
 }
 {{</p5js>}}
-- 那么{{<math>}}G_i(x){{</math>}}该如何求：以下是拉格朗日的思路：令
+- 上面图示的原理比较直观，满足上述条件的函数{{<math>}}G_i(x){{</math>}}可以找到无数个，以下是拉格朗日的求解思路：令
 {{<math>}}G_i(x)=y_i f_i(x_i){{</math>}}，[^4]
   - {{<math>}}f_i(x_j)=\begin{cases}1&i=j\\0&i\ne j\end{cases}{{</math>}}
   - 对于经过三个点的函数，可以如下构造{{<math>}}f_1(x){{</math>}}很显然可以满足上述条件（代值进去就可以验算）：{{<math>}} f_1(x)=\frac{(x-x_2)(x-x_3)}{(x_1-x_2)(x_1-x_3)}{{</math>}}
   - 更一般地有： {{<math>}}\displaystyle f_i(x)=\prod_{j=0,j\ne i}^{n}\frac{(x-x_j)}{(x_i-x_j)}{{</math>}}
-> 为了直观说明原理，上述图示中使用的函数{{<math>}}G_i(x){{</math>}}并不是拉格朗日函数，而是正态分布函数
+> 备注：以上图示中使用的函数{{<math>}}G_i(x){{</math>}}并不是拉格朗日函数，而是正态分布函数
 
 拉格朗日插值的结果与多项式完全相同，对应的代码如下：
 {{<ace allowRunning=true height=220 >}}
@@ -307,7 +309,7 @@ function Lagrange(points)
 相应的插值图形如下：
 >鼠标左键选中点拖动，单击空白处添加新点，双击删除
 
-{{<p5js defaultFold=true >}}
+{{<p5js defaultFold=true codeHeight=280 >}}
 let radius = 6
 let  P = (x,y)=>{return {x:x,y:y}}
 let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
@@ -318,10 +320,70 @@ function DrawInterpolations()
   let lagrangeInterFunc = parent.Lagrange(points)
   let blue = color(0.,.369, .608)
   //lagrangeInterFunc(points[0].x)
-  parent.DrawFunc(this,lagrangeInterFunc,blue);
+  parent.Plot(this,lagrangeInterFunc,blue);
 } 
 function setup () {  
   colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
+  DrawInterpolations();
+  parent.createInterpolation(this,points,radius,DrawInterpolations)
+}
+{{</p5js>}}
+
+### 2.3 牛顿插值法
+不管是解线性方程组还是拉格朗日差值法，当新增加一个插值点时，整个插值都需要重新计算。多项式的插值复杂都是{{<math>}}O(n^3){{</math>}}，当插值点达到成千上万个的时候，重新计算一次插值函数的代价是比较高的。牛顿插值法就是为了解决重新计算的问题而提出的。
+***定义***
+- 一阶差商：{{<math>}}\displaystyle f[i,i+1]=\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}{{</math>}}
+- 二阶差商：{{<math>}}\displaystyle f[i,i+2]=\frac{f[i+1,i+2]-f[i,i+1]}{x_{i+2}-x_i}{{</math>}}
+- k阶差商：{{<math>}}\displaystyle f[i,i+k]=\frac{f[i+1,i+k]-f[i,i+k-1]}{x_{i+k}-x_i}{{</math>}}
+- 牛顿插值多项式表示为：
+{{<math>}}N_n(x)=f(x_0)+f[0,1](x-x_0)+f[0,2](x-x_0)(x-x_1)+...+f[0,n](x-x_0)(x-x_1)...(x-x_n){{</math>}}
+>以上定义的形式并不是正式的数学形式，更偏向于程序语言，这样在编程时更容易将公式转换为程序语言。
+
+牛顿插值的结果与多项式完全相同，相应的代码如下：
+{{<ace allowRunning=true >}}
+function Newtown(ps)
+{
+  let n = ps.length
+  let f = Array.from({length:n},()=>Array.from({length:n}))
+  for(let i =0;i<n-1;++i) 
+    f[i][i+1] = (ps[i+1].y-ps[i].y)/(ps[i+1].x-ps[i].x)
+  for(let k=2;k<n;++k){
+    for(let i=0;i+k<n;++i){
+      f[i][i+k] = (f[i+1][i+k]-f[i][i+k-1])/(ps[i+k].x-ps[i].x)
+    }
+  }
+  return x =>{
+    let y = ps[0].y;
+    let dx = x-ps[0].x;
+    for(let i = 1;i<n;++i){
+      y += f[0][i]*dx ;
+      dx *= x-ps[i].x;
+    }
+    return y;
+  }
+}
+{{</ace >}}
+
+相应的插值图形如下：
+>鼠标左键选中点拖动，单击空白处添加新点，双击删除
+
+{{<p5js defaultFold=true codeHeight=280 >}}
+let radius = 6
+let  P = (x,y)=>{return {x:x,y:y}}
+let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
+function DrawInterpolations()
+{
+  background (.976, .949, .878);
+  points.forEach(p=>ellipse(p.x,height-p.y,radius,radius))
+  let NewtownInterFunc = parent.Newtown(points)
+  let blue = color(0.,.369, .608)
+  //lagrangeInterFunc(points[0].x)
+  parent.Plot(this,NewtownInterFunc,blue);
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
   DrawInterpolations();
   parent.createInterpolation(this,points,radius,DrawInterpolations)
 }

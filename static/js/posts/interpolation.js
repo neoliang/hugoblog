@@ -1,7 +1,7 @@
 function P(x,y){
   return {x:x,y:y};
 }
-function DrawFunc(p5,f,c,xa=0, xb=null)
+function Plot(p5,f,c,xa=0, xb=null)
 {
     if(xb === null) xb = p5.width
     let x = xa, y = f(x)
