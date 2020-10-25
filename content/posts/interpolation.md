@@ -602,6 +602,146 @@ function setup () {
 }
 {{</p5js>}}
 
+## 五、总结
+
+{{<row>}}
+{{<col width= 0.01 >}}
+<p> </p>
+{{</col >}}
+{{<col width= 0.4 >}}
+{{<checkbox id=poly title=高斯消元 >}}
+{{<checkbox id=newtown title=牛顿迭代 >}}
+{{<checkbox id=lagrange title=拉格朗日 >}}
+{{<checkbox id=rbf title=RBF >}}
+{{<checkbox id=least title=最小二乘 >}}
+{{</col>}}
+{{<col width= 0.5 >}}
+{{<sliderbar id=t_sigma width=0.7 >}}
+{{<sliderbar id=t_lambda width=0.7 >}}
+{{<sliderbar id=t_leastM width=0.7 >}}
+{{</col>}}
+{{</row>}}
+{{<rawhtml>}}
+<script type="text/javascript" >
+t_leastM = 1
+t_leastLambda = 0
+t_sigma = 10
+t_ValueChangedCallback = null
+show = {
+  "poly":true,
+  "newtown":true,
+  "lagrange":true,
+  "rbf":true,
+  "least":true
+}
+function HandlelCheck (name){
+  let checkbox = document.getElementById("check_"+name)
+  checkbox.onclick=()=>
+  {
+    show[name] = checkbox.checked
+    if(t_ValueChangedCallback !== null){
+      t_ValueChangedCallback()
+    }
+  }  
+}
+HandlelCheck("poly")
+HandlelCheck("newtown")
+HandlelCheck("lagrange")
+HandlelCheck("rbf")
+HandlelCheck("least")
+
+{
+  let slider = document.getElementById("slider_t_leastM");
+  let output = document.getElementById("slider_value_t_leastM");
+  slider.oninput = function() { 
+    let m = Math.round((slider.value)/100.0 * 18 + 2);
+    output.innerHTML = "m:" + m;
+    if(m != t_leastM){
+      t_leastM = m
+      if(t_ValueChangedCallback !== null){
+        t_ValueChangedCallback()
+      }
+    }
+
+  }
+  slider.value = 5;
+  slider.oninput();
+}
+{
+  let slider = document.getElementById("slider_t_lambda");
+  let output = document.getElementById("slider_value_t_lambda");
+  slider.oninput = function() { 
+    let m = Math.round((slider.value)/100.0 * 50);
+    output.innerHTML = "lambda:" + m;
+    if(m != t_leastLambda){
+      t_leastLambda = m
+      if(t_ValueChangedCallback !== null){
+        t_ValueChangedCallback()
+      }
+    }
+
+  }
+  slider.value = 0;
+  slider.oninput();
+}
+{
+let slider = document.getElementById("slider_t_sigma");
+let output = document.getElementById("slider_value_t_sigma");
+let onSlideInput = function() {
+  
+  let m = Math.round((slider.value)/100.0 *59 + 1);
+  output.innerHTML = "Sigma:" + m;
+  if(m != t_sigma){
+    t_sigma = m
+    if(t_ValueChangedCallback !== null)
+      t_ValueChangedCallback()
+  }
+
+}
+slider.value = 30;
+slider.oninput = onSlideInput;
+onSlideInput();
+}
+</script>
+{{</rawhtml>}}
+{{<p5js defaultFold=true codeHeight=280 >}}
+let radius = 6
+let  P = (x,y)=>{return {x:x,y:y}}
+let points = [[0.05,0.4],[0.2,0.2],[0.3,0.5],[0.65,0.8],[0.9,0.3]].map(p=>P(p[0]*width,p[1]*height))
+function DrawInterpolations()
+{
+  background (.976, .949, .878);
+  points.forEach(p=>ellipse(p.x,height-p.y,radius,radius))
+  if(parent.show["least"]){
+    let interFunc = parent.LeastSqure(points,parent.t_leastM,parent.t_leastLambda)
+    let blue = color(0.,.369, .608)
+    parent.Plot(this,interFunc,blue);
+  }
+  if(parent.show["rbf"]){
+    let interFunc = parent.RBF(points,parent.t_sigma)
+    parent.Plot(this,interFunc,color(.667,.133, .141));
+  }
+  if(parent.show["poly"]){
+    let interFunc = parent.Polynomial(points)
+    parent.Plot(this,interFunc,color(1,0.8,0.4));
+  }
+  if(parent.show["lagrange"]){
+    let interFunc = parent.Lagrange(points)
+    parent.Plot(this,interFunc,color(0.1,0.8,0.2));
+  }
+  if(parent.show["newtown"]){
+    let interFunc = parent.Newtown(points)
+    parent.Plot(this,interFunc,color(0.2));
+  }
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
+  DrawInterpolations();
+  parent.HandleMouse(this,points,radius,DrawInterpolations)
+  parent.t_ValueChangedCallback = DrawInterpolations
+}
+{{</p5js>}}
 
 [^4]:(https://www.matongxue.com/madocs/498/)
 [^5]:(https://baike.baidu.com/item/%E7%97%85%E6%80%81%E7%9F%A9%E9%98%B5)
