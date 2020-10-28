@@ -495,8 +495,9 @@ function setup () {
 - 改写成向量的形式：{{<math>}}\vec f\cdot \vec x^j = \vec y \cdot \vec x^j{{</math>}}，其中
   - {{<math>}}\vec y = (y_0,y_1,...,y_n){{</math>}}
   - {{<math>}}\vec  x^j=(x_0^j,x_1^j,...x_n^j){{</math>}}
+  - {{<math>}}\vec f = (f(x_0),f(x_1),f(x_n))= \vec a X{{</math>}}
+  - {{<math>}}X = (\vec x^0,...,\vec x^m)^T{{</math>}}
 
-  - {{<math>}}\vec f = (f(x_0),f(x_1),f(x_n))= (\vec a\cdot \vec x_0,\vec a\cdot \vec x_1,...,\vec a\cdot \vec x_n){{</math>}}
 
 对所以{{<math>}}a_j{{</math>}}求偏导，可以联立出一个方程组，通过求解方程组，我们就可以得到拟合函数的所有系数。
 
