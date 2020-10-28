@@ -396,7 +396,7 @@ function setup () {
   parent.HandleMouse(this,points,radius,DrawInterpolations)
 }
 {{</p5js>}}
-虽然魏尔施特拉斯逼近定理表明，闭区间上的连续函数可用多项式级数一致逼近，但是多项式插值也有一些缺点，例如矩阵病态问题引起的不稳定[^5]和龙格振荡现象[^6]。使用正交多项式基可以解决上述的问题，例如Bernstein基函数和高斯基函数（？证明）,下面详情介绍高斯基函数
+虽然魏尔施特拉斯逼近定理表明，闭区间上的连续函数可用多项式级数一致逼近，但是多项式插值也有一些缺点，例如[矩阵病态](https://baike.baidu.com/item/%E7%97%85%E6%80%81%E7%9F%A9%E9%98%B5)问题引起的不稳定和龙格振荡现象[^6]。使用正交多项式基可以解决上述的问题，例如Bernstein基函数和高斯基函数（？证明）,下面详情介绍高斯基函数
 
 ## 三、径向基函数(RBF)插值
 
@@ -745,5 +745,4 @@ function setup () {
 {{</p5js>}}
 
 [^4]:(https://www.matongxue.com/madocs/498/)
-[^5]:(https://baike.baidu.com/item/%E7%97%85%E6%80%81%E7%9F%A9%E9%98%B5)
 [^6]:(https://en.wikipedia.org/wiki/Runge%27s_phenomenon)
