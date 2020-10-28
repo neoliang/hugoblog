@@ -340,9 +340,9 @@ function setup () {
 ### 2.3 牛顿插值法
 不管是解线性方程组还是拉格朗日差值法，当新增加一个插值点时，整个插值都需要重新计算。多项式的插值复杂都是{{<math>}}O(n^3){{</math>}}，当插值点达到成千上万个的时候，重新计算一次插值函数的代价是比较高的。牛顿插值法就是为了解决重新计算的问题而提出的。
 ***定义***
-- 一阶差商：{{<math>}}\displaystyle f[i,i+1]=\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}{{</math>}}
-- 二阶差商：{{<math>}}\displaystyle f[i,i+2]=\frac{f[i+1,i+2]-f[i,i+1]}{x_{i+2}-x_i}{{</math>}}
-- k阶差商：{{<math>}}\displaystyle f[i,i+k]=\frac{f[i+1,i+k]-f[i,i+k-1]}{x_{i+k}-x_i}{{</math>}}
+- 一阶差商：{{<math>}} f[i,i+1]=\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}{{</math>}}
+- 二阶差商：{{<math>}} f[i,i+2]=\frac{f[i+1,i+2]-f[i,i+1]}{x_{i+2}-x_i}{{</math>}}
+- k阶差商：{{<math>}} f[i,i+k]=\frac{f[i+1,i+k]-f[i,i+k-1]}{x_{i+k}-x_i}{{</math>}}
 - 牛顿插值多项式表示为：
 {{<math>}}\displaystyle N_n(x)=f(x_0)+\sum_{i=1}^{n}f[0,i]\prod_{j=0}^{i-1}(x-x_j){{</math>}}
 >以上牛顿插值的公式形式相对维基百科[^newtown_poly]做了一些小的改动，比原来的形式更偏向程序语言描述，与二维数组和循环相对应，在编程时可以很容易将该公式转换为相应的代码。
