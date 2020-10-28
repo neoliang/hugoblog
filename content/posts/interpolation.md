@@ -344,8 +344,9 @@ function setup () {
 - 二阶差商：{{<math>}}\displaystyle f[i,i+2]=\frac{f[i+1,i+2]-f[i,i+1]}{x_{i+2}-x_i}{{</math>}}
 - k阶差商：{{<math>}}\displaystyle f[i,i+k]=\frac{f[i+1,i+k]-f[i,i+k-1]}{x_{i+k}-x_i}{{</math>}}
 - 牛顿插值多项式表示为：
-{{<math>}}N_n(x)=f(x_0)+f[0,1](x-x_0)+f[0,2](x-x_0)(x-x_1)+...+f[0,n](x-x_0)(x-x_1)...(x-x_n){{</math>}}
->以上定义的形式并不是正式的数学形式，更偏向于程序语言，这样在编程时更容易将公式转换为程序语言。
+{{<math>}}\displaystyle N_n(x)=f(x_0)+\sum_{i=1}^{n}f[0,i]\prod_{j=0}^{i-1}(x-x_j){{</math>}}
+>以上牛顿插值的公式形式相对维基百科[^newtown_poly]做了一些小的改动，比原来的形式更偏向程序语言描述，与二维数组和循环相对应，在编程时可以很容易将该公式转换为相应的代码。
+[^newtown_poly]:(https://en.wikipedia.org/wiki/Newton_polynomial)
 
 牛顿插值的结果与多项式完全相同，相应的代码如下：
 {{<ace allowRunning=true >}}
@@ -399,7 +400,7 @@ function setup () {
 
 ## 三、径向基函数(RBF)插值
 
- 多项式插值使用的是不同阶函数的线性组合 ，而径向基函数插值是使用高斯基函数的线性组合 {{<math>}} f(x)=b_0 + \sum_{i=1}^{n}b_i g_i(x) {{</math>}}，其中：
+ 多项式插值使用的是不同阶函数的线性组合 ，而径向基函数插值是使用高斯基函数的线性组合 {{<math>}}\displaystyle f(x)=b_0 + \sum_{i=1}^{n}b_i g_i(x) {{</math>}}，其中：
    -  {{<math>}}g_i(x)=e^{-\frac{(x-x_i)^2}{2\sigma^2}}{{</math>}}
 
 即{{<math>}}g_i(x){{</math>}}的对称轴在插值点上，{{<math>}}i=1,…,n{{</math>}}，RBF的求解比较简单，可以将{{<math>}}b_0,\sigma{{</math>}}设置为常量，将n个点的值带入可以得到n个方程式，直接使用我们前面实现的高斯消元法即可将系数求出，相应的代码如下：
@@ -484,13 +485,13 @@ function setup () {
 上图的插值函数除了插值点附近，其余点基本为零，形状看起来并是很好。原因是我们将RBF的{{<math>}}\sigma{{</math>}}设置为1，通过调整不同的{{<math>}}\sigma{{</math>}}值，可以得到更好的插值函数形状。
 
 ## 四、函数拟合
-使用多项式插值时，当数据点个数较多时，插值会导致多项式曲线阶数过高，带来不稳定因素。可通过固定幂基函数的最高次数来逼近这个数据点，所谓的逼近是指让目标函数{{<math>}}f(x){{</math>}}与数据点的距离尽可能小，令 {{<math>}}\varepsilon=\sum_{j=0}^{n}|f(x_j)-y_j|{{</math>}}，即寻找让 {{<math>}}\varepsilon {{</math>}}最小的{{<math>}}f(x){{</math>}}。{{<math>}}\varepsilon {{</math>}}的表达式中绝对值，并不好求导数。可以改写成这样的形式：{{<math>}}\varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2{{</math>}}，使用最小二乘法来求解。
+使用多项式插值时，当数据点个数较多时，插值会导致多项式曲线阶数过高，带来不稳定因素。可通过固定幂基函数的最高次数来逼近这个数据点，所谓的逼近是指让目标函数{{<math>}}f(x){{</math>}}与数据点的距离尽可能小，令 {{<math>}}\displaystyle \varepsilon=\sum_{j=0}^{n}|f(x_j)-y_j|{{</math>}}，即寻找让 {{<math>}}\varepsilon {{</math>}}最小的{{<math>}}f(x){{</math>}}。{{<math>}}\varepsilon {{</math>}}的表达式中绝对值，并不好求导数。可以改写成这样的形式：{{<math>}}\displaystyle \varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2{{</math>}}，使用最小二乘法来求解。
 
 ### 4.1 最小二乘法
-固定幂基函数的最高次数 m(m < n)。设{{<math>}} f(x) = \sum_{i=0}^{m} a_iB_i(x){{</math>}}，其中基函数 {{<math>}} B_i(x) = x^i{{</math>}}。
-- 令{{<math>}}\varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2{{</math>}}
-- 对{{<math>}}\varepsilon{{</math>}}求{{<math>}}a_j{{</math>}}偏导： {{<math>}}\frac{\partial\varepsilon}{\partial a_j}=2\sum_{k=0}^{n}(f(x_k)-y_k)x_k^j{{</math>}}，求解{{<math>}}\frac{\partial\varepsilon}{\partial a_j}=0{{</math>}}方程组即可得到所有的{{<math>}}a_j{{</math>}}
-- {{<math>}}\frac{\partial\varepsilon}{\partial a_j}=0 \Rightarrow \sum_{k=0}^{n}f(x_k)x_k^j=\sum_{k=0}^{n}y_k x_k^j{{</math>}}
+固定幂基函数的最高次数 m(m < n)。设{{<math>}}\displaystyle f(x) = \sum_{i=0}^{m} a_iB_i(x){{</math>}}，其中基函数 {{<math>}} B_i(x) = x^i{{</math>}}。
+- 令{{<math>}}\displaystyle \varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2{{</math>}}
+- 对{{<math>}}\varepsilon{{</math>}}求{{<math>}}a_j{{</math>}}偏导： {{<math>}}\displaystyle \frac{\partial\varepsilon}{\partial a_j}=2\sum_{k=0}^{n}(f(x_k)-y_k)x_k^j{{</math>}}，求解{{<math>}}\frac{\partial\varepsilon}{\partial a_j}=0{{</math>}}方程组即可得到所有的{{<math>}}a_j{{</math>}}
+- {{<math>}}\displaystyle \frac{\partial\varepsilon}{\partial a_j}=0 \Rightarrow \sum_{k=0}^{n}f(x_k)x_k^j=\sum_{k=0}^{n}y_k x_k^j{{</math>}}
 - 改写成向量的形式：{{<math>}}\vec f\cdot \vec x^j = \vec y \cdot \vec x^j{{</math>}}，其中
   - {{<math>}}\vec y = (y_0,y_1,...,y_n){{</math>}}
   - {{<math>}}\vec  x^j=(x_0^j,x_1^j,...x_n^j){{</math>}}
@@ -502,8 +503,8 @@ function setup () {
 ### 4.2 岭回归拟合
 
 在上述的求解线性方程过程中,当矩阵不是列满秩时，或者某些列之间的线性相关性比较大时， 矩阵的行列式接近于0，接近于奇异，上述问题变为一个不适定问题，计算误差会很大，缺乏稳定性与可靠性。为了解决这个问题，我们需要将不适定问题转化为适定问题：可以为上述优化函数加上一个正则化项，变为：
-- {{<math>}}\varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2 + \lambda \sum_{j=0}^{n} a_j {{</math>}}，相应的方程组变为：
--  {{<math>}}\lambda + \sum_{k=0}^{n}f(x_k)x_k^j  =\sum_{k=0}^{n}y_k x_k^j{{</math>}}
+- {{<math>}}\displaystyle \varepsilon=\sum_{j=0}^{n}(f(x_j)-y_j)^2 + \lambda \sum_{j=0}^{n} a_j {{</math>}}，相应的方程组变为：
+-  {{<math>}}\displaystyle \lambda + \sum_{k=0}^{n}f(x_k)x_k^j  =\sum_{k=0}^{n}y_k x_k^j{{</math>}}
 
 根据上述公式，可以编写相应的代码如下：
 {{<ace allowRunning=true >}}
