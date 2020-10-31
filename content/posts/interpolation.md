@@ -11,6 +11,7 @@ classes:
 - feature-math
 categories:
 - Math
+- Geometry
 ---
 本文描述不同的插值与拟合算法实现，并用程序语言以图形化的方式展示不同插值和拟合函数，通过图形化的表示，我们可以直观和清晰认识到各种不同插值和拟合函数优缺点，例如函数的平滑度、准确度等。
 <!--more-->
@@ -705,6 +706,7 @@ slider.oninput = onSlideInput;
 onSlideInput();
 }
 </script>
+   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
 {{</rawhtml>}}
 {{<p5js defaultFold=true codeHeight=280 >}}
 let radius = 6
@@ -744,6 +746,91 @@ function setup () {
   parent.t_ValueChangedCallback = DrawInterpolations
 }
 {{</p5js>}}
+
+## 使用神经网络求函数
+{{<p5js >}}
+let tf = parent.tf;
+const Pi = 3.1415926
+let radius = 6
+let  P = (x,y)=>{return {x:x,y:y}}
+let xs = Array.from({length:400},()=> Math.random()*2-1)
+let ys = xs.map(x=>Math.sin(x*Pi)*0.9+0.2*Math.random()-0.1).map(y=> y*0.5+0.5)
+
+let points = xs.map((x,i)=>P((x+1)*width*0.5,ys[i]*height))
+
+
+var a =  Array.from({length:3},_=> tf.scalar(Math.random()).variable())
+var b = a.map(()=>tf.scalar(Math.random()).variable())
+var w = a.map(()=>tf.scalar(Math.random()).variable())
+
+function predict(X) {
+  //w*e^{-(ax+b)^2}
+  let exps = a.map((a_,i)=>{
+    return a_.mul(X).add(b[i]).square().mul(tf.scalar(-1)).exp()
+  })
+  let e0 = exps[0]
+  for(let i = 1;i<exp.length;++i)
+  {
+    e0 = e0.add(exp[i])
+  }
+  return e0
+}
+
+let plotX = []
+for(let i = 0;i<=50;++i)
+{
+  plotX.push(i/50*2-1)
+}
+const XX = tf.tensor1d(plotX)
+const L = tf.tensor1d(ys)
+const X = tf.tensor1d(xs)
+
+function loss(Y,L) {
+  return Y.sub(L).square().mean()
+}
+const learningRate = 0.01
+const optimizer = tf.train.adam(learningRate)
+
+function DrawInterpolations()
+{
+  background (.976, .949, .878);
+  stroke(color(0.2,0.7))
+  fill(color(0.,.369, .608,0.5))
+  strokeWeight(0.5)
+  points.forEach(p=>ellipse(p.x,height-p.y,radius,radius))
+  
+  let ys = []
+  tf.tidy(()=>{
+    let Py = predict(XX)
+    ys = Py.dataSync();
+    Py.dispose();
+  })
+
+  beginShape()
+  noFill()
+  stroke(color(1,0.8,0.1))
+  strokeWeight(2)
+  for(let i = 0;i<plotX.length;++i)
+  {
+    //console.log()
+    vertex((plotX[i]+1)*width*0.5,height-ys[i]*height)
+  }
+  endShape()
+} 
+function setup () {  
+  colorMode(RGB,1.0)
+  fill(color(1, 0.81, 0.34))
+}
+function draw(){
+  DrawInterpolations()
+  tf.tidy(()=>{
+    optimizer.minimize(()=>loss(predict(X),L))
+  })
+  console.log(tf.memory().numTensors)
+}
+{{</p5js>}}
+
+## 使用神经网络求函数
 
 [^4]:(https://www.matongxue.com/madocs/498/)
 [^6]:(https://en.wikipedia.org/wiki/Runge%27s_phenomenon)
