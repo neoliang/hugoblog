@@ -758,22 +758,26 @@ let ys = xs.map(x=>Math.sin(x*Pi)*0.9+0.2*Math.random()-0.1).map(y=> y*0.5+0.5)
 
 let points = xs.map((x,i)=>P((x+1)*width*0.5,ys[i]*height))
 
-
-var a =  Array.from({length:3},_=> tf.scalar(Math.random()).variable())
-var b = a.map(()=>tf.scalar(Math.random()).variable())
-var w = a.map(()=>tf.scalar(Math.random()).variable())
+const hiddenNum = 3
+var a = tf.randomNormal([hiddenNum,1]).variable();// Array.from({length:3},_=> tf.scalar(Math.random()).variable())
+var b = tf.randomNormal([hiddenNum,1]).variable();//a.map(()=>tf.scalar(Math.random()).variable())
+var w = tf.randomNormal([hiddenNum,1]).variable();//a.map(()=>tf.scalar(Math.random()).variable())
 
 function predict(X) {
   //w*e^{-(ax+b)^2}
-  let exps = a.map((a_,i)=>{
-    return a_.mul(X).add(b[i]).square().mul(tf.scalar(-1)).exp()
-  })
-  let e0 = exps[0]
-  for(let i = 1;i<exp.length;++i)
-  {
-    e0 = e0.add(exp[i])
-  }
-  return e0
+  let x1 = X.tile([1,hiddenNum])
+  x1 = x1.reshape([-1,hiddenNum,1])
+  return x1.mul(a).add(b).exp().sum(0)
+  //return x1.sum(0);
+  // let exps = a.map((a_,i)=>{
+  //   return a_.mul(X).add(b[i]).square().mul(tf.scalar(-1)).exp()
+  // })
+  // let e0 = exps[0]
+  // for(let i = 1;i<exp.length;++i)
+  // {
+  //   e0 = e0.add(exp[i])
+  // }
+  // return e0
 }
 
 let plotX = []
@@ -781,9 +785,9 @@ for(let i = 0;i<=50;++i)
 {
   plotX.push(i/50*2-1)
 }
-const XX = tf.tensor1d(plotX)
-const L = tf.tensor1d(ys)
-const X = tf.tensor1d(xs)
+const XX = tf.tensor2d(plotX,[1,plotX.length])
+const L = tf.tensor2d(ys,[1,ys.length])
+const X = tf.tensor2d(xs,[1,xs.length])
 
 function loss(Y,L) {
   return Y.sub(L).square().mean()
@@ -812,7 +816,7 @@ function DrawInterpolations()
   strokeWeight(2)
   for(let i = 0;i<plotX.length;++i)
   {
-    //console.log()
+    //console.log(ys[i])
     vertex((plotX[i]+1)*width*0.5,height-ys[i]*height)
   }
   endShape()
