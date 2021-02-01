@@ -10,8 +10,7 @@ classes:
 - feature-math
 - feature-ace
 categories:
-- portfolio
-- physics
+- 知乎
 ---
 
 本文为我在知乎的回答[^1]
