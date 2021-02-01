@@ -54,5 +54,6 @@ categories:
 
 另外除了改进光线采样外，还可以对最终生成的图像做后期处理以实现降噪，比如一个简单的办法是对采样生成的图像做双线性插值。
 大量的采样耗时较高，最近在光线追踪领域研究得比较多的是去噪算法（Denoising），在 @文刀秋二 的这篇文章中有提过[^2] ，即通过Denoising算法，将极低采样的光线追踪结果重建（Reconstruct）出非常接近用大量采样渲染得到的收敛后的图像。
-[^2](http://www.realtimerendering.com/Real-Time_Rendering_4th-Real-Time_Ray_Tracing.pdf)
-[^3](https://zhuanlan.zhihu.com/p/34851503)
+
+[^2]:(http://www.realtimerendering.com/Real-Time_Rendering_4th-Real-Time_Ray_Tracing.pdf)
+[^3]:(https://zhuanlan.zhihu.com/p/34851503)
