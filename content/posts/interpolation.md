@@ -754,30 +754,39 @@ const Pi = 3.1415926
 let radius = 6
 let  P = (x,y)=>{return {x:x,y:y}}
 let xs = Array.from({length:400},()=> Math.random()*2-1)
-let ys = xs.map(x=>Math.sin(x*Pi)*0.9+0.2*Math.random()-0.1).map(y=> y*0.5+0.5)
+let noise = 0.08
+const N = 3
+let ys = xs.map(x=>(0.3*Math.cos(0.5*x*Pi*N)+0.7*Math.sin(x*Pi*N))*(1-noise)+(2*noise)*Math.random()-noise).map(y=> y*0.5+0.5)
 
 let points = xs.map((x,i)=>P((x+1)*width*0.5,ys[i]*height))
 
-const hiddenNum = 3
-var a = tf.randomNormal([hiddenNum,1]).variable();// Array.from({length:3},_=> tf.scalar(Math.random()).variable())
-var b = tf.randomNormal([hiddenNum,1]).variable();//a.map(()=>tf.scalar(Math.random()).variable())
-var w = tf.randomNormal([hiddenNum,1]).variable();//a.map(()=>tf.scalar(Math.random()).variable())
+
+let rd  = n=> Array.from({length:n},_=>Math.random())
+let a = tf.tensor1d(rd(N+1)).reshape([N+1,-1]).variable()
+let b = tf.tensor1d(rd(N+1)).reshape([N+1,-1]).variable()
+let w = tf.tensor1d(rd(N+1)).reshape([N+1,-1]).variable()
+let bias = tf.scalar(Math.random())
+
+
 
 function predict(X) {
   //w*e^{-(ax+b)^2}
-  let x1 = X.tile([1,hiddenNum])
-  x1 = x1.reshape([-1,hiddenNum,1])
-  return x1.mul(a).add(b).exp().sum(0)
-  //return x1.sum(0);
-  // let exps = a.map((a_,i)=>{
-  //   return a_.mul(X).add(b[i]).square().mul(tf.scalar(-1)).exp()
+  // let exps = a.map((_,i)=>{
+  //   return a[i].mul(X).add(b[i]).square().mul(tf.scalar(-0.5)).exp()
   // })
-  // let e0 = exps[0]
+  // let e0 = exps[0].mul(w[0])
   // for(let i = 1;i<exp.length;++i)
   // {
-  //   e0 = e0.add(exp[i])
+  //   e0 = e0.add(exp[i].mul(w[i]))
   // }
   // return e0
+  // let v1 = a1.mul(X).add(b1).square().mul(tf.scalar(-0.5)).exp().mul(c1)
+  // let v2 = a2.mul(X).add(b2).square().mul(tf.scalar(-0.5)).exp().mul(c2)
+
+  // return v1.add(v2);
+  let x1 = X.tile([N+1])
+  x1 = x1.reshape([N+1,-1])
+  return a.mul(x1).add(b).square().mul(tf.scalar(-0.5)).exp().add(w).sum(0).add(bias)
 }
 
 let plotX = []
@@ -785,14 +794,14 @@ for(let i = 0;i<=50;++i)
 {
   plotX.push(i/50*2-1)
 }
-const XX = tf.tensor2d(plotX,[1,plotX.length])
-const L = tf.tensor2d(ys,[1,ys.length])
-const X = tf.tensor2d(xs,[1,xs.length])
+const XX = tf.tensor1d(plotX)
+const L = tf.tensor1d(ys)
+const X = tf.tensor1d(xs)
 
 function loss(Y,L) {
   return Y.sub(L).square().mean()
 }
-const learningRate = 0.01
+const learningRate = 0.1
 const optimizer = tf.train.adam(learningRate)
 
 function DrawInterpolations()
@@ -807,7 +816,6 @@ function DrawInterpolations()
   tf.tidy(()=>{
     let Py = predict(XX)
     ys = Py.dataSync();
-    Py.dispose();
   })
 
   beginShape()
@@ -816,7 +824,7 @@ function DrawInterpolations()
   strokeWeight(2)
   for(let i = 0;i<plotX.length;++i)
   {
-    //console.log(ys[i])
+    //console.log()
     vertex((plotX[i]+1)*width*0.5,height-ys[i]*height)
   }
   endShape()
@@ -830,7 +838,6 @@ function draw(){
   tf.tidy(()=>{
     optimizer.minimize(()=>loss(predict(X),L))
   })
-  console.log(tf.memory().numTensors)
 }
 {{</p5js>}}
 
