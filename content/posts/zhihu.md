@@ -2,7 +2,7 @@
 title: 知乎的一些回答与文章合集
 date: "2021-09-09"
 url: "/posts/zhihu"
-description: "我的知乎的回答与文章"
+description: "我在知乎的回答与文章"
 classes:
 - feature-figcaption
 - feature-figcaption-hidden
@@ -11,7 +11,7 @@ classes:
 categories:
 - 知乎
 ---
-我的知乎的回答与文章
+我在知乎的回答与文章
 <!--more-->
 
 {{<rawhtml>}}
