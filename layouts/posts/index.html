@@ -1,12 +1,4 @@
 {{ define "main" }}
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-M5M4XHBTPG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-M5M4XHBTPG');
-</script>
 	<div class="pa3 pa4-ns w-100 w-70-ns center">
 		<section class="w-100 mw8">
 		{{ $pages := where .Paginator.Pages ".Params.skip" "ne" "true" }}
